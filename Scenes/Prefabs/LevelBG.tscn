@@ -785,6 +785,7 @@ metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
 
 [node name="LiquidLayer" type="Parallax2D" parent="."]
 process_mode = 1
+visible = false
 visibility_layer = 2
 z_index = 50
 z_as_relative = false
