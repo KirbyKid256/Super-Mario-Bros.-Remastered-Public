@@ -131,7 +131,6 @@ script = SubResource("GDScript_e2e05")
 [node name="FireBar" type="Sprite2D" parent="."]
 visible = false
 top_level = true
-z_index = 1
 texture = ExtResource("1_e2e05")
 script = ExtResource("2_ym371")
 metadata/_custom_type_script = "uid://364rywt44hy6"
