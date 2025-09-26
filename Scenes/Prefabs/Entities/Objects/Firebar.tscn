@@ -23,7 +23,10 @@ script/source = "extends Node2D
 
 @export_enum(\"C-Clockwise\", \"Clockwise\") var direction := 0
 
-@export var block_visible := false
+@export var block_visible := false:
+	set(value):
+		block_visible = value
+		handle_block_collision(true)
 
 @onready var track_joint = $TrackJoint
 
