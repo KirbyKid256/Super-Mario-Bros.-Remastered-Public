@@ -49,6 +49,7 @@ func update_direction_textures() -> void:
 		i.frame = int(Track.DIRECTIONS[i.get_index()] == starting_direction)
 	for i in [$Start, $Connect, $End]:
 		i.texture = texture
+	$DirectionArrow.global_rotation = Vector2(connecting_direction).angle()
 
 func on_mouse_entered(area_idx := 0) -> void:
 	mouse_in_areas |= (1 << area_idx)

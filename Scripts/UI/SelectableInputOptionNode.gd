@@ -4,7 +4,7 @@ extends HBoxContainer
 @export var settings_category := "video"
 @export var selected := false
 
-@export var action_name := ""
+@export var action_names := [""]
 @export var title := ""
 
 @export_enum("Keyboard", "Controller") var type := 0
@@ -42,10 +42,15 @@ const button_id_translation := [
 	"DPad R" 
 ]
 
+func _ready() -> void:
+	update_value()
+
 func _process(_delta: float) -> void:
 	if selected:
 		handle_inputs()
 	$Cursor.modulate.a = int(selected)
+
+func update_value() -> void:
 	$Title.text = tr(title) + ":"
 	$Value.text = get_event_string(input_event) if not awaiting_input else "Press Any..."
 
@@ -62,6 +67,7 @@ func begin_remap() -> void:
 	get_parent().can_input = false
 	await get_tree().create_timer(0.1).timeout
 	awaiting_input = true
+	update_value()
 
 func _input(event: InputEvent) -> void:
 	if awaiting_input == false: return
@@ -69,10 +75,10 @@ func _input(event: InputEvent) -> void:
 	if event.is_pressed() == false:
 		return
 	
-	if event is InputEventKey:
-		if event.as_text_physical_keycode() == "Escape":
-			cancel_remap()
-			return
+	#if event is InputEventKey:
+		#if event.as_text_physical_keycode() == "Escape":
+			#cancel_remap()
+			#return
 	
 	if type == 0 and event is InputEventKey:
 		map_event_to_action(event)
@@ -82,23 +88,28 @@ func _input(event: InputEvent) -> void:
 		map_event_to_action(event)
 
 func map_event_to_action(event) -> void:
-	var action = action_name + "_" + str(player_idx)
-	var events = InputMap.action_get_events(action).duplicate()
-	events[type] = event
-	InputMap.action_erase_events(action)
-	for i in events:
-		InputMap.action_add_event(action, i)
-	input_changed.emit(action, event)
-	input_event = event
-	awaiting_input = false
-	await get_tree().create_timer(0.1).timeout
-	rebinding_input = false
-	get_parent().can_input = true
-	can_remap = true
+	for action_name in action_names:
+		var action = action_name
+		if action.contains("ui_") == false and action != "pause":
+			action = action_name + "_" + str(player_idx)
+		var events = InputMap.action_get_events(action).duplicate()
+		events[type] = event
+		InputMap.action_erase_events(action)
+		for i in events:
+			InputMap.action_add_event(action, i)
+		input_changed.emit(action, event)
+		input_event = event
+		awaiting_input = false
+		await get_tree().create_timer(0.1).timeout
+		rebinding_input = false
+		get_parent().can_input = true
+		can_remap = true
+		update_value()
 
 func get_event_string(event: InputEvent) -> String:
 	var event_string := ""
 	if event is InputEventKey:
+		print(event.keycode)
 		event_string = OS.get_keycode_string(event.keycode)
 	elif event is InputEventJoypadButton:
 		var translation = button_id_translation[event.button_index]
@@ -126,6 +137,8 @@ func get_event_string(event: InputEvent) -> String:
 			else:
 				direction = "Down"
 		event_string = stick + " " + direction
+	else:
+		pass
 	return event_string
 
 func _unhandled_input(event: InputEvent) -> void:

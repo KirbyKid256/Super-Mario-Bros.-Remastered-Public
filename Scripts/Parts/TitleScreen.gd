@@ -93,6 +93,7 @@ func open_story_options() -> void:
 func continue_story() -> void:
 	Global.current_game_mode = Global.GameMode.CAMPAIGN
 	if Global.game_beaten or Global.debug_mode:
+		go_back_to_first_level()
 		$CanvasLayer/StoryMode/QuestSelect.open()
 	else:
 		$CanvasLayer/StoryMode/NoBeatenCharSelect.open()
@@ -117,9 +118,15 @@ func check_for_ghost() -> void:
 
 func get_highscore() -> void:
 	%HighScore.text = "TOP- " + str(Global.high_score).pad_zeros(6)
+	if Global.world_num == 1 and Global.level_num == 1 and Global.score <= 0:
+		%StoryOptions.selected_index = 0
+	else:
+		%StoryOptions.selected_index = 1
 
 func clear_stats() -> void:
 	Global.clear_saved_values()
+
+func go_back_to_first_level() -> void:
 	Global.world_num = 1
 	Global.level_num = 1
 	LevelTransition.level_to_transition_to = Level.get_scene_string(Global.world_num, Global.level_num)
@@ -132,6 +139,7 @@ func start_game() -> void:
 	Global.transition_to_scene("res://Scenes/Levels/LevelTransition.tscn")
 
 func start_full_run() -> void:
+	Global.second_quest = false
 	Global.current_game_mode = Global.GameMode.MARATHON
 	SpeedrunHandler.timer = 0
 	if SpeedrunHandler.is_warp_run:
@@ -148,6 +156,7 @@ func start_full_run() -> void:
 	Global.transition_to_scene("res://Scenes/Levels/LevelTransition.tscn")
 
 func start_level_run() -> void:
+	Global.second_quest = false
 	Global.current_game_mode = Global.GameMode.MARATHON_PRACTICE
 	SpeedrunHandler.timer = 0
 	if SpeedrunHandler.is_warp_run:
@@ -166,6 +175,7 @@ func _exit_tree() -> void:
 	Global.in_title_screen = false
 
 func challenge_hunt_selected() -> void:
+	Global.second_quest = false
 	Global.current_game_mode = Global.GameMode.CHALLENGE
 	Global.reset_values()
 	Global.clear_saved_values()
@@ -220,6 +230,7 @@ func quit_game() -> void:
 	get_tree().quit()
 
 func new_game_selected() -> void:
+	Global.second_quest = false
 	Global.current_game_mode = Global.GameMode.CAMPAIGN
 	if Global.game_beaten:
 		%QuestSelect.open()
@@ -227,6 +238,7 @@ func new_game_selected() -> void:
 		$CanvasLayer/StoryMode/NewUnbeatenGame/NoBeatenCharSelect.open()
 
 func continue_game() -> void:
+	SaveManager.apply_save(SaveManager.load_save(Global.current_campaign))
 	Global.current_game_mode = Global.GameMode.CAMPAIGN
 	if Global.game_beaten:
 		$CanvasLayer/StoryMode/ContinueBeatenGame/WorldSelect.open()

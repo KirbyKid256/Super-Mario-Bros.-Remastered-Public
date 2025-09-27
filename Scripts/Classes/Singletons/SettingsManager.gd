@@ -34,7 +34,10 @@ var file := {
 		"move_left": "Left",
 		"move_right": "Right",
 		"move_up": "Up",
-		"move_down": "Down"
+		"move_down": "Down",
+		"ui_accept": "Z",
+		"ui_back": "X",
+		"pause": "Escape"
 	},
 	"controller":
 	{
@@ -44,7 +47,10 @@ var file := {
 		"move_left": "0,-1",
 		"move_right": "0,1",
 		"move_up": "1,-1",
-		"move_down": "1,1"
+		"move_down": "1,1",
+		"ui_accept": 0,
+		"ui_back": 1,
+		"pause": 6
 	},
 	"visuals":
 	{
@@ -79,10 +85,10 @@ var file := {
 	}
 }
 
-const SETTINGS_DIR := "user://settings.cfg"
+static var SETTINGS_DIR := Global.config_path.path_join("settings.cfg")
 
 func _enter_tree() -> void:
-	DirAccess.make_dir_absolute("user://resource_packs")
+	DirAccess.make_dir_absolute(Global.config_path.path_join("resource_packs"))
 	load_settings()
 	await get_tree().physics_frame
 	apply_settings()
