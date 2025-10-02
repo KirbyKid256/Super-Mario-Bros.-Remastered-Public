@@ -70,7 +70,7 @@ static func reset_values() -> void:
 	combo_breaks = 0
 	current_rank = "F"
 	Player.times_hit = 0
-	Global.player_power_states = "0000"
+	Global.reset_power_states()
 
 func _physics_process(delta: float) -> void:
 	if not active:

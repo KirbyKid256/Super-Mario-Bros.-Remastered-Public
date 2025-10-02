@@ -46,7 +46,7 @@ const SMBS_LEVELS := [
 
 func _ready() -> void:
 	AudioManager.stop_all_music()
-	Global.player_power_states = "0000"
+	Global.reset_power_states()
 	Global.get_node("GameHUD").hide()
 	boo_index = BooRaceHandler.boo_colour
 	Global.current_game_mode = Global.GameMode.BOO_RACE

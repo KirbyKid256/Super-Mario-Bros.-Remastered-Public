@@ -121,13 +121,13 @@ var can_time_tick := true:
 		if value == false:
 			pass
 
-var player_power_states := "0000"
+var player_power_states := [0, 0, 0, 0, 0, 0, 0, 0]
 
 var connected_players := 1
 
 const CAMPAIGNS := ["SMB1", "SMBLL", "SMBS", "SMBANN"]
 
-var player_characters := [0, 0, 0, 0]:
+var player_characters := [0, 1, 2, 3, 0, 1, 2, 3]:
 	set(value):
 		player_characters = value
 		player_characters_changed.emit()
@@ -332,7 +332,10 @@ func clear_saved_values() -> void:
 	coins = 0
 	score = 0
 	lives = 3
-	player_power_states = "0000"
+	reset_power_states()
+
+func reset_power_states() -> void:
+	player_power_states = [0, 0, 0, 0, 0, 0, 0, 0]
 
 func transition_to_scene(scene_path := "") -> void:
 	Global.fade_transition = bool(Settings.file.visuals.transition_animation)

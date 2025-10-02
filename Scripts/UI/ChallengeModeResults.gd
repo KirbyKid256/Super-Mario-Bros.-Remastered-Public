@@ -45,7 +45,7 @@ func save_results() -> void:
 	SaveManager.write_save()
 
 func retry_level() -> void:
-	Global.player_power_states = "0000"
+	Global.reset_power_states()
 	ChallengeModeHandler.current_run_red_coins_collected = ChallengeModeHandler.red_coins_collected[Global.world_num - 1][Global.level_num - 1]
 	Global.score = 0
 	LevelTransition.level_to_transition_to = Level.get_scene_string(Global.world_num, Global.level_num)

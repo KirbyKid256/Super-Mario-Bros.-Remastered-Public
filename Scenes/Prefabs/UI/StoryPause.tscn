@@ -12,7 +12,7 @@ script/source = "extends Node
 
 func restart_level() -> void:
 	AudioManager.stop_all_music()
-	Global.player_power_states = \"0000\"
+	Global.reset_power_states()
 	Global.reset_values()
 	DiscoLevel.reset_values()
 	if Global.current_game_mode == Global.GameMode.CHALLENGE:
@@ -44,6 +44,12 @@ texture = SubResource("AtlasTexture_eud56")
 
 [node name="Handler" type="Node" parent="." index="2"]
 script = SubResource("GDScript_r6hlk")
+
+[node name="SettingsMenu" parent="." index="3" node_paths=PackedStringArray("disabled_containers")]
+disabled_containers = [NodePath("PanelContainer/MarginContainer/VBoxContainer/Difficulty"), NodePath("PanelContainer/MarginContainer/VBoxContainer/Multiplayer"), NodePath("PanelContainer/MarginContainer/VBoxContainer/Data")]
+
+[node name="Multiplayer" parent="SettingsMenu/PanelContainer/MarginContainer/VBoxContainer" index="8" node_paths=PackedStringArray("options")]
+options = [NodePath("CoopStyle")]
 
 [node name="LabelFontChanger" parent="SettingsMenu" index="1" node_paths=PackedStringArray("labels")]
 labels = [NodePath("../PanelContainer/MarginContainer/VBoxContainer/Title"), NodePath("../PanelContainer/MarginContainer/VBoxContainer/CategorySelect/HBoxContainer/Category"), null, null, null, null, null, null, null, NodePath("../PanelContainer/MarginContainer/VBoxContainer/Audio/SelectableOptionNode/Value"), null, NodePath("../PanelContainer/MarginContainer/VBoxContainer/Audio/SelectableOptionNode2/Value"), null, NodePath("../PanelContainer/MarginContainer/VBoxContainer/Audio/SelectableOptionNode3/Value"), NodePath("../PanelContainer/MarginContainer/VBoxContainer/Difficulty/Description/AutoScrollContainer/MarginContainer/Desc")]

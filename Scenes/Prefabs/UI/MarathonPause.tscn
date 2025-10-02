@@ -12,7 +12,7 @@ func restart_run() -> void:
 	Global.reset_values()
 	SpeedrunHandler.timer = 0
 	SpeedrunHandler.timer_active = false
-	Global.player_power_states = \"0000\"
+	Global.reset_power_states()
 	if Global.current_game_mode == Global.GameMode.MARATHON_PRACTICE:
 		Global.current_level.reload_level()
 	else:

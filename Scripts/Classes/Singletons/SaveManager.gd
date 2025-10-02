@@ -13,7 +13,7 @@ const SAVE_TEMPLATE := {
 	"Coins": 0,
 	"Score": 0,
 	"GameWin": false,
-	"PowerStates": "0000",
+	"PowerStates": [0, 0, 0, 0, 0, 0, 0, 0],
 	"LevelsVisited": "1000000000000000000000000000000000000000000000000000",
 	"BestAnyTime": 0.0,
 	"BestWarplessTime": 0.0,
@@ -126,6 +126,8 @@ func apply_save(json := {}) -> void:
 	ChallengeModeHandler.red_coins_collected = json["RedCoins"]
 	ChallengeModeHandler.top_challenge_scores = json["ChallengeScores"]
 	BooRaceHandler.cleared_boo_levels = json["ClearedBooLevels"]
+	if json["PowerStates"] is String:
+		json["PowerStates"] = [int(json["PowerStates"][0]), int(json["PowerStates"][1]), int(json["PowerStates"][2]), int(json["PowerStates"][3]), 0, 0, 0, 0]
 	Global.player_power_states = json["PowerStates"]
 	Global.game_beaten = json["GameWin"]
 	for i in json["LevelsVisited"].length():

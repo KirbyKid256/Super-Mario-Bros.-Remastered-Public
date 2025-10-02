@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://dnksdgorle8su"]
+[gd_scene load_steps=28 format=3 uid="uid://dnksdgorle8su"]
 
 [ext_resource type="Script" uid="uid://cj6858gmexp11" path="res://Scripts/UI/SettingsMenu.gd" id="1_hnwhb"]
 [ext_resource type="StyleBox" uid="uid://comkghpj0djcl" path="res://Resources/UI/Panel.tres" id="2_t6b48"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://cxkumlifwb0s6" path="res://Scripts/Parts/DifficultySetter.gd" id="10_2qqpf"]
 [ext_resource type="Script" uid="uid://d63p6qr5a748" path="res://Scripts/UI/AutoScrollContainer.gd" id="12_oh4w7"]
 [ext_resource type="Script" uid="uid://co6tjg3w6qpd8" path="res://Scripts/Parts/LabelFontChanger.gd" id="13_iwu7d"]
+[ext_resource type="Script" uid="uid://c22okxds46u6a" path="res://Scripts/Parts/MultiplayerSetter.gd" id="14_yvj4y"]
 [ext_resource type="PackedScene" uid="uid://bqy0nm0h7f5sl" path="res://Scenes/Parts/DataDeletionNode.tscn" id="15_oh4w7"]
 [ext_resource type="PackedScene" uid="uid://bom2rstlk8fws" path="res://Scenes/Prefabs/UI/ResourcePackConfigMenu.tscn" id="16_78q3k"]
 [ext_resource type="Script" uid="uid://dcx77vdfvwq4y" path="res://Scripts/Parts/ResourcePackTemplateCreator.gd" id="19_k6yev"]
@@ -209,7 +210,7 @@ offset_right = 22.600006
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_hnwhb")
-containers = [NodePath("PanelContainer/MarginContainer/VBoxContainer/Video"), NodePath("PanelContainer/MarginContainer/VBoxContainer/Audio"), NodePath("PanelContainer/MarginContainer/VBoxContainer/Visuals"), NodePath("PanelContainer/MarginContainer/VBoxContainer/ResourcePacks"), NodePath("PanelContainer/MarginContainer/VBoxContainer/Difficulty"), NodePath("PanelContainer/MarginContainer/VBoxContainer/KeyboardControls"), NodePath("PanelContainer/MarginContainer/VBoxContainer/Controller"), NodePath("PanelContainer/MarginContainer/VBoxContainer/Data")]
+containers = [NodePath("PanelContainer/MarginContainer/VBoxContainer/Video"), NodePath("PanelContainer/MarginContainer/VBoxContainer/Audio"), NodePath("PanelContainer/MarginContainer/VBoxContainer/Visuals"), NodePath("PanelContainer/MarginContainer/VBoxContainer/ResourcePacks"), NodePath("PanelContainer/MarginContainer/VBoxContainer/Difficulty"), NodePath("PanelContainer/MarginContainer/VBoxContainer/Multiplayer"), NodePath("PanelContainer/MarginContainer/VBoxContainer/KeyboardControls"), NodePath("PanelContainer/MarginContainer/VBoxContainer/Controller"), NodePath("PanelContainer/MarginContainer/VBoxContainer/Data")]
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 custom_minimum_size = Vector2(222, 0)
@@ -720,6 +721,65 @@ uppercase = true
 [node name="DifficultySetter" type="Node" parent="PanelContainer/MarginContainer/VBoxContainer/Difficulty"]
 script = ExtResource("10_2qqpf")
 
+[node name="Multiplayer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" node_paths=PackedStringArray("options", "description_node")]
+visible = false
+custom_minimum_size = Vector2(0, 134)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = -4
+script = ExtResource("4_avtty")
+category_name = "SETTINGS_MULTIPLAYER"
+options = [NodePath("CoopStyle")]
+description_node = NodePath("Description/AutoScrollContainer/MarginContainer/Desc")
+
+[node name="Control" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/Multiplayer"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="CoopStyle" parent="PanelContainer/MarginContainer/VBoxContainer/Multiplayer" groups=["Options"] instance=ExtResource("3_dl6kk")]
+layout_mode = 2
+option_key = "coop_style"
+title = "MULTI_COOP_STYLE"
+value_descs = Array[String](["DESC_COOP_STYLE_0", "DESC_COOP_STYLE_1"])
+values = ["SETTINGS_CLASSIC", "SETTINGS_MODERN"]
+settings_category = "multiplayer"
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer/Multiplayer"]
+custom_minimum_size = Vector2(0, 11)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_2qqpf")
+
+[node name="Description" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/Multiplayer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ksnto")
+
+[node name="AutoScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBoxContainer/Multiplayer/Description"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+script = ExtResource("12_oh4w7")
+direction = 1
+is_active = true
+auto_connect_focus = false
+metadata/_custom_type_script = "uid://d63p6qr5a748"
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/Multiplayer/Description/AutoScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_bottom = -4
+
+[node name="Desc" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/Multiplayer/Description/AutoScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+autowrap_mode = 2
+uppercase = true
+
+[node name="MultiplayerSetter" type="Node" parent="PanelContainer/MarginContainer/VBoxContainer/Multiplayer"]
+script = ExtResource("14_yvj4y")
+
 [node name="KeyboardControls" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" node_paths=PackedStringArray("options")]
 layout_mode = 2
 size_flags_vertical = 3
@@ -960,7 +1020,7 @@ size_flags_vertical = 0
 
 [node name="Icon" type="NinePatchRect" parent="PanelContainer/Control"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(24, 23)
+custom_minimum_size = Vector2(24, 24)
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -969,11 +1029,11 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -12.0
 offset_right = 12.0
-offset_bottom = 23.0
+offset_bottom = 24.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_7l5ko")
-region_rect = Rect2(0, 0, 24, 23)
+region_rect = Rect2(0, 0, 24, 24)
 
 [node name="LabelFontChanger" type="Node" parent="." node_paths=PackedStringArray("labels")]
 script = ExtResource("13_iwu7d")
@@ -1035,6 +1095,7 @@ script = ExtResource("19_k6yev")
 [connection signal="value_changed" from="PanelContainer/MarginContainer/VBoxContainer/Difficulty/BackScroll" to="PanelContainer/MarginContainer/VBoxContainer/Difficulty/DifficultySetter" method="backscroll_changed"]
 [connection signal="value_changed" from="PanelContainer/MarginContainer/VBoxContainer/Difficulty/TimeLimit" to="PanelContainer/MarginContainer/VBoxContainer/Difficulty/DifficultySetter" method="time_limit_changed"]
 [connection signal="value_changed" from="PanelContainer/MarginContainer/VBoxContainer/Difficulty/LakituStyle" to="PanelContainer/MarginContainer/VBoxContainer/Difficulty/DifficultySetter" method="lakitu_style_changed"]
+[connection signal="value_changed" from="PanelContainer/MarginContainer/VBoxContainer/Multiplayer/CoopStyle" to="PanelContainer/MarginContainer/VBoxContainer/Multiplayer/MultiplayerSetter" method="coop_style_changed"]
 [connection signal="deleted" from="PanelContainer/MarginContainer/VBoxContainer/Data/CampaignData" to="PanelContainer/MarginContainer/VBoxContainer/Data/DataDeletion" method="delete_story"]
 [connection signal="deleted" from="PanelContainer/MarginContainer/VBoxContainer/Data/ChallengeModeData" to="PanelContainer/MarginContainer/VBoxContainer/Data/DataDeletion" method="delete_challenge"]
 [connection signal="deleted" from="PanelContainer/MarginContainer/VBoxContainer/Data/BooRaceData" to="PanelContainer/MarginContainer/VBoxContainer/Data/DataDeletion" method="delete_boo"]

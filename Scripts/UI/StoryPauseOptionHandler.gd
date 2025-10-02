@@ -1,7 +1,7 @@
 extends Node
 
 func restart_level() -> void:
-	Global.player_power_states = "0000"
+	Global.reset_power_states()
 	Global.checkpoint_passed = false
 	Level.first_load = true
 	Global.speed_run_timer = 0

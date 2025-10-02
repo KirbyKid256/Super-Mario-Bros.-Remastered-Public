@@ -53,7 +53,7 @@ func reset_values() -> void:
 		ChallengeModeHandler.current_run_red_coins_collected = ChallengeModeHandler.red_coins_collected[Global.world_num - 1][Global.level_num - 1]
 	Global.lives = 3
 	Global.score = 0
-	Global.player_power_states = "0000"
+	Global.reset_power_states()
 	Global.coins = 0
 	if Global.current_game_mode == Global.GameMode.CHALLENGE:
 		return

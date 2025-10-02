@@ -80,7 +80,7 @@ func handle_input() -> void:
 		var characters := Global.player_characters
 		for i in characters:
 			if int(i) > 3:
-				characters = [0, 0, 0, 0]
+				characters = [0, 1, 2, 3, 0, 1, 2, 3]
 		Settings.file.game.characters = characters
 		Settings.save_settings()
 		selected.emit()

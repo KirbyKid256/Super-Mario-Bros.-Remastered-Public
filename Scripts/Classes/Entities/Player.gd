@@ -206,7 +206,7 @@ func _ready() -> void:
 	Global.level_theme_changed.connect(apply_character_physics)
 	Global.level_theme_changed.connect(set_power_state_frame)
 	if Global.current_level.first_load and Global.current_game_mode == Global.GameMode.MARATHON_PRACTICE:
-		Global.player_power_states[player_id] = "0"
+		Global.player_power_states[player_id] = 0
 	power_state = $PowerStates.get_node(POWER_STATES[int(Global.player_power_states[player_id])])
 	if Global.current_game_mode == Global.GameMode.LEVEL_EDITOR:
 		camera.enabled = false
@@ -585,7 +585,7 @@ func die(pit := false) -> void:
 
 func death_load() -> void:
 	power_state = get_node("PowerStates/Small")
-	Global.player_power_states = "0000"
+	Global.reset_power_states()
 
 	if Global.death_load:
 		return
