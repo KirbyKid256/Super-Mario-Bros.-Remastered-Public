@@ -16,6 +16,10 @@ signal option_4_selected
 
 signal closed
 
+func _ready() -> void:
+	Input.joy_connection_changed.connect(func(d, c): if d != 0 or c: update_colours())
+	Global.level_theme_changed.connect(update_colours)
+
 func _process(_delta: float) -> void:
 	if active:
 		handle_inputs()
@@ -23,14 +27,14 @@ func _process(_delta: float) -> void:
 	cursor.global_position.x = options[selected_index].global_position.x - 10
 
 func handle_inputs() -> void:
-	if Input.is_action_just_pressed("ui_down"):
+	if Global.player_action_just_pressed("ui_down"):
 		selected_index += 1
-	if Input.is_action_just_pressed("ui_up"):
+	if Global.player_action_just_pressed("ui_up"):
 		selected_index -= 1
 	selected_index = clamp(selected_index, 0, options.size() - 1)
-	if Input.is_action_just_pressed("ui_accept"):
+	if Global.player_action_just_pressed("ui_accept"):
 		option_selected()
-	elif Input.is_action_just_pressed("pause") or Input.is_action_just_pressed("ui_back"):
+	elif Global.player_action_just_pressed("pause") or Global.player_action_just_pressed("ui_back"):
 		close()
 
 func option_selected() -> void:
@@ -42,21 +46,34 @@ func open_settings() -> void:
 	await $SettingsMenu.closed
 	active = true
 
-func open() -> void:
+func update_colours() -> void:
+	if Global.connected_players > 1:
+		$Control/PanelContainer.self_modulate = PlayerManager.colours[PlayerManager.active_device]
+		$SettingsMenu/PanelContainer.self_modulate = $Control/PanelContainer.self_modulate
+	else:
+		$Control/PanelContainer.self_modulate = Color.WHITE
+		$SettingsMenu/PanelContainer.self_modulate = Color.WHITE
+
+func open(device := 0) -> void:
 	if is_pause:
 		Global.game_paused = true
 		AudioManager.play_global_sfx("pause")
 		get_tree().paused = true
+	if Global.connected_players > 1:
+		PlayerManager.active_device = device
+	else:
+		PlayerManager.active_device = 0
+	update_colours()
 	show()
-	await get_tree().physics_frame
+	await get_tree().create_timer(0.1).timeout
 	active = true
 
 func close() -> void:
 	active = false
 	selected_index = 0
+	PlayerManager.active_device = 0
 	hide()
 	closed.emit()
-	for i in 2:
-		await get_tree().physics_frame
+	await get_tree().create_timer(0.1).timeout
 	Global.game_paused = false
 	get_tree().paused = false

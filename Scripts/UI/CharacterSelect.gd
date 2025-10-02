@@ -63,20 +63,20 @@ func open() -> void:
 	get_custom_characters()
 	show()
 	grab_focus()
-	selected_index = int(Global.player_characters[player_id])
+	selected_index = int(Global.player_characters[PlayerManager.active_device])
 	update_sprites()
-	await get_tree().physics_frame
+	await get_tree().create_timer(0.1).timeout
 	active = true
 
 func handle_input() -> void:
-	if Input.is_action_just_pressed("ui_left"):
+	if Global.player_action_just_pressed("ui_left"):
 		selected_index = wrap(selected_index - 1, 0, Player.CHARACTERS.size())
 		update_sprites()
-	elif Input.is_action_just_pressed("ui_right"):
+	elif Global.player_action_just_pressed("ui_right"):
 		selected_index = wrap(selected_index + 1, 0, Player.CHARACTERS.size())
 		update_sprites()
-	if Input.is_action_just_pressed("ui_accept"):
-		Global.player_characters[player_id] = (selected_index)
+	if Global.player_action_just_pressed("ui_accept"):
+		Global.player_characters[PlayerManager.active_device] = selected_index
 		var characters := Global.player_characters
 		for i in characters:
 			if int(i) > 3:
@@ -91,8 +91,11 @@ func handle_input() -> void:
 
 func update_sprites() -> void:
 	%Left.force_character = Player.CHARACTERS[wrap(selected_index - 1, 0, Player.CHARACTERS.size())]
+	%Left.player_id = PlayerManager.active_device
 	%Selected.force_character = Player.CHARACTERS[wrap(selected_index, 0, Player.CHARACTERS.size())]
+	%Selected.player_id = PlayerManager.active_device
 	%Right.force_character = Player.CHARACTERS[wrap(selected_index + 1, 0, Player.CHARACTERS.size())]
+	%Right.player_id = PlayerManager.active_device
 	for i in [%Left, %Selected, %Right]:
 		i.update()
 		i.play("Pose" if i == %Selected else "FaceForward")

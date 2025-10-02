@@ -19,7 +19,6 @@ func _process(delta: float) -> void:
 		delta_time -= 1
 		on_timeout()
 	handle_main_hud()
-	handle_pausing()
 
 func handle_main_hud() -> void:
 	$Main.visible = not Settings.file.visuals.modern_hud
@@ -166,13 +165,13 @@ func handle_speedrun_timer() -> void:
 	%ModernPB.text = %PB.text
 	%ModernPB.modulate = %PB.modulate
 
-func handle_pausing() -> void:
+func _input(event: InputEvent) -> void:
 	if get_tree().get_first_node_in_group("Players") != null and Global.can_pause and (Global.current_game_mode != Global.GameMode.LEVEL_EDITOR):
 		if get_tree().paused == false and Global.game_paused == false:
-			if Input.is_action_just_pressed("pause"):
-				activate_pause_menu()
+			if Global.player_action_just_pressed("pause", event.device):
+				activate_pause_menu(event.device)
 
-func activate_pause_menu() -> void:
+func activate_pause_menu(device: int = 0) -> void:
 	match Global.current_game_mode:
 		Global.GameMode.BOO_RACE:
 			$BooRacePause.open()
@@ -181,7 +180,7 @@ func activate_pause_menu() -> void:
 		Global.GameMode.MARATHON_PRACTICE:
 			$MarathonPause.open()
 		_:
-			$StoryPause.open()
+			$StoryPause.open(device)
 
 
 

@@ -30,11 +30,11 @@ func _process(_delta: float) -> void:
 		selected_index = minimum_idx
 
 func handle_input() -> void:
-	if Input.is_action_just_pressed("ui_down"):
+	if Global.player_action_just_pressed("ui_down"):
 		selected_index += 1
 		if Settings.file.audio.extra_sfx == 1:
 			AudioManager.play_global_sfx("menu_move")
-	if Input.is_action_just_pressed("ui_up"):
+	if Global.player_action_just_pressed("ui_up"):
 		selected_index -= 1
 		if Settings.file.audio.extra_sfx == 1:
 			AudioManager.play_global_sfx("menu_move")
