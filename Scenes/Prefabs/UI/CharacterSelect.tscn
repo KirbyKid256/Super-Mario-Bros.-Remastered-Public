@@ -71,6 +71,14 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/separator = SubResource("StyleBoxLine_2ehcx")
 
+[node name="PlayerNumber" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+text = "P1"
+uppercase = true
+
 [node name="Spotlight" type="TextureRect" parent="Panel/MarginContainer/VBoxContainer"]
 self_modulate = Color(0.96862745, 0.22352941, 0.0627451, 1)
 layout_mode = 2

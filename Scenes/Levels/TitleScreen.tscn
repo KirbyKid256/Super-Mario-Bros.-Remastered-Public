@@ -286,15 +286,126 @@ process_callback = 0
 position = Vector2(0, -528)
 tile_map_data = PackedByteArray("AAAAACIAAAACAAAAAAAAACMAAAACAAIAAAABACIAAAACAAAAAAABACMAAAACAAIAAAACACIAAAACAAAAAAACACMAAAACAAIAAAADACIAAAACAAAAAAADACMAAAACAAIAAAAEACIAAAACAAAAAAAEACMAAAACAAIAAAAFACIAAAACAAAAAAAFACMAAAACAAIAAAAGACIAAAACAAAAAAAGACMAAAACAAIAAAAHACIAAAACAAAAAAAHACMAAAACAAIAAAAIACIAAAACAAAAAAAIACMAAAACAAIAAAAJACIAAAACAAAAAAAJACMAAAACAAIAAAAKACIAAAACAAAAAAAKACMAAAACAAIAAAALACIAAAACAAAAAAALACMAAAACAAIAAAAMACIAAAACAAAAAAAMACMAAAACAAIAAAANACIAAAACAAAAAAANACMAAAACAAIAAAAOACIAAAACAAAAAAAOACMAAAACAAIAAAAPACIAAAACAAAAAAAPACMAAAACAAIAAAAQACIAAAACAAAAAAAQACMAAAACAAIAAAARACIAAAACAAAAAAARACMAAAACAAIAAAASACIAAAACAAAAAAASACMAAAACAAIAAAATACIAAAACAAAAAAATACMAAAACAAIAAAAUACIAAAACAAAAAAAUACMAAAACAAIAAAAVACIAAAACAAAAAAAVACMAAAACAAIAAAAWACIAAAACAAAAAAAWACMAAAACAAIAAAAXACIAAAACAAAAAAAXACMAAAACAAIAAAAYACIAAAACAAAAAAAYACMAAAACAAIAAAAZACIAAAACAAAAAAAZACMAAAACAAIAAAAaACIAAAACAAAAAAAaACMAAAACAAIAAAAbACIAAAACAAAAAAAbACMAAAACAAIAAAAcACIAAAACAAAAAAAcACMAAAACAAIAAAAdACIAAAACAAAAAAAdACMAAAACAAIAAAAeACIAAAACAAAAAAAeACMAAAACAAIAAAAfACIAAAACAAAAAAAfACMAAAACAAIAAADm/yIAAAACAAAAAADm/yMAAAACAAIAAADn/yIAAAACAAAAAADn/yMAAAACAAIAAADo/yIAAAACAAAAAADo/yMAAAACAAIAAADp/yIAAAACAAAAAADp/yMAAAACAAIAAADq/yIAAAACAAAAAADq/yMAAAACAAIAAADr/yIAAAACAAAAAADr/yMAAAACAAIAAADs/yIAAAACAAAAAADs/yMAAAACAAIAAADt/yIAAAACAAAAAADt/yMAAAACAAIAAADu/yIAAAACAAAAAADu/yMAAAACAAIAAADv/yIAAAACAAAAAADv/yMAAAACAAIAAADw/yIAAAACAAAAAADw/yMAAAACAAIAAADx/yIAAAACAAAAAADx/yMAAAACAAIAAADy/yIAAAACAAAAAADy/yMAAAACAAIAAADz/yIAAAACAAAAAADz/yMAAAACAAIAAAD0/yIAAAACAAAAAAD0/yMAAAACAAIAAAD1/yIAAAACAAAAAAD1/yMAAAACAAIAAAD2/yIAAAACAAAAAAD2/yMAAAACAAIAAAD3/yIAAAACAAAAAAD3/yMAAAACAAIAAAD4/yIAAAACAAAAAAD4/yMAAAACAAIAAAD5/yIAAAACAAAAAAD5/yMAAAACAAIAAAD6/yIAAAACAAAAAAD6/yMAAAACAAIAAAD7/yIAAAACAAAAAAD7/yMAAAACAAIAAAD8/yIAAAACAAAAAAD8/yMAAAACAAIAAAD9/yIAAAACAAAAAAD9/yMAAAACAAIAAAD+/yIAAAACAAAAAAD+/yMAAAACAAIAAAD//yIAAAACAAAAAAD//yMAAAACAAIAAAAgACIAAAACAAAAAAAgACMAAAACAAIAAAAhACIAAAACAAAAAAAhACMAAAACAAIAAAAiACIAAAACAAAAAAAiACMAAAACAAIAAAAjACIAAAACAAAAAAAjACMAAAACAAIAAAAkACIAAAACAAAAAAAkACMAAAACAAIAAAAlACIAAAACAAAAAAAlACMAAAACAAIAAAAmACIAAAACAAAAAAAmACMAAAACAAIAAAAnACIAAAACAAAAAAAnACMAAAACAAIAAAAoACIAAAACAAAAAAAoACMAAAACAAIAAAApACIAAAACAAAAAAApACMAAAACAAIAAAAqACIAAAACAAAAAAAqACMAAAACAAIAAAArACIAAAACAAAAAAArACMAAAACAAIAAAAsACIAAAACAAAAAAAsACMAAAACAAIAAAAtACIAAAACAAAAAAAtACMAAAACAAIAAAAuACIAAAACAAAAAAAuACMAAAACAAIAAAAvACIAAAACAAAAAAAvACMAAAACAAIAAAAwACIAAAACAAAAAAAwACMAAAACAAIAAAAxACIAAAACAAAAAAAxACMAAAACAAIAAAAyACIAAAACAAAAAAAyACMAAAACAAIAAAAzACIAAAACAAAAAAAzACMAAAACAAIAAAA0ACIAAAACAAAAAAA0ACMAAAACAAIAAAA1ACIAAAACAAAAAAA1ACMAAAACAAIAAAA2ACIAAAACAAAAAAA2ACMAAAACAAIAAAA3ACIAAAACAAAAAAA3ACMAAAACAAIAAAA4ACIAAAACAAAAAAA4ACMAAAACAAIAAAA5ACIAAAACAAAAAAA5ACMAAAACAAIAAAA6ACIAAAACAAAAAAA6ACMAAAACAAIAAAA7ACIAAAACAAAAAAA7ACMAAAACAAIAAAA8ACIAAAACAAAAAAA8ACMAAAACAAIAAAA9ACIAAAACAAAAAAA9ACMAAAACAAIAAAA+ACIAAAACAAAAAAA+ACMAAAACAAIAAAA/ACIAAAACAAAAAAA/ACMAAAACAAIAAABAACIAAAACAAAAAABAACMAAAACAAIAAABBACIAAAACAAAAAABBACMAAAACAAIAAABCACIAAAACAAAAAABCACMAAAACAAIAAABDACIAAAACAAAAAABDACMAAAACAAIAAABEACIAAAACAAAAAABEACMAAAACAAIAAABFACIAAAACAAAAAABFACMAAAACAAIAAABGACIAAAACAAAAAABGACMAAAACAAIAAABHACIAAAACAAAAAABHACMAAAACAAIAAABIACIAAAACAAAAAABIACMAAAACAAIAAABJACIAAAACAAAAAABJACMAAAACAAIAAABKACIAAAACAAAAAABKACMAAAACAAIAAABLACIAAAACAAAAAABLACMAAAACAAIAAABMACIAAAACAAAAAABMACMAAAACAAIAAABNACIAAAACAAAAAABNACMAAAACAAIAAABOACIAAAACAAAAAABOACMAAAACAAIAAABPACIAAAACAAAAAABPACMAAAACAAIAAABQACIAAAACAAAAAABQACMAAAACAAIAAABRACIAAAACAAAAAABRACMAAAACAAIAAABSACIAAAACAAAAAABSACMAAAACAAIAAABTACIAAAACAAAAAABTACMAAAACAAIAAABUACIAAAACAAAAAABUACMAAAACAAIAAABVACIAAAACAAAAAABVACMAAAACAAIAAABWACIAAAACAAAAAABWACMAAAACAAIAAABXACIAAAACAAAAAABXACMAAAACAAIAAABYACIAAAACAAAAAABYACMAAAACAAIAAABZACIAAAACAAAAAABZACMAAAACAAIAAABaACIAAAACAAAAAABaACMAAAACAAIAAABbACIAAAACAAAAAABbACMAAAACAAIAAABcACIAAAACAAAAAABcACMAAAACAAIAAABdACIAAAACAAAAAABdACMAAAACAAIAAABeACIAAAACAAAAAABeACMAAAACAAIAAABfACIAAAACAAAAAABfACMAAAACAAIAAABgACIAAAACAAAAAABgACMAAAACAAIAAABhACIAAAACAAAAAABhACMAAAACAAIAAABiACIAAAACAAAAAABiACMAAAACAAIAAABjACIAAAACAAAAAABjACMAAAACAAIAAABkACIAAAACAAAAAABkACMAAAACAAIAAABlACIAAAACAAAAAABlACMAAAACAAIAAABmACIAAAACAAAAAABmACMAAAACAAIAAABnACIAAAACAAAAAABnACMAAAACAAIAAABoACIAAAACAAAAAABoACMAAAACAAIAAABpACIAAAACAAAAAABpACMAAAACAAIAAABqACIAAAACAAAAAABqACMAAAACAAIAAABrACIAAAACAAAAAABrACMAAAACAAIAAABsACIAAAACAAAAAABsACMAAAACAAIAAABtACIAAAACAAAAAABtACMAAAACAAIAAABuACIAAAACAAAAAABuACMAAAACAAIAAABvACIAAAADAAAAAABvACMAAAADAAIAAACR/yIAAAABAAMAAACS/yIAAAACAAMAAACT/yIAAAACAAMAAACU/yIAAAACAAMAAACV/yIAAAACAAMAAACW/yIAAAACAAMAAACX/yIAAAACAAMAAACY/yIAAAACAAMAAACZ/yIAAAACAAMAAACa/yIAAAACAAMAAACb/yIAAAACAAMAAACc/yIAAAACAAMAAACd/yIAAAACAAMAAACe/yIAAAACAAMAAACf/yIAAAACAAMAAACg/yIAAAABAAAAAACh/yIAAAACAAAAAACi/yIAAAACAAAAAACj/yIAAAACAAAAAACk/yIAAAACAAAAAACl/yIAAAACAAAAAACm/yIAAAACAAAAAACn/yIAAAACAAAAAACo/yIAAAACAAAAAACp/yIAAAACAAAAAACq/yIAAAACAAAAAACr/yIAAAACAAAAAACs/yIAAAACAAAAAACt/yIAAAACAAAAAACu/yIAAAACAAAAAACv/yIAAAACAAAAAACw/yIAAAACAAAAAACx/yIAAAACAAAAAACy/yIAAAACAAAAAACz/yIAAAACAAAAAAC0/yIAAAACAAAAAAC1/yIAAAACAAAAAAC2/yIAAAACAAAAAAC3/yIAAAACAAAAAAC4/yIAAAACAAAAAAC5/yIAAAACAAAAAAC6/yIAAAACAAAAAAC7/yIAAAACAAAAAAC8/yIAAAACAAAAAAC9/yIAAAACAAAAAAC+/yIAAAACAAAAAAC//yIAAAACAAAAAADA/yIAAAACAAAAAADB/yIAAAACAAAAAADC/yIAAAACAAAAAADD/yIAAAACAAAAAADE/yIAAAACAAAAAADF/yIAAAACAAAAAADG/yIAAAACAAAAAADH/yIAAAACAAAAAADI/yIAAAACAAAAAADJ/yIAAAACAAAAAADK/yIAAAACAAAAAADL/yIAAAACAAAAAADM/yIAAAACAAAAAADN/yIAAAACAAAAAADO/yIAAAACAAAAAADP/yIAAAACAAAAAADQ/yIAAAACAAAAAADR/yIAAAACAAAAAADS/yIAAAACAAAAAADT/yIAAAACAAAAAADU/yIAAAACAAAAAADV/yIAAAACAAAAAADW/yIAAAACAAAAAADX/yIAAAACAAAAAADY/yIAAAACAAAAAADZ/yIAAAACAAAAAADa/yIAAAACAAAAAADb/yIAAAACAAAAAADc/yIAAAACAAAAAADd/yIAAAACAAAAAADe/yIAAAACAAAAAADf/yIAAAACAAAAAADg/yIAAAACAAAAAADh/yIAAAACAAAAAADi/yIAAAACAAAAAADj/yIAAAACAAAAAADk/yIAAAACAAAAAADl/yIAAAACAAAAAADj/yMAAAACAAIAAADk/yMAAAACAAIAAADl/yMAAAACAAIAAACg/yMAAAABAAIAAACh/yMAAAACAAIAAACi/yMAAAACAAIAAACj/yMAAAACAAIAAACk/yMAAAACAAIAAACl/yMAAAACAAIAAACm/yMAAAACAAIAAACn/yMAAAACAAIAAACo/yMAAAACAAIAAACp/yMAAAACAAIAAACq/yMAAAACAAIAAACr/yMAAAACAAIAAACs/yMAAAACAAIAAACt/yMAAAACAAIAAACu/yMAAAACAAIAAACv/yMAAAACAAIAAACw/yMAAAACAAIAAACx/yMAAAACAAIAAACy/yMAAAACAAIAAACz/yMAAAACAAIAAAC0/yMAAAACAAIAAAC1/yMAAAACAAIAAAC2/yMAAAACAAIAAAC3/yMAAAACAAIAAAC4/yMAAAACAAIAAAC5/yMAAAACAAIAAAC6/yMAAAACAAIAAAC7/yMAAAACAAIAAAC8/yMAAAACAAIAAAC9/yMAAAACAAIAAAC+/yMAAAACAAIAAAC//yMAAAACAAIAAADA/yMAAAACAAIAAADB/yMAAAACAAIAAADC/yMAAAACAAIAAADD/yMAAAACAAIAAADE/yMAAAACAAIAAADF/yMAAAACAAIAAADG/yMAAAACAAIAAADH/yMAAAACAAIAAADI/yMAAAACAAIAAADJ/yMAAAACAAIAAADK/yMAAAACAAIAAADL/yMAAAACAAIAAADM/yMAAAACAAIAAADN/yMAAAACAAIAAADO/yMAAAACAAIAAADP/yMAAAACAAIAAADQ/yMAAAACAAIAAADR/yMAAAACAAIAAADS/yMAAAACAAIAAADT/yMAAAACAAIAAADU/yMAAAACAAIAAADV/yMAAAACAAIAAADW/yMAAAACAAIAAADX/yMAAAACAAIAAADY/yMAAAACAAIAAADZ/yMAAAACAAIAAADa/yMAAAACAAIAAADb/yMAAAACAAIAAADc/yMAAAACAAIAAADd/yMAAAACAAIAAADe/yMAAAACAAIAAADf/yMAAAACAAIAAADg/yMAAAACAAIAAADh/yMAAAACAAIAAADi/yMAAAACAAIAAAA=")
 
-[node name="PlayerSprite" type="AnimatedSprite2D" parent="." node_paths=PackedStringArray("resource_setter")]
+[node name="PlayerSprites" type="Node2D" parent="."]
 position = Vector2(-64, 17)
+
+[node name="PlayerSprite0" type="AnimatedSprite2D" parent="PlayerSprites" node_paths=PackedStringArray("resource_setter")]
 sprite_frames = ExtResource("6_oofmi")
 animation = &"Idle"
 script = ExtResource("6_8d7lx")
 resource_setter = NodePath("ResourceSetterNew")
 metadata/_custom_type_script = "uid://b08qfwj5jk6g1"
 
-[node name="ResourceSetterNew" type="Node" parent="PlayerSprite"]
+[node name="ResourceSetterNew" type="Node" parent="PlayerSprites/PlayerSprite0"]
+script = ExtResource("6_100cl")
+use_cache = false
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="PlayerSprite1" type="AnimatedSprite2D" parent="PlayerSprites" node_paths=PackedStringArray("resource_setter")]
+visible = false
+position = Vector2(-16, 0)
+sprite_frames = ExtResource("6_oofmi")
+animation = &"Idle"
+script = ExtResource("6_8d7lx")
+player_id = 1
+resource_setter = NodePath("ResourceSetterNew")
+metadata/_custom_type_script = "uid://b08qfwj5jk6g1"
+
+[node name="ResourceSetterNew" type="Node" parent="PlayerSprites/PlayerSprite1"]
+script = ExtResource("6_100cl")
+use_cache = false
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="PlayerSprite2" type="AnimatedSprite2D" parent="PlayerSprites" node_paths=PackedStringArray("resource_setter")]
+visible = false
+position = Vector2(-32, 0)
+sprite_frames = ExtResource("6_oofmi")
+animation = &"Idle"
+script = ExtResource("6_8d7lx")
+player_id = 2
+resource_setter = NodePath("ResourceSetterNew")
+metadata/_custom_type_script = "uid://b08qfwj5jk6g1"
+
+[node name="ResourceSetterNew" type="Node" parent="PlayerSprites/PlayerSprite2"]
+script = ExtResource("6_100cl")
+use_cache = false
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="PlayerSprite3" type="AnimatedSprite2D" parent="PlayerSprites" node_paths=PackedStringArray("resource_setter")]
+visible = false
+position = Vector2(-48, 0)
+sprite_frames = ExtResource("6_oofmi")
+animation = &"Idle"
+script = ExtResource("6_8d7lx")
+player_id = 3
+resource_setter = NodePath("ResourceSetterNew")
+metadata/_custom_type_script = "uid://b08qfwj5jk6g1"
+
+[node name="ResourceSetterNew" type="Node" parent="PlayerSprites/PlayerSprite3"]
+script = ExtResource("6_100cl")
+use_cache = false
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="PlayerSprite4" type="AnimatedSprite2D" parent="PlayerSprites" node_paths=PackedStringArray("resource_setter")]
+visible = false
+position = Vector2(176, 0)
+sprite_frames = ExtResource("6_oofmi")
+animation = &"Idle"
+flip_h = true
+script = ExtResource("6_8d7lx")
+player_id = 4
+resource_setter = NodePath("ResourceSetterNew")
+metadata/_custom_type_script = "uid://b08qfwj5jk6g1"
+
+[node name="ResourceSetterNew" type="Node" parent="PlayerSprites/PlayerSprite4"]
+script = ExtResource("6_100cl")
+use_cache = false
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="PlayerSprite5" type="AnimatedSprite2D" parent="PlayerSprites" node_paths=PackedStringArray("resource_setter")]
+visible = false
+position = Vector2(160, 0)
+sprite_frames = ExtResource("6_oofmi")
+animation = &"Idle"
+flip_h = true
+script = ExtResource("6_8d7lx")
+player_id = 5
+resource_setter = NodePath("ResourceSetterNew")
+metadata/_custom_type_script = "uid://b08qfwj5jk6g1"
+
+[node name="ResourceSetterNew" type="Node" parent="PlayerSprites/PlayerSprite5"]
+script = ExtResource("6_100cl")
+use_cache = false
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="PlayerSprite6" type="AnimatedSprite2D" parent="PlayerSprites" node_paths=PackedStringArray("resource_setter")]
+visible = false
+position = Vector2(144, 0)
+sprite_frames = ExtResource("6_oofmi")
+animation = &"Idle"
+flip_h = true
+script = ExtResource("6_8d7lx")
+player_id = 6
+resource_setter = NodePath("ResourceSetterNew")
+metadata/_custom_type_script = "uid://b08qfwj5jk6g1"
+
+[node name="ResourceSetterNew" type="Node" parent="PlayerSprites/PlayerSprite6"]
+script = ExtResource("6_100cl")
+use_cache = false
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="PlayerSprite7" type="AnimatedSprite2D" parent="PlayerSprites" node_paths=PackedStringArray("resource_setter")]
+visible = false
+position = Vector2(128, 0)
+sprite_frames = ExtResource("6_oofmi")
+animation = &"Idle"
+flip_h = true
+script = ExtResource("6_8d7lx")
+player_id = 7
+resource_setter = NodePath("ResourceSetterNew")
+metadata/_custom_type_script = "uid://b08qfwj5jk6g1"
+
+[node name="ResourceSetterNew" type="Node" parent="PlayerSprites/PlayerSprite7"]
 script = ExtResource("6_100cl")
 use_cache = false
 metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
@@ -1540,20 +1651,20 @@ metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
 [connection signal="cancelled" from="CanvasLayer/StoryMode/NewBeatenGame/WorldSelect" to="CanvasLayer/StoryMode/NewBeatenGame/QuestSelect" method="open"]
 [connection signal="world_selected" from="CanvasLayer/StoryMode/NewBeatenGame/WorldSelect" to="CanvasLayer/StoryMode/NewBeatenGame/LevelSelect" method="open"]
 [connection signal="cancelled" from="CanvasLayer/StoryMode/NewBeatenGame/LevelSelect" to="CanvasLayer/StoryMode/NewBeatenGame/WorldSelect" method="open"]
-[connection signal="level_selected" from="CanvasLayer/StoryMode/NewBeatenGame/LevelSelect" to="CanvasLayer/StoryMode/NewBeatenGame/BeatenCharSelect" method="open"]
+[connection signal="level_selected" from="CanvasLayer/StoryMode/NewBeatenGame/LevelSelect" to="CanvasLayer/StoryMode/NewBeatenGame/BeatenCharSelect" method="open" binds= [true]]
 [connection signal="cancelled" from="CanvasLayer/StoryMode/NewBeatenGame/BeatenCharSelect" to="CanvasLayer/StoryMode/NewBeatenGame/LevelSelect" method="open"]
-[connection signal="selected" from="CanvasLayer/StoryMode/NewBeatenGame/BeatenCharSelect" to="." method="start_game"]
 [connection signal="selected" from="CanvasLayer/StoryMode/NewBeatenGame/BeatenCharSelect" to="." method="clear_stats"]
+[connection signal="selected" from="CanvasLayer/StoryMode/NewBeatenGame/BeatenCharSelect" to="." method="start_game"]
 [connection signal="cancelled" from="CanvasLayer/StoryMode/ContinueBeatenGame/WorldSelect" to="CanvasLayer/StoryMode/StoryOptions" method="open"]
 [connection signal="world_selected" from="CanvasLayer/StoryMode/ContinueBeatenGame/WorldSelect" to="CanvasLayer/StoryMode/ContinueBeatenGame/LevelSelect" method="open"]
 [connection signal="cancelled" from="CanvasLayer/StoryMode/ContinueBeatenGame/LevelSelect" to="CanvasLayer/StoryMode/ContinueBeatenGame/WorldSelect" method="open"]
-[connection signal="level_selected" from="CanvasLayer/StoryMode/ContinueBeatenGame/LevelSelect" to="CanvasLayer/StoryMode/ContinueBeatenGame/CharSelect" method="open"]
+[connection signal="level_selected" from="CanvasLayer/StoryMode/ContinueBeatenGame/LevelSelect" to="CanvasLayer/StoryMode/ContinueBeatenGame/CharSelect" method="open" binds= [true]]
 [connection signal="cancelled" from="CanvasLayer/StoryMode/ContinueBeatenGame/CharSelect" to="CanvasLayer/StoryMode/ContinueBeatenGame/LevelSelect" method="open"]
 [connection signal="selected" from="CanvasLayer/StoryMode/ContinueBeatenGame/CharSelect" to="." method="start_game"]
 [connection signal="cancelled" from="CanvasLayer/StoryMode/NewUnbeatenGame/NoBeatenCharSelect" to="CanvasLayer/StoryMode/StoryOptions" method="open"]
-[connection signal="selected" from="CanvasLayer/StoryMode/NewUnbeatenGame/NoBeatenCharSelect" to="." method="start_game"]
 [connection signal="selected" from="CanvasLayer/StoryMode/NewUnbeatenGame/NoBeatenCharSelect" to="." method="clear_stats"]
 [connection signal="selected" from="CanvasLayer/StoryMode/NewUnbeatenGame/NoBeatenCharSelect" to="." method="go_back_to_first_level"]
+[connection signal="selected" from="CanvasLayer/StoryMode/NewUnbeatenGame/NoBeatenCharSelect" to="." method="start_game"]
 [connection signal="cancelled" from="CanvasLayer/StoryMode/ContinueUnbeatenGame/CharacterSelect" to="CanvasLayer/StoryMode/StoryOptions" method="open"]
 [connection signal="selected" from="CanvasLayer/StoryMode/ContinueUnbeatenGame/CharacterSelect" to="." method="start_game"]
 [connection signal="closed" from="CanvasLayer/ChallengeOptions" to="CanvasLayer/Options2" method="open"]
@@ -1563,13 +1674,13 @@ metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
 [connection signal="cancelled" from="CanvasLayer/ChallengeHunt/WorldSelect" to="CanvasLayer/ChallengeOptions" method="open"]
 [connection signal="world_selected" from="CanvasLayer/ChallengeHunt/WorldSelect" to="CanvasLayer/ChallengeHunt/LevelSelect" method="open"]
 [connection signal="cancelled" from="CanvasLayer/ChallengeHunt/LevelSelect" to="CanvasLayer/ChallengeHunt/WorldSelect" method="open"]
-[connection signal="level_selected" from="CanvasLayer/ChallengeHunt/LevelSelect" to="CanvasLayer/ChallengeHunt/CharacterSelect" method="open"]
+[connection signal="level_selected" from="CanvasLayer/ChallengeHunt/LevelSelect" to="CanvasLayer/ChallengeHunt/CharacterSelect" method="open" binds= [true]]
 [connection signal="cancelled" from="CanvasLayer/ChallengeHunt/CharacterSelect" to="CanvasLayer/ChallengeHunt/LevelSelect" method="open"]
 [connection signal="selected" from="CanvasLayer/ChallengeHunt/CharacterSelect" to="." method="challenge_hunt_start"]
 [connection signal="cancelled" from="CanvasLayer/World9/ExtraWorldSelect" to="CanvasLayer/ChallengeOptions" method="open"]
 [connection signal="world_selected" from="CanvasLayer/World9/ExtraWorldSelect" to="CanvasLayer/World9/ExtraLevelSelect" method="open"]
 [connection signal="cancelled" from="CanvasLayer/World9/ExtraLevelSelect" to="CanvasLayer/World9/ExtraWorldSelect" method="open"]
-[connection signal="level_selected" from="CanvasLayer/World9/ExtraLevelSelect" to="CanvasLayer/World9/CharacterSelect" method="open"]
+[connection signal="level_selected" from="CanvasLayer/World9/ExtraLevelSelect" to="CanvasLayer/World9/CharacterSelect" method="open" binds= [true]]
 [connection signal="cancelled" from="CanvasLayer/World9/CharacterSelect" to="CanvasLayer/World9/ExtraLevelSelect" method="open"]
 [connection signal="selected" from="CanvasLayer/World9/CharacterSelect" to="." method="start_game"]
 [connection signal="cancelled" from="CanvasLayer/AllNightNippon/WorldSelect" to="CanvasLayer/Options1" method="open"]

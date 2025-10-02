@@ -17,6 +17,7 @@ var star_offset_x := 0
 var star_offset_y := 0
 
 func _enter_tree() -> void:
+	Input.joy_connection_changed.connect(update_players)
 	check_for_unlocked_achievements()
 	Global.debugged_in = false
 	Global.current_campaign = Settings.file.game.campaign
@@ -44,6 +45,7 @@ func _ready() -> void:
 	Global.current_level = null
 	Global.world_num = clamp(Global.world_num, 1, get_world_count())
 	update_title()
+	update_players()
 
 func update_title() -> void:
 	SaveManager.apply_save(SaveManager.load_save(Global.current_campaign))
@@ -53,6 +55,22 @@ func update_title() -> void:
 	await get_tree().physics_frame
 	$LevelBG.time_of_day = ["Day", "Night"].find(Global.theme_time)
 	$LevelBG.update_visuals()
+
+const SMOKE_PARTICLE := preload("uid://d08nv4qtfouv1")
+
+func update_players(device: int = -1, connected: bool = true) -> void:
+	if device < 0:
+		for i in range(1, 8): $PlayerSprites.get_child(i).visible = Global.connected_joypads.has(i)
+	elif device > 0:
+		if $PlayerSprites.get_child(device).visible != connected:
+			$PlayerSprites.get_child(device).visible = connected
+			for i in 2:
+				var smoke = SMOKE_PARTICLE.instantiate()
+				smoke.animation_finished.connect(smoke.queue_free)
+				smoke.position = $PlayerSprites.get_child(device).position - Vector2(0, 16 * i)
+				$PlayerSprites.add_child(smoke)
+				if i == 0: AudioManager.play_sfx("magic", smoke.global_position)
+				if int(Global.player_power_states[device]) == 0: break
 
 func play_bgm() -> void:
 	if has_achievements_to_unlock:
@@ -96,7 +114,7 @@ func continue_story() -> void:
 		go_back_to_first_level()
 		$CanvasLayer/StoryMode/QuestSelect.open()
 	else:
-		$CanvasLayer/StoryMode/NoBeatenCharSelect.open()
+		$CanvasLayer/StoryMode/NoBeatenCharSelect.open(true)
 
 func check_for_warpless() -> void:
 	SpeedrunHandler.is_warp_run = false
@@ -235,7 +253,7 @@ func new_game_selected() -> void:
 	if Global.game_beaten:
 		%QuestSelect.open()
 	else:
-		$CanvasLayer/StoryMode/NewUnbeatenGame/NoBeatenCharSelect.open()
+		$CanvasLayer/StoryMode/NewUnbeatenGame/NoBeatenCharSelect.open(true)
 
 func continue_game() -> void:
 	SaveManager.apply_save(SaveManager.load_save(Global.current_campaign))
@@ -243,7 +261,7 @@ func continue_game() -> void:
 	if Global.game_beaten:
 		$CanvasLayer/StoryMode/ContinueBeatenGame/WorldSelect.open()
 	else:
-		$CanvasLayer/StoryMode/ContinueUnbeatenGame/CharacterSelect.open()
+		$CanvasLayer/StoryMode/ContinueUnbeatenGame/CharacterSelect.open(true)
 
 func on_story_options_closed() -> void:
 	$CanvasLayer/Options2.open()

@@ -100,6 +100,7 @@ func handle_input() -> void:
 		return
 	if Input.is_action_just_pressed("ui_back"):
 		Global.transition_to_scene("res://Scenes/Levels/TitleScreen.tscn")
+		Global.no_coop = false
 	if Input.is_action_just_pressed("ui_accept"):
 		level_selected()
 

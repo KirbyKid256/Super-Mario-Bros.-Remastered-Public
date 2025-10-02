@@ -3,7 +3,10 @@ extends CharacterBody2D
 
 const CHARACTERS := ["Mario", "Luigi", "Toad", "Toadette"]
 
-var character := "Mario"
+var character := "Mario":
+	set(value):
+		character = value
+		$Sprite/ResourceSetter.force_properties["Character"] = value
 
 var direction := 1
 const FIREBALL_EXPLOSION = preload("res://Scenes/Prefabs/Particles/FireballExplosion.tscn")
@@ -31,4 +34,5 @@ func hit(play_sfx := true) -> void:
 func summon_explosion() -> void:
 	var node = FIREBALL_EXPLOSION.instantiate()
 	node.global_position = global_position
+	node.get_node("ResourceSetter").force_properties["Character"] = character
 	add_sibling(node)

@@ -58,6 +58,7 @@ signal text_shadow_changed
 @onready var player_ghost: PlayerGhost = $PlayerGhost
 
 var debugged_in := true
+var no_coop := false ## This variable determines if extra Players can be spawned in the level when multiple controllers are connected.
 
 var score_tween = create_tween()
 var time_tween = create_tween()
@@ -123,7 +124,16 @@ var can_time_tick := true:
 
 var player_power_states := [0, 0, 0, 0, 0, 0, 0, 0]
 
-var connected_players := 1
+var connected_joypads:
+	get():
+		var joypads = Input.get_connected_joypads(); if not joypads.has(0): joypads.insert(0, 0)
+		return joypads
+var connected_players:
+	get():
+		if no_coop: return 1
+		if current_level != null:
+			return clampi((get_tree().get_nodes_in_group("Players")).size(), 1, PlayerManager.MAX_LOCAL_PLAYERS)
+		return clampi(connected_joypads.size(), 1, PlayerManager.MAX_LOCAL_PLAYERS)
 
 const CAMPAIGNS := ["SMB1", "SMBLL", "SMBS", "SMBANN"]
 

@@ -7,7 +7,7 @@ signal selected
 signal cancelled
 var active := false
 
-var player_id := 0
+var player_queue := []
 
 var character_sprite_jsons := [
 	"res://Assets/Sprites/Players/Mario/Small.json",
@@ -59,7 +59,14 @@ func get_custom_characters() -> void:
 			if FileAccess.file_exists(char_path.path_join("SFX.json")):
 				AudioManager.character_sfx_map[i] = JSON.parse_string(FileAccess.open(char_path.path_join("SFX.json"), FileAccess.READ).get_as_text())
 
-func open() -> void:
+func open(can_coop := false) -> void:
+	PlayerManager.active_device = 0
+	Global.no_coop = not can_coop
+	if can_coop and Global.connected_players > 1:
+		player_queue = Global.connected_joypads
+		player_queue.remove_at(0)
+	else:
+		player_queue.clear()
 	get_custom_characters()
 	show()
 	grab_focus()
@@ -83,11 +90,18 @@ func handle_input() -> void:
 				characters = [0, 1, 2, 3, 0, 1, 2, 3]
 		Settings.file.game.characters = characters
 		Settings.save_settings()
-		selected.emit()
-		close()
-	elif Input.is_action_just_pressed("ui_back"):
+		if player_queue.is_empty():
+			player_queue.clear()
+			selected.emit()
+			close()
+		else:
+			PlayerManager.active_device = player_queue.pop_at(0)
+			selected_index = int(Global.player_characters[PlayerManager.active_device])
+			update_sprites()
+	elif Input.is_action_just_pressed("ui_back_0"):
 		close()
 		cancelled.emit()
+		Global.no_coop = false
 
 func update_sprites() -> void:
 	%Left.force_character = Player.CHARACTERS[wrap(selected_index - 1, 0, Player.CHARACTERS.size())]
@@ -103,12 +117,23 @@ func update_sprites() -> void:
 	%CharacterName.text = tr(Player.CHARACTER_NAMES[selected_index])
 	$Panel/MarginContainer/VBoxContainer/CharacterName/TextShadowColourChanger/ColourPaletteSampler.texture = %ColourPaletteSampler.texture
 	$Panel/MarginContainer/VBoxContainer/CharacterName/TextShadowColourChanger.handle_shadow_colours()
+	if player_queue.is_empty() and PlayerManager.active_device < 1:
+		$Panel.self_modulate = Color.WHITE
+		%PlayerNumber.hide()
+	else:
+		$Panel.self_modulate = PlayerManager.colours[PlayerManager.active_device]
+		%PlayerNumber.modulate = $Panel.self_modulate
+		%PlayerNumber.text = "P%d" % (PlayerManager.active_device + 1)
+		%PlayerNumber.show()
+
 func select() -> void:
 	selected.emit()
 	hide()
 	active = false
 
 func close() -> void:
+	PlayerManager.active_device = 0
+	player_queue.clear()
 	active = false
 	hide()
 

@@ -189,13 +189,19 @@ var skid_frames := 0
 var simulated_velocity := Vector2.ZERO
 
 func _ready() -> void:
+	name = "Player" + str(player_id + 1)
+	for group in ["CrouchCollisions", "SmallCollisions", "BigCollisions", "StepCollision"]:
+		for i in get_tree().get_nodes_in_group(group):
+			for child in find_children(i.name):
+				if child.has_meta("player_id"): continue
+				child.set_meta("player_id", player_id)
 	if classic_physics:
 		apply_classic_physics()
 	get_viewport().size_changed.connect(recenter_camera)
 	show()
-	$Checkpoint/Label.text = str(player_id + 1)
-	$Checkpoint/Label.modulate = [Color("5050FF"), Color("F73910"), Color("1A912E"), Color("FFB762")][player_id]
-	$Checkpoint/Label.visible = Global.connected_players > 1
+	check_player_label()
+	if player_id == 0:
+		Input.joy_connection_changed.connect(func(d, c): if d != 0 or c: check_player_label())
 	Global.can_pause = true
 	character = CHARACTERS[int(Global.player_characters[player_id])]
 	Global.can_time_tick = true
@@ -205,6 +211,7 @@ func _ready() -> void:
 	Global.level_theme_changed.connect(apply_character_sfx_map)
 	Global.level_theme_changed.connect(apply_character_physics)
 	Global.level_theme_changed.connect(set_power_state_frame)
+	Global.level_theme_changed.connect(check_player_label)
 	if Global.current_level.first_load and Global.current_game_mode == Global.GameMode.MARATHON_PRACTICE:
 		Global.player_power_states[player_id] = 0
 	power_state = $PowerStates.get_node(POWER_STATES[int(Global.player_power_states[player_id])])
@@ -216,6 +223,18 @@ func _ready() -> void:
 	if Global.level_editor == null:
 		recenter_camera()
 
+func check_player_label() -> void:
+	$Checkpoint/Label.text = str(player_id + 1)
+	$Checkpoint/Label.modulate = PlayerManager.colours[player_id]
+	$Checkpoint/Label.visible = not Global.no_coop and Global.connected_joypads.size() > 1
+
+static func match_id(i, id := 0) -> bool:
+	if i is Player: return i.player_id == id
+	return i.get_meta("player_id", 0) == id
+
+func match_player_id(i) -> bool:
+	return i.get_meta("player_id", 0) == player_id
+
 func apply_character_physics() -> void:
 	var path = "res://Assets/Sprites/Players/" + character + "/CharacterInfo.json"
 	if int(Global.player_characters[player_id]) > 3:
@@ -225,11 +244,11 @@ func apply_character_physics() -> void:
 	for i in json.physics:
 		set(i, json.physics[i])
 	
-	for i in get_tree().get_nodes_in_group("SmallCollisions"):
+	for i in get_tree().get_nodes_in_group("SmallCollisions").filter(match_player_id):
 		var hitbox_scale = json.get("small_hitbox_scale", [1, 1])
 		i.scale = Vector2(hitbox_scale[0], hitbox_scale[1])
 		i.update()
-	for i in get_tree().get_nodes_in_group("BigCollisions"):
+	for i in get_tree().get_nodes_in_group("BigCollisions").filter(match_player_id):
 		var hitbox_scale = json.get("big_hitbox_scale", [1, 1])
 		i.scale = Vector2(hitbox_scale[0], hitbox_scale[1])
 		i.update()
@@ -271,7 +290,7 @@ func _physics_process(delta: float) -> void:
 	handle_block_collision_detection()
 	handle_wing_flight(delta)
 	air_frames = (air_frames + 1 if is_on_floor() == false else 0)
-	for i in get_tree().get_nodes_in_group("StepCollision"):
+	for i in get_tree().get_nodes_in_group("StepCollision").filter(match_player_id):
 		var on_wall := false
 		for x in [$StepWallChecks/LWall, $StepWallChecks/RWall]:
 			if x.is_colliding():
@@ -483,7 +502,7 @@ func handle_directions() -> void:
 var use_big_collision := false
 
 func handle_power_up_states(delta) -> void:
-	for i in get_tree().get_nodes_in_group("BigCollisions"):
+	for i in get_tree().get_nodes_in_group("BigCollisions").filter(match_player_id):
 		if i.owner == self:
 			i.set_deferred("disabled", power_state.hitbox_size == "Small" or crouching)
 	$Checkpoint.position.y = -24 if power_state.hitbox_size == "Small" or crouching else -40

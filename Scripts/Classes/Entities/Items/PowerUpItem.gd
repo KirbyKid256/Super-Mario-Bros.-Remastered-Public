@@ -20,8 +20,10 @@ func collect_item(player: Player) -> void:
 
 func player_multiplayer_launch_spawn(player: Player) -> void:
 	global_position.y -= 8
-	velocity = 100 * player_angles[player.player_id]
+	velocity = 100 * player_angles[wrapi(player.player_id, 0, player_angles.size())] 
 	direction = sign(velocity.x)
+	await get_tree().physics_frame
+	show()
 
 func on_area_entered(area: Area2D) -> void:
 	if area.owner is Player:

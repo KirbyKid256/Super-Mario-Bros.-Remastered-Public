@@ -98,15 +98,35 @@ func _enter_tree() -> void:
 	if Settings.file.difficulty.back_scroll == 1 and Global.current_game_mode != Global.GameMode.CUSTOM_LEVEL:
 		can_backscroll = true
 	first_load = false
-	if Global.connected_players > 1:
-		spawn_in_extra_players()
+	if not Global.no_coop and Global.connected_joypads.size() > 1:
+		await ready; spawn_in_extra_players()
 	Global.current_campaign = campaign
 	await get_tree().process_frame
 	AudioManager.stop_music_override(AudioManager.MUSIC_OVERRIDES.NONE, true)
 
+const PLAYER = preload("res://Scenes/Prefabs/Entities/Player.tscn")
 
-func spawn_in_extra_players() -> void:
-	return
+func spawn_in_extra_players(device := -1, connected := true) -> void:
+	if device < 0:
+		for i in Global.connected_joypads.size():
+			if i == 0: continue
+			var player_node = PLAYER.instantiate()
+			player_node.player_id = Global.connected_joypads[i]
+			player_node.global_position = get_tree().get_nodes_in_group("Players")[i - 1].global_position + Vector2(16, 0)
+			add_child(player_node)
+	else:
+		if device == 0: return
+		if connected:
+			var player_node = PLAYER.instantiate()
+			player_node.player_id = device
+			player_node.global_position = get_tree().get_first_node_in_group("Players").global_position
+			add_child(player_node)
+			player_node.do_smoke_effect()
+		else:
+			var player_node: Player = get_tree().get_nodes_in_group("Players").filter(Player.match_id.bind(device)).front()
+			player_node.hide()
+			player_node.do_smoke_effect()
+			player_node.queue_free()
 
 func update_theme() -> void:
 	if auto_set_theme:

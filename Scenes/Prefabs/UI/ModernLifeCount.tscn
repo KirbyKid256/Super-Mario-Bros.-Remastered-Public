@@ -1,0 +1,69 @@
+[gd_scene load_steps=9 format=3 uid="uid://b4khb35hqsghi"]
+
+[ext_resource type="Texture2D" uid="uid://bgckb78kobtx3" path="res://Assets/Sprites/Players/Mario/LifeIcon.png" id="1_mtlg1"]
+[ext_resource type="Script" uid="uid://cxwn3t5oplc7r" path="res://Scenes/Prefabs/UI/ModernLifeCount.gd" id="1_ryqr7"]
+[ext_resource type="Shader" uid="uid://x7lh23cq2u38" path="res://Scenes/Parts/ShadowShader.gdshader" id="2_ryqr7"]
+[ext_resource type="Script" uid="uid://cbal8ms2oe1ik" path="res://Scripts/Classes/Components/ResourceSetterNew.gd" id="3_e6cxd"]
+[ext_resource type="Script" uid="uid://ca3bew33g45eq" path="res://Scripts/Classes/UI/PackTextureRect.gd" id="3_udisg"]
+[ext_resource type="Script" uid="uid://co6tjg3w6qpd8" path="res://Scripts/Parts/LabelFontChanger.gd" id="5_e6cxd"]
+[ext_resource type="Script" uid="uid://dt2p68xl462v2" path="res://Scripts/Parts/TextShadowColourChanger.gd" id="6_0s20y"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eon7h"]
+shader = ExtResource("2_ryqr7")
+shader_parameter/shadow_colour = Vector4(0, 0, 0, 1)
+shader_parameter/allow_transparency = true
+
+[node name="LifeCount" type="HBoxContainer"]
+custom_minimum_size = Vector2(36, 16)
+offset_right = 36.0
+offset_bottom = 16.0
+theme_override_constants/separation = 0
+script = ExtResource("1_ryqr7")
+
+[node name="CharacterIcon" type="TextureRect" parent="."]
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("1_mtlg1")
+stretch_mode = 2
+script = ExtResource("3_udisg")
+metadata/_custom_type_script = "uid://ca3bew33g45eq"
+
+[node name="Shadow" type="TextureRect" parent="CharacterIcon"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_eon7h")
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 9.0
+offset_bottom = 9.0
+texture = ExtResource("1_mtlg1")
+stretch_mode = 3
+script = ExtResource("3_udisg")
+metadata/_custom_type_script = "uid://ca3bew33g45eq"
+
+[node name="ModernLifeCount" type="Label" parent="CharacterIcon"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = -4.0
+offset_right = 20.0
+offset_bottom = 12.0
+size_flags_horizontal = 2
+text = "*"
+
+[node name="ResourceSetterNew" type="Node" parent="CharacterIcon" node_paths=PackedStringArray("node_to_affect")]
+script = ExtResource("3_e6cxd")
+node_to_affect = NodePath("..")
+property_name = "texture"
+mode = 1
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="LabelFontChanger" type="Node" parent="CharacterIcon" node_paths=PackedStringArray("labels")]
+script = ExtResource("5_e6cxd")
+labels = [NodePath("../ModernLifeCount")]
+metadata/_custom_type_script = "uid://co6tjg3w6qpd8"
+
+[node name="TextShadowColourChanger2" type="Node" parent="CharacterIcon" node_paths=PackedStringArray("labels", "shadow_node")]
+script = ExtResource("6_0s20y")
+labels = [NodePath("../ModernLifeCount")]
+shadow_node = NodePath("../Shadow")
+metadata/_custom_type_script = "uid://dt2p68xl462v2"

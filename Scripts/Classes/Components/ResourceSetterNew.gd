@@ -36,13 +36,14 @@ var update_on_spawn := true
 func _init() -> void:
 	set_process_mode(Node.PROCESS_MODE_ALWAYS)
 
+func _ready() -> void:
+	Global.level_time_changed.connect(update_resource)
+	Global.level_theme_changed.connect(update_resource)
+
 func _enter_tree() -> void:
 	safety_check()
 	if update_on_spawn:
 		update_resource()
-	Global.level_time_changed.connect(update_resource)
-	Global.level_theme_changed.connect(update_resource)
-	
 
 func safety_check() -> void:
 	if Settings.file.visuals.resource_packs.has("BaseAssets") == false:
@@ -254,8 +255,16 @@ func get_variation_json(json := {}) -> Dictionary:
 			json = get_variation_json(json[game_mode])
 	
 	var chara = "Character:" + Player.CHARACTERS[int(Global.player_characters[0])]
+	var parent = get_parent()
+	while parent != null && parent != get_tree():
+		parent = parent.get_parent()
+		if parent is Player:
+			chara = "Character:" + Player.CHARACTERS[int(Global.player_characters[parent.player_id])]
+			break
 	if json.has(chara) == false:
 		chara = "Character:Mario"
+	if force_properties.has("Character"):
+		chara = "Character:" + str(force_properties["Character"])
 	if json.has(chara):
 		if json.get(chara).has("link"):
 			json = get_variation_json(json[json.get(chara).get("link")])
