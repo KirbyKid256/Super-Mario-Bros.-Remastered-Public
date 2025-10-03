@@ -26,7 +26,7 @@ func player_multiplayer_launch_spawn(player: Player) -> void:
 	show()
 
 func on_area_entered(area: Area2D) -> void:
-	if area.owner is Player:
+	if area.owner is Player and area.owner.is_in_group("Players"):
 		collect_item(area.owner)
 
 func block_bounce_up(block: Node2D) -> void:

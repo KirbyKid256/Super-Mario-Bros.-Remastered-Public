@@ -45,6 +45,6 @@ func _physics_process(delta: float) -> void:
 	platform.position.y += velocity * delta
 	
 func is_player(area: Area2D) -> bool:
-	if area.owner is Player:
+	if area.owner is Player and area.owner.is_in_group("Players"):
 		return area.owner.is_on_floor()
 	return false

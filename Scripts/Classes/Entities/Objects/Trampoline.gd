@@ -37,5 +37,5 @@ func bounce_players() -> void:
 	players.clear()
 
 func on_area_exited(area: Area2D) -> void:
-	if area.owner is Player:
+	if area.owner is Player and area.owner.is_in_group("Players"):
 		area.owner.spring_bouncing = false

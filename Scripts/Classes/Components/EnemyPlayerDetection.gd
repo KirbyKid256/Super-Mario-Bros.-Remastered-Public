@@ -13,7 +13,7 @@ func _ready() -> void:
 	hitbox.area_entered.connect(area_entered)
 
 func area_entered(area: Area2D) -> void:
-	if area.owner is Player:
+	if area.owner is Player and area.owner.is_in_group("Players"):
 		player_entered(area.owner)
 
 func player_entered(player: Player) -> void:

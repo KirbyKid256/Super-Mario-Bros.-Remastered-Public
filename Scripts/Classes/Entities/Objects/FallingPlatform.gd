@@ -5,6 +5,6 @@ func _physics_process(delta: float) -> void:
 		global_position.y += 96 * delta
 
 func is_player(area: Area2D) -> bool:
-	if area.owner is Player:
+	if area.owner is Player and area.owner.is_in_group("Players"):
 		return area.owner.is_on_floor() and area.owner.global_position.y - 4 <= global_position.y
 	return false

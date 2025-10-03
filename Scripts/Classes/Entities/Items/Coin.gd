@@ -9,7 +9,7 @@ var can_spawn_particles := true
 signal collected
 
 func area_entered(area: Area2D) -> void:
-	if area.owner is Player:
+	if area.owner is Player and area.owner.is_in_group("Players"):
 		collect()
 
 func collect() -> void:

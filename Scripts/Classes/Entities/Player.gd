@@ -425,6 +425,7 @@ func is_actually_on_ceiling() -> bool:
 	return false
 
 func enemy_bounce_off(add_combo := true, award_score := true) -> void:
+	if not is_in_group("Players"): return
 	if add_combo:
 		add_stomp_combo(award_score)
 	jump_cancelled = not Global.player_action_pressed("jump", player_id)

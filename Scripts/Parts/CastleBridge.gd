@@ -18,7 +18,7 @@ func _ready() -> void:
 	$Axe/CameraRightLimit._enter_tree()
 
 func on_area_entered(area: Area2D) -> void:
-	if area.owner is Player:
+	if area.owner is Player and area.owner.is_in_group("Players"):
 		destroy_bridge(area.owner)
 
 func destroy_bridge(player: Player) -> void:

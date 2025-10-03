@@ -6,7 +6,7 @@ func _physics_process(delta: float) -> void:
 	$BasicEnemyMovement.handle_movement(delta)
 
 func on_area_entered(area: Area2D) -> void:
-	if area.owner is Player:
+	if area.owner is Player and area.owner.is_in_group("Players"):
 		if has_meta("is_poison"):
 			area.owner.damage()
 			queue_free()
