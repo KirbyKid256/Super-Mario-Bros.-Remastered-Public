@@ -98,7 +98,7 @@ func _enter_tree() -> void:
 	if Settings.file.difficulty.back_scroll == 1 and Global.current_game_mode != Global.GameMode.CUSTOM_LEVEL:
 		can_backscroll = true
 	first_load = false
-	if not Global.no_coop and Global.connected_joypads.size() > 1:
+	if not Global.no_coop and Global.connected_players.size() > 1:
 		await ready; spawn_in_extra_players()
 	Global.current_campaign = campaign
 	await get_tree().process_frame
@@ -108,11 +108,11 @@ const PLAYER = preload("res://Scenes/Prefabs/Entities/Player.tscn")
 
 func spawn_in_extra_players(device := -1, connected := true) -> void:
 	if device < 0:
-		for i in Global.connected_joypads.size():
+		for i in Global.connected_players.size():
 			if i == 0: continue
 			var player_node = PLAYER.instantiate()
-			player_node.player_id = Global.connected_joypads[i]
 			player_node.global_position = get_tree().get_nodes_in_group("Players")[i - 1].global_position + Vector2(16, 0)
+			player_node.player_id = Global.connected_players[i]
 			add_child(player_node)
 	else:
 		if device == 0: return

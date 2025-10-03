@@ -226,7 +226,7 @@ func _ready() -> void:
 func check_player_label() -> void:
 	$Checkpoint/Label.text = str(player_id + 1)
 	$Checkpoint/Label.modulate = PlayerManager.colours[player_id]
-	$Checkpoint/Label.visible = not Global.no_coop and Global.connected_joypads.size() > 1
+	$Checkpoint/Label.visible = not Global.no_coop and Global.connected_players.size() > 1
 
 static func match_id(i, id := 0) -> bool:
 	if i is Player: return i.player_id == id

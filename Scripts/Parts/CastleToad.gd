@@ -9,7 +9,7 @@ func _ready() -> void:
 		$Sprite.play("Idle")
 	Global.level_complete_begin.connect(begin)
 	for i in [$SpeedrunMSG/ThankYou, $StandardMSG/ThankYou]:
-		i.text = tr(i.text).replace("{PLAYER}", tr(Player.CHARACTER_NAMES[int(Global.player_characters[0])]))
+		i.text = tr(i.text).replace("{PLAYER}", tr(Player.CHARACTER_NAMES[int(Global.player_characters[PlayerManager.active_device])]))
 
 func begin() -> void:
 	$StaticBody2D/CollisionShape2D.set_deferred("disabled", false)

@@ -17,7 +17,7 @@ signal option_4_selected
 signal closed
 
 func _ready() -> void:
-	Input.joy_connection_changed.connect(func(d, c): if d != 0 or c: update_colours())
+	Input.joy_connection_changed.connect(update_colours)
 	Global.level_theme_changed.connect(update_colours)
 
 func _process(_delta: float) -> void:
@@ -46,8 +46,8 @@ func open_settings() -> void:
 	await $SettingsMenu.closed
 	active = true
 
-func update_colours() -> void:
-	if Global.connected_players > 1:
+func update_colours(_device := -1, _connected := true) -> void:
+	if Global.connected_players.size() > 1:
 		$Control/PanelContainer.self_modulate = PlayerManager.colours[PlayerManager.active_device]
 		$SettingsMenu/PanelContainer.self_modulate = $Control/PanelContainer.self_modulate
 	else:
@@ -59,7 +59,7 @@ func open(device := 0) -> void:
 		Global.game_paused = true
 		AudioManager.play_global_sfx("pause")
 		get_tree().paused = true
-	if Global.connected_players > 1:
+	if Global.connected_players.size() > 1:
 		PlayerManager.active_device = device
 	else:
 		PlayerManager.active_device = 0

@@ -55,6 +55,8 @@ func joy_connection_changed(device: int, connected: bool) -> void:
 			print("PLAYER %d has Connected" % (device + 1))
 		else:
 			print("PLAYER %d has Disconnected" % (device + 1))
+			if active_device == device:
+				active_device = 0
 
 ## This function duplicates an existing action from the [InputMap] and re-assigns it to a specific Player/Device ID.
 func copy_action(action: String, device: int) -> void:

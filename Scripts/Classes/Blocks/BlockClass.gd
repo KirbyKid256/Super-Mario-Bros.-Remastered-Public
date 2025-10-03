@@ -43,12 +43,12 @@ func dispense_item() -> void:
 	var node = item_to_dispense.instantiate()
 	if node is PowerUpItem or node.has_meta("is_item"):
 		for i in get_tree().get_nodes_in_group("Players"):
-			node = player_mushroom_check(i).instantiate()
+			if i.player_id > 0: node = player_mushroom_check(i).instantiate()
 			node.position = position + Vector2(0, -1)
 			node.hide()
 			add_sibling(node)
 			if node is PowerUpItem:
-				if Global.connected_players > 1:
+				if Global.connected_players.size() > 1:
 					AudioManager.play_sfx("item_appear", global_position)
 					node.player_multiplayer_launch_spawn(i)
 				else:

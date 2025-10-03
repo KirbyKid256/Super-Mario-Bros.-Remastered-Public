@@ -15,10 +15,12 @@ func on_area_entered(area: Area2D) -> void:
 	if area.owner is Player and area.owner.is_in_group("Players"):
 		player_touch(area.owner)
 
-
+func _exit_tree() -> void:
+	PlayerManager.active_device = 0
 
 func player_touch(player: Player) -> void:
 	player_reached.emit()
+	PlayerManager.active_device = player.player_id
 	if Global.current_game_mode == Global.GameMode.MARATHON_PRACTICE:
 		SpeedrunHandler.is_warp_run = false
 		SpeedrunHandler.run_finished()

@@ -56,16 +56,14 @@ func update_title() -> void:
 	$LevelBG.time_of_day = ["Day", "Night"].find(Global.theme_time)
 	$LevelBG.update_visuals()
 
-const SMOKE_PARTICLE := preload("uid://d08nv4qtfouv1")
-
 func update_players(device: int = -1, connected: bool = true) -> void:
 	if device < 0:
-		for i in range(1, 8): $PlayerSprites.get_child(i).visible = Global.connected_joypads.has(i)
+		for i in range(1, 8): $PlayerSprites.get_child(i).visible = Global.connected_players.has(i)
 	elif device > 0:
 		if $PlayerSprites.get_child(device).visible != connected:
 			$PlayerSprites.get_child(device).visible = connected
 			for i in 2:
-				var smoke = SMOKE_PARTICLE.instantiate()
+				var smoke = Player.SMOKE_PARTICLE.instantiate()
 				smoke.animation_finished.connect(smoke.queue_free)
 				smoke.position = $PlayerSprites.get_child(device).position - Vector2(0, 16 * i)
 				$PlayerSprites.add_child(smoke)

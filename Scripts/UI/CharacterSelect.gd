@@ -62,8 +62,8 @@ func get_custom_characters() -> void:
 func open(can_coop := false) -> void:
 	PlayerManager.active_device = 0
 	Global.no_coop = not can_coop
-	if can_coop and Global.connected_players > 1:
-		player_queue = Global.connected_joypads
+	if can_coop and Global.connected_players.size() > 1:
+		player_queue = Global.connected_players
 		player_queue.remove_at(0)
 	else:
 		player_queue.clear()
@@ -84,6 +84,7 @@ func handle_input() -> void:
 		update_sprites()
 	if Global.player_action_just_pressed("ui_accept"):
 		Global.player_characters[PlayerManager.active_device] = selected_index
+		Global.player_characters_changed.emit() # I don't know why it won't emit automatically
 		var characters := Global.player_characters
 		for i in characters:
 			if int(i) > 3:
@@ -126,17 +127,8 @@ func update_sprites() -> void:
 		%PlayerNumber.text = "P%d" % (PlayerManager.active_device + 1)
 		%PlayerNumber.show()
 
-func select() -> void:
-	selected.emit()
-	hide()
-	active = false
-
 func close() -> void:
 	PlayerManager.active_device = 0
 	player_queue.clear()
 	active = false
 	hide()
-
-
-func on_selected() -> void:
-	pass # Replace with function body.

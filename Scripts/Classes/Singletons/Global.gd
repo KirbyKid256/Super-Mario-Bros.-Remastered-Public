@@ -124,16 +124,11 @@ var can_time_tick := true:
 
 var player_power_states := [0, 0, 0, 0, 0, 0, 0, 0]
 
-var connected_joypads:
-	get():
-		var joypads = Input.get_connected_joypads(); if not joypads.has(0): joypads.insert(0, 0)
-		return joypads
 var connected_players:
 	get():
-		if no_coop: return 1
-		if current_level != null:
-			return clampi((get_tree().get_nodes_in_group("Players")).size(), 1, PlayerManager.MAX_LOCAL_PLAYERS)
-		return clampi(connected_joypads.size(), 1, PlayerManager.MAX_LOCAL_PLAYERS)
+		if no_coop: return [0]
+		var joypads = Input.get_connected_joypads(); if not joypads.has(0): joypads.insert(0, 0)
+		return joypads
 
 const CAMPAIGNS := ["SMB1", "SMBLL", "SMBS", "SMBANN"]
 

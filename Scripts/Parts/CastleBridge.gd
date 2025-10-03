@@ -82,6 +82,7 @@ func _physics_process(delta: float) -> void:
 	$Camera.global_position.x = clamp($Camera.global_position.x, -INF, Player.camera_right_limit)
 
 func victory_sequence(player: Player) -> void:
+	PlayerManager.active_device = player.player_id
 	get_tree().call_group("Enemies", "flag_die")
 	Global.level_complete_begin.emit()
 	victory_begin.emit()
@@ -102,6 +103,5 @@ func victory_sequence(player: Player) -> void:
 	if do_tally:
 		Global.tally_time()
 
-
-func on_victory_begin() -> void:
-	pass # Replace with function body.
+func _exit_tree() -> void:
+	PlayerManager.active_device = 0
