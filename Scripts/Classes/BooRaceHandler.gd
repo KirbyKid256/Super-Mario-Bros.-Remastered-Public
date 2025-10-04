@@ -9,6 +9,7 @@ static var boo_colour := 0
 
 static var current_level_id := 0
 
+@export var vs_race := false
 @export var is_custom := false
 
 static var countdown_active := false
@@ -28,7 +29,7 @@ func _ready() -> void:
 	TimedBooBlock.can_tick = false
 	current_level_id = level_id
 	if is_custom == false:
-		Global.current_game_mode = Global.GameMode.BOO_RACE 
+		Global.current_game_mode = Global.GameMode.RACE if vs_race else Global.GameMode.BOO_RACE
 		do_countdown()
 		
 
@@ -104,7 +105,7 @@ func _exit_tree() -> void:
 	countdown_active = false
 
 func on_timeout() -> void:
-	if boo.moving:
+	if not vs_race and boo.moving:
 		boo.play_laugh_animation()
 		AudioManager.play_global_sfx("boo_laugh")
 		await get_tree().create_timer(1, false).timeout

@@ -111,8 +111,11 @@ func spawn_in_extra_players(device := -1, connected := true) -> void:
 		for i in Global.connected_players.size():
 			if i == 0: continue
 			var player_node = PLAYER.instantiate()
-			player_node.global_position = get_tree().get_nodes_in_group("Players")[i - 1].global_position + Vector2(16, 0)
 			player_node.player_id = Global.connected_players[i]
+			if Global.current_game_mode == Global.GameMode.RACE:
+				player_node.global_position = get_tree().get_first_node_in_group("Players").global_position
+			else:
+				player_node.global_position = get_tree().get_nodes_in_group("Players")[i - 1].global_position + Vector2(16, 0)
 			add_child(player_node)
 	else:
 		if device == 0: return
@@ -121,12 +124,22 @@ func spawn_in_extra_players(device := -1, connected := true) -> void:
 			player_node.player_id = device
 			player_node.global_position = get_tree().get_first_node_in_group("Players").global_position
 			add_child(player_node)
-			player_node.do_smoke_effect()
+			do_smoke_effect(player_node)
 		else:
 			var player_node: Player = get_tree().get_nodes_in_group("Players").filter(Player.match_id.bind(device)).front()
-			player_node.hide()
-			player_node.do_smoke_effect()
-			player_node.queue_free()
+			if player_node != null:
+				do_smoke_effect(player_node)
+				player_node.queue_free()
+
+func do_smoke_effect(player: Player) -> void:
+	for i in 2:
+		var node = Player.SMOKE_PARTICLE.instantiate()
+		node.process_mode = Node.PROCESS_MODE_ALWAYS
+		node.global_position = player.global_position - Vector2(0, 16 * i)
+		node.z_index = player.z_index
+		add_child(node)
+		if player.power_state.hitbox_size == "Small": break
+	AudioManager.play_sfx("magic", player.global_position, 1.0, player.player_id)
 
 func update_theme() -> void:
 	if auto_set_theme:
@@ -143,7 +156,8 @@ func update_theme() -> void:
 	Global.level_theme = theme
 	Global.theme_time = theme_time
 	TitleScreen.last_theme = theme
-	$LevelBG.update_visuals()
+	if get_node_or_null("LevelBG") != null:
+		$LevelBG.update_visuals()
 
 func update_next_level_info() -> void:
 	next_level = wrap(level_id + 1, 1, 5)
@@ -179,7 +193,7 @@ func reload_level() -> void:
 	LevelTransition.level_to_transition_to = Level.start_level_path
 	if Global.current_game_mode == Global.GameMode.CUSTOM_LEVEL:
 		LevelTransition.level_to_transition_to = "res://Scenes/Levels/LevelEditor.tscn"
-	if Global.current_game_mode == Global.GameMode.BOO_RACE:
+	if Global.current_game_mode == Global.GameMode.RACE or Global.current_game_mode == Global.GameMode.BOO_RACE:
 		LevelPersistance.reset_states()
 		Global.transition_to_scene(LevelTransition.level_to_transition_to)
 	else:

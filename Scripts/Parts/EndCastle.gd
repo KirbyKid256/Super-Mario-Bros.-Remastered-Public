@@ -21,7 +21,7 @@ func _ready() -> void:
 	$OverlaySprite.show()
 	$Overlay/PlayerDetection.set_collision_layer_value(1, true)
 	Global.score_tally_finished.connect(on_tally_finished)
-	if Global.current_game_mode == Global.GameMode.BOO_RACE:
+	if Global.current_game_mode == Global.GameMode.RACE or Global.current_game_mode == Global.GameMode.BOO_RACE:
 		get_tree().create_timer(3.5, false).timeout.connect(on_music_finished)
 	else:
 		get_tree().create_timer(5.5, false).timeout.connect(on_music_finished)
@@ -59,7 +59,7 @@ func on_tally_finished() -> void:
 	$FlagJoint/Flag/AnimationPlayer.play("Raise")
 
 func do_sequence() -> void:
-	if Global.current_game_mode != Global.GameMode.BOO_RACE:
+	if Global.current_game_mode != Global.GameMode.RACE and Global.current_game_mode != Global.GameMode.BOO_RACE:
 		await get_tree().create_timer(1, false).timeout
 		if Global.current_campaign == "SMBLL":
 			await do_lost_levels_firework_check()

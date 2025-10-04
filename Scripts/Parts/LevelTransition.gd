@@ -97,7 +97,7 @@ func _ready() -> void:
 
 func transition() -> void:
 	Global.can_time_tick = true
-	if PIPE_CUTSCENE_LEVELS[Global.current_campaign].has([Global.world_num, Global.level_num]) and not PipeCutscene.seen_cutscene and Global.current_game_mode != Global.GameMode.MARATHON_PRACTICE and Global.current_game_mode !=Global.GameMode.BOO_RACE:
+	if PIPE_CUTSCENE_LEVELS[Global.current_campaign].has([Global.world_num, Global.level_num]) and not PipeCutscene.seen_cutscene and Global.current_game_mode != Global.GameMode.MARATHON_PRACTICE and Global.current_game_mode != Global.GameMode.RACE and Global.current_game_mode != Global.GameMode.BOO_RACE:
 		if PIPE_CUTSCENE_OVERRIDE[Global.current_campaign].has([Global.world_num, Global.level_num]):
 			Global.transition_to_scene(PIPE_CUTSCENE_OVERRIDE[Global.current_campaign][[Global.world_num, Global.level_num]])
 		else:

@@ -46,8 +46,8 @@ func _enter_tree() -> void:
 		update_resource()
 
 func safety_check() -> void:
-	if Settings.file.visuals.resource_packs.has("BaseAssets") == false:
-		Settings.file.visuals.resource_packs.append("BaseAssets")
+	if Settings.file.visuals.resource_packs.has(Global.ROM_PACK_NAME) == false:
+		Settings.file.visuals.resource_packs.insert(Global.ROM_PACK_NAME, 0)
 
 func update_resource() -> void:
 	randomize()

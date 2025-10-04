@@ -93,7 +93,7 @@ func victory_sequence(player: Player) -> void:
 
 	player.state_machine.transition_to("LevelExit")
 	$Camera.make_current()
-	if Global.current_game_mode == Global.GameMode.BOO_RACE:
+	if Global.current_game_mode == Global.GameMode.RACE or Global.current_game_mode == Global.GameMode.BOO_RACE:
 		AudioManager.set_music_override(AudioManager.MUSIC_OVERRIDES.RACE_WIN, 99, false)
 		await AudioManager.music_override_player.finished
 		Global.current_level.transition_to_next_level()

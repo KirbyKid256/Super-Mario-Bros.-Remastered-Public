@@ -205,7 +205,7 @@ func _ready() -> void:
 	Global.can_pause = true
 	character = CHARACTERS[int(Global.player_characters[player_id])]
 	Global.can_time_tick = true
-	if [Global.GameMode.BOO_RACE, Global.GameMode.MARATHON, Global.GameMode.MARATHON_PRACTICE].has(Global.current_game_mode) == false:
+	if [Global.GameMode.RACE, Global.GameMode.BOO_RACE, Global.GameMode.MARATHON, Global.GameMode.MARATHON_PRACTICE].has(Global.current_game_mode) == false:
 		apply_character_physics()
 	apply_character_sfx_map()
 	Global.level_theme_changed.connect(apply_character_sfx_map)
@@ -584,8 +584,6 @@ func die(pit := false) -> void:
 	visible = not pit
 	flight_meter = 0
 	dead.emit()
-	Global.p_switch_active = false
-	Global.p_switch_timer = 0
 	stop_all_timers()
 	Global.total_deaths += 1
 	sprite.process_mode = Node.PROCESS_MODE_ALWAYS
