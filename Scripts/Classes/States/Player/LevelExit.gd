@@ -4,7 +4,7 @@ func enter(_msg := {}) -> void:
 	player.can_hurt = false
 	player.has_jumped = false
 	player.crouching = false
-	player.get_node("CameraCenterJoint/RightWall").set_collision_layer_value(1, false)
+	player.camera_center_joint.get_node("RightWall").set_collision_layer_value(1, false)
 
 func physics_update(delta: float) -> void:
 	if player.is_posing: 

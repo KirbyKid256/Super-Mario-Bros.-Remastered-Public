@@ -8,8 +8,6 @@ func _ready() -> void:
 	if $Sprite is AnimatedSprite2D and Global.current_campaign == "SMBANN":
 		$Sprite.play("Idle")
 	Global.level_complete_begin.connect(begin)
-	for i in [$SpeedrunMSG/ThankYou, $StandardMSG/ThankYou]:
-		i.text = tr(i.text).replace("{PLAYER}", tr(Player.CHARACTER_NAMES[int(Global.player_characters[PlayerManager.active_device])]))
 
 func begin() -> void:
 	$StaticBody2D/CollisionShape2D.set_deferred("disabled", false)
@@ -19,6 +17,8 @@ func begin() -> void:
 		SaveManager.write_save()
 		play_music()
 	%Time.text = tr(%Time.text).replace("{TIME}", SpeedrunHandler.gen_time_string(SpeedrunHandler.format_time(SpeedrunHandler.timer)))
+	for i in [$SpeedrunMSG/ThankYou, $StandardMSG/ThankYou]:
+		i.text = tr(i.text).replace("{PLAYER}", tr(Player.CHARACTER_NAMES[int(Global.player_characters[PlayerManager.active_device])]))
 	$CameraRightLimit._enter_tree()
 	await get_tree().create_timer(3, false).timeout
 	if Global.current_game_mode == Global.GameMode.MARATHON_PRACTICE or (Global.current_game_mode == Global.GameMode.MARATHON and play_end_music):
