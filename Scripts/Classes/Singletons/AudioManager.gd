@@ -5,9 +5,12 @@ const DEFAULT_SFX_LIBRARY := {
 	"big_jump": ("res://Assets/Audio/SFX/BigJump.wav"),
 	"coin": ("res://Assets/Audio/SFX/Coin.wav"),
 	"bump": ("res://Assets/Audio/SFX/Bump.wav"),
+	"skid": ("res://Assets/Audio/SFX/Skid.wav"),
 	"pipe": ("res://Assets/Audio/SFX/Pipe.wav"),
+	"die": ("res://Assets/Audio/SFX/Die.wav"),
 	"damage": ("res://Assets/Audio/SFX/Damage.wav"),
 	"power_up": ("res://Assets/Audio/SFX/Powerup.wav"),
+	"bubble_pop": ("res://Assets/Audio/SFX/BubblePop.wav"),
 	"item_appear": ("res://Assets/Audio/SFX/ItemAppear.wav"),
 	"block_break": ("res://Assets/Audio/SFX/BreakBlock.wav"),
 	"enemy_stomp": ("res://Assets/Audio/SFX/Stomp.wav"),
@@ -57,21 +60,23 @@ const DEFAULT_SFX_LIBRARY := {
 	"door_locked": "res://Assets/Audio/SFX/DoorLocked.wav"
 }
 
-@onready var sfx_library = DEFAULT_SFX_LIBRARY.duplicate()
+@onready var sfx_library := {}
+@onready var active_sfxs: Dictionary[int, Dictionary] = {
+	0: {}, 1: {}, 2: {}, 3: {}, 4: {}, 5: {}, 6: {}, 7: {}
+}
+@onready var queued_sfxs: Dictionary[int, Array] = {
+	0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: []
+}
 
 @onready var music_player: AudioStreamPlayer = $Music
 @onready var music_override_player: AudioStreamPlayer = $MusicOverride
 
 var music_override_priority := -1
 
-var active_sfxs := {}
-
 var current_level_theme := ""
 var current_clip_idx := 0
 
 signal music_beat
-
-var queued_sfxs := []
 
 var current_music_override: MUSIC_OVERRIDES
 
@@ -100,21 +105,18 @@ var character_sfx_map := {}
 
 var audio_override_queue := []
 
-func play_sfx(stream_name = "", position := Vector2.ZERO, pitch := 1.0) -> void:
+func _ready() -> void:
+	load_sfx_map()
 
-	if queued_sfxs.has(stream_name):
-		return
-	queued_sfxs.append(stream_name)
-	if stream_name is String:
-		if active_sfxs.has(stream_name):
-			active_sfxs[stream_name].queue_free()
+## Plays a sound in the current scene using an [AudioStreamPlayer2D].
+func play_sfx(stream_name := "", position := Vector2.ZERO, pitch := 1.0, player_id := 0) -> void:
+	if queued_sfxs[player_id].has(stream_name): return
+	queued_sfxs[player_id].append(stream_name)
+	kill_sfx(stream_name, player_id)
 	var player = AudioStreamPlayer2D.new()
 	player.global_position = position
-	var stream = stream_name
-	var is_custom = false
-	if stream_name is String:
-		is_custom = sfx_library[stream_name].contains(Global.config_path.path_join("custom_characters"))
-		stream = import_stream(sfx_library[stream_name])
+	var is_custom = sfx_library[player_id][stream_name].contains(Global.config_path.path_join("custom_characters"))
+	var stream := import_stream(sfx_library[player_id][stream_name])
 	if is_custom == false:
 		player.stream = ResourceSetter.get_resource(stream, player)
 	else:
@@ -124,16 +126,33 @@ func play_sfx(stream_name = "", position := Vector2.ZERO, pitch := 1.0) -> void:
 	player.max_distance = 99999
 	player.bus = "SFX"
 	add_child(player)
-	active_sfxs[stream_name] = player
-	queued_sfxs.erase(stream_name)
+	active_sfxs[player_id][stream_name] = player
+	queued_sfxs[player_id].erase(stream_name)
 	await player.finished
-	active_sfxs.erase(stream_name)
+	active_sfxs[player_id].erase(stream_name)
 	player.queue_free()
 
-func play_global_sfx(stream_name := "") -> void:
-	if get_viewport().get_camera_2d() == null:
-		return
-	play_sfx(stream_name, get_viewport().get_camera_2d().get_screen_center_position())
+## Functions the same way as `play_sfx`, except it uses an [AudioStreamPlayer] rather than an [AudioStreamPlayer2D]. This means that this audio cannot be positioned.
+func play_global_sfx(stream_name := "", pitch := 1.0, player_id := 0) -> void:
+	if queued_sfxs[player_id].has(stream_name): return
+	queued_sfxs[player_id].append(stream_name)
+	kill_sfx(stream_name, player_id)
+	var player = AudioStreamPlayer.new()
+	var is_custom = sfx_library[player_id][stream_name].contains(Global.config_path.path_join("custom_characters"))
+	var stream := import_stream(sfx_library[player_id][stream_name])
+	if is_custom == false:
+		player.stream = ResourceSetter.get_resource(stream, player)
+	else:
+		player.stream = stream
+	player.autoplay = true
+	player.pitch_scale = pitch
+	player.bus = "SFX"
+	add_child(player)
+	active_sfxs[player_id][stream_name] = player
+	queued_sfxs[player_id].erase(stream_name)
+	await player.finished
+	active_sfxs[player_id].erase(stream_name)
+	player.queue_free()
 
 func _process(_delta: float) -> void:
 	handle_music()
@@ -148,11 +167,11 @@ func stop_all_music() -> void:
 	AudioManager.audio_override_queue.clear()
 	AudioManager.stop_music_override(MUSIC_OVERRIDES.NONE, true)
 
-func kill_sfx(sfx_name := "") -> void:
-	print(active_sfxs)
-	if active_sfxs.has(sfx_name):
-		active_sfxs[sfx_name].queue_free()
-		active_sfxs.erase(sfx_name)
+func kill_sfx(sfx_name := "", player_id := 0) -> void:
+	#print(active_sfxs)
+	if active_sfxs.has(player_id) and active_sfxs[player_id].has(sfx_name):
+		active_sfxs[player_id][sfx_name].queue_free()
+		active_sfxs[player_id].erase(sfx_name)
 
 func set_music_override(stream: MUSIC_OVERRIDES, priority := 0, stop_on_finish := true, restart := true) -> void:
 	if audio_override_queue.has(stream):
@@ -195,9 +214,10 @@ func stop_music_override(stream: MUSIC_OVERRIDES, force := false) -> void:
 		set_music_override(audio_override_queue[audio_override_queue.size() - 1])
 
 func load_sfx_map(json := {}) -> void:
-	sfx_library = DEFAULT_SFX_LIBRARY.duplicate()
-	for i in json:
-		sfx_library[i] = json[i]
+	for i in PlayerManager.MAX_LOCAL_PLAYERS:
+		sfx_library[i] = DEFAULT_SFX_LIBRARY.duplicate()
+		for j in json:
+			sfx_library[i][j] = json[j]
 	print(json)
 
 func handle_music() -> void:
