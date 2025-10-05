@@ -48,11 +48,14 @@ func open_settings() -> void:
 
 func update_colours(_device := -1, _connected := true) -> void:
 	if Global.connected_players.size() > 1:
-		$Control/PanelContainer.self_modulate = PlayerManager.colours[PlayerManager.active_device]
-		$SettingsMenu/PanelContainer.self_modulate = $Control/PanelContainer.self_modulate
+		var color: Color = PlayerManager.colours[PlayerManager.active_device]
+		$Control/PanelContainer.self_modulate = color
+		$SettingsMenu/PanelContainer.self_modulate = color
+		$SettingsMenu/ResourcePackConfigMenu/Panel.self_modulate = color
 	else:
 		$Control/PanelContainer.self_modulate = Color.WHITE
 		$SettingsMenu/PanelContainer.self_modulate = Color.WHITE
+		$SettingsMenu/ResourcePackConfigMenu/Panel.self_modulate = Color.WHITE
 
 func open(device := 0) -> void:
 	if is_pause:

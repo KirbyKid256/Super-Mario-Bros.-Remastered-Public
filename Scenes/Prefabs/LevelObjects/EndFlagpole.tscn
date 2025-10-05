@@ -65,26 +65,38 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Score:position")
+tracks/0/path = NodePath("ScoreLabels:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(8, -24)]
+"update": 1,
+"values": [false]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Score:visible")
+tracks/1/path = NodePath("ScoreLabels:pivot_offset")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Vector2(0, 152)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ScoreLabels:size")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(40, 152)]
 }
 
 [sub_resource type="Animation" id="Animation_c56yc"]
@@ -92,26 +104,38 @@ resource_name = "ScoreRise"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Score:position")
+tracks/0/path = NodePath("ScoreLabels:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(8, -24), Vector2(8, -168)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Score:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ScoreLabels:pivot_offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 152), Vector2(0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ScoreLabels:size")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(40, 152), Vector2(40, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jihtx"]
@@ -183,32 +207,42 @@ script = ExtResource("5_dm4yn")
 note_offset = Vector2(0, -160)
 metadata/_custom_type_script = "uid://5octqlf4ohel"
 
-[node name="Score" type="Label" parent="."]
+[node name="ScoreLabels" type="VBoxContainer" parent="."]
 visible = false
 visibility_layer = 2
 offset_left = 8.0
-offset_top = -24.0
+offset_top = -168.0
 offset_right = 48.0
-offset_bottom = -8.0
+offset_bottom = -16.0
+pivot_offset = Vector2(0, 152)
+alignment = 2
+
+[node name="Score" type="Label" parent="ScoreLabels"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
 theme_override_fonts/font = ExtResource("8_sjcdg")
 text = "5000"
 
-[node name="Animation2" type="AnimationPlayer" parent="Score"]
+[node name="TextShadowColourChanger" type="Node" parent="ScoreLabels/Score" node_paths=PackedStringArray("labels")]
+script = ExtResource("9_jihtx")
+labels = [NodePath("..")]
+metadata/_custom_type_script = "uid://dt2p68xl462v2"
+
+[node name="Animation" type="AnimationPlayer" parent="ScoreLabels"]
 root_node = NodePath("../..")
 libraries = {
 &"": SubResource("AnimationLibrary_jihtx")
 }
-
-[node name="TextShadowColourChanger" type="Node" parent="Score" node_paths=PackedStringArray("labels")]
-script = ExtResource("9_jihtx")
-labels = [NodePath("..")]
-metadata/_custom_type_script = "uid://dt2p68xl462v2"
 
 [node name="ThemedToJSONConverter" type="Node" parent="."]
 script = ExtResource("12_jgs31")
 resource = SubResource("Resource_a0hgu")
 json_file_path = "res://Assets/Sprites/Tilesets/FlagPole.json"
 metadata/_custom_type_script = "uid://cqif1li7otvpl"
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
 
 [connection signal="area_entered" from="Hitbox" to="." method="on_area_entered"]
 [connection signal="player_entered" from="Top" to="." method="on_player_entered"]

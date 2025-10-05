@@ -1,5 +1,7 @@
 extends Node
 
+const VICTORY_WAIT_TIME := 2.5
+
 const MAX_LOCAL_PLAYERS := 8
 const PLAYER_ACTIONS := [
 	# Menus

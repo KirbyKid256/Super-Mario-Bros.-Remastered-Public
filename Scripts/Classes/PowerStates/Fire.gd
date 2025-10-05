@@ -3,7 +3,7 @@ extends PowerUpState
 var fireball_amount := 0
 const FIREBALL = preload("res://Scenes/Prefabs/Entities/Items/Fireball.tscn")
 func update(_delta: float) -> void:
-	if Global.player_action_just_pressed("action", player.player_id) and fireball_amount < 2 and player.state_machine.state.name == "Normal":
+	if player.can_input and Global.player_action_just_pressed("action", player.player_id) and fireball_amount < 2 and player.state_machine.state.name == "Normal":
 		throw_fireball()
 
 func throw_fireball() -> void:

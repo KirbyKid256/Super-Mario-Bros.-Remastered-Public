@@ -9,7 +9,7 @@ var cam_move := false
 @export var end_timer := false
 @export var do_tally := true
 
-signal axe_touched
+signal axe_touched(player: Player)
 
 var bowser_present := true
 
@@ -43,7 +43,7 @@ func destroy_bridge(player: Player) -> void:
 	bowser_present = get_tree().get_first_node_in_group("Bowser") != null
 	player.velocity = Vector2.ZERO
 	Global.can_time_tick = false
-	axe_touched.emit()
+	axe_touched.emit(player)
 	$Axe.queue_free()
 	if bowser_present:
 		for i in get_tree().get_nodes_in_group("Bowser"):

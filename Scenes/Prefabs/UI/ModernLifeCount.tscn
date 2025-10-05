@@ -13,14 +13,18 @@ shader = ExtResource("2_ryqr7")
 shader_parameter/shadow_colour = Vector4(0, 0, 0, 1)
 shader_parameter/allow_transparency = true
 
-[node name="LifeCount" type="HBoxContainer"]
+[node name="ModernLifeCount" type="HBoxContainer"]
 custom_minimum_size = Vector2(36, 16)
 offset_right = 36.0
 offset_bottom = 16.0
 theme_override_constants/separation = 0
 script = ExtResource("1_ryqr7")
 
-[node name="CharacterIcon" type="TextureRect" parent="."]
+[node name="LifeCount" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = -4
+
+[node name="Icon" type="TextureRect" parent="LifeCount"]
 layout_mode = 2
 size_flags_vertical = 4
 texture = ExtResource("1_mtlg1")
@@ -28,7 +32,7 @@ stretch_mode = 2
 script = ExtResource("3_udisg")
 metadata/_custom_type_script = "uid://ca3bew33g45eq"
 
-[node name="Shadow" type="TextureRect" parent="CharacterIcon"]
+[node name="Shadow" type="TextureRect" parent="LifeCount/Icon"]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_eon7h")
 layout_mode = 0
@@ -41,29 +45,27 @@ stretch_mode = 3
 script = ExtResource("3_udisg")
 metadata/_custom_type_script = "uid://ca3bew33g45eq"
 
-[node name="ModernLifeCount" type="Label" parent="CharacterIcon"]
-layout_mode = 0
-offset_left = 4.0
-offset_top = -4.0
-offset_right = 20.0
-offset_bottom = 12.0
-size_flags_horizontal = 2
-text = "*"
-
-[node name="ResourceSetterNew" type="Node" parent="CharacterIcon" node_paths=PackedStringArray("node_to_affect")]
+[node name="ResourceSetterNew" type="Node" parent="LifeCount/Icon" node_paths=PackedStringArray("node_to_affect")]
 script = ExtResource("3_e6cxd")
 node_to_affect = NodePath("..")
 property_name = "texture"
 mode = 1
 metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
 
-[node name="LabelFontChanger" type="Node" parent="CharacterIcon" node_paths=PackedStringArray("labels")]
+[node name="Label" type="Label" parent="LifeCount"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "*"
+
+[node name="LabelFontChanger" type="Node" parent="LifeCount/Label" node_paths=PackedStringArray("labels")]
 script = ExtResource("5_e6cxd")
-labels = [NodePath("../ModernLifeCount")]
+labels = [NodePath("..")]
 metadata/_custom_type_script = "uid://co6tjg3w6qpd8"
 
-[node name="TextShadowColourChanger2" type="Node" parent="CharacterIcon" node_paths=PackedStringArray("labels", "shadow_node")]
+[node name="TextShadowColourChanger2" type="Node" parent="LifeCount/Label" node_paths=PackedStringArray("labels", "shadow_node")]
 script = ExtResource("6_0s20y")
-labels = [NodePath("../ModernLifeCount")]
-shadow_node = NodePath("../Shadow")
+labels = [NodePath("..")]
+shadow_node = NodePath("../../Icon/Shadow")
 metadata/_custom_type_script = "uid://dt2p68xl462v2"
+
+[connection signal="updated" from="LifeCount/Icon/ResourceSetterNew" to="." method="on_updated"]

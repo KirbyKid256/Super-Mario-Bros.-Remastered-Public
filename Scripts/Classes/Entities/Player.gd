@@ -44,6 +44,9 @@ var DEATH_JUMP_HEIGHT := 300.0         # The strength of the player's "jump" dur
 @onready var camera: Camera2D = $Camera
 @onready var score_note_spawner: ScoreNoteSpawner = $ScoreNoteSpawner
 
+## If this is set to false, input is disabled for the Player. However, physics and processing functions are still applied. This is useful for when a level is ending, but not all of the Players have reached the end.
+var can_input := true
+
 var has_jumped := false
 
 var direction := 1
@@ -429,9 +432,9 @@ func enemy_bounce_off(add_combo := true, award_score := true) -> void:
 	if not is_in_group("Players"): return
 	if add_combo:
 		add_stomp_combo(award_score)
-	jump_cancelled = not Global.player_action_pressed("jump", player_id)
+	jump_cancelled = not can_input and Global.player_action_pressed("jump", player_id)
 	await get_tree().physics_frame
-	if Global.player_action_pressed("jump", player_id):
+	if can_input and Global.player_action_pressed("jump", player_id):
 		velocity.y = sign(gravity_vector.y) * -BOUNCE_JUMP_HEIGHT
 		gravity = JUMP_GRAVITY
 		has_jumped = true
@@ -495,9 +498,9 @@ func handle_block_collision_detection() -> void:
 					i.player_block_hit.emit(self)
 func handle_directions() -> void:
 	input_direction = 0
-	if Global.player_action_pressed("move_right", player_id):
+	if can_input and Global.player_action_pressed("move_right", player_id):
 		input_direction = 1
-	elif Global.player_action_pressed("move_left", player_id):
+	elif can_input and Global.player_action_pressed("move_left", player_id):
 		input_direction = -1
 	velocity_direction = sign(velocity.x)
 
@@ -749,7 +752,7 @@ func power_up_animation(new_power_state := "") -> void:
 			transforming = false
 	get_tree().paused = false
 	sprite.process_mode = Node.PROCESS_MODE_INHERIT
-	if Global.player_action_just_pressed("jump", player_id):
+	if can_input and Global.player_action_just_pressed("jump", player_id):
 		jump()
 	return
 
@@ -886,9 +889,9 @@ func water_exited() -> void:
 	if in_water: return
 	normal_state.swim_up_meter = 0
 	if velocity.y < 0:
-		velocity.y = -250.0 if velocity.y < -50.0 or Global.player_action_pressed("move_up", player_id) else velocity.y
+		velocity.y = -250.0 if velocity.y < -50.0 or can_input and Global.player_action_pressed("move_up", player_id) else velocity.y
 	has_jumped = true
-	if Global.player_action_pressed("move_up", player_id):
+	if can_input and Global.player_action_pressed("move_up", player_id):
 		gravity = JUMP_GRAVITY
 	else:
 		gravity = FALL_GRAVITY
