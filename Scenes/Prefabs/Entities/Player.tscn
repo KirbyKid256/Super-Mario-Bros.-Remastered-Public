@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=3 uid="uid://cuh62hlq8errh"]
+[gd_scene load_steps=85 format=3 uid="uid://cuh62hlq8errh"]
 
 [ext_resource type="Script" uid="uid://dt4rosa5o35xr" path="res://Scripts/Classes/Entities/Player.gd" id="1_f6bau"]
 [ext_resource type="Script" uid="uid://uribh0f1jttq" path="res://Scripts/Classes/States/StateMachine.gd" id="2_1y62l"]
@@ -26,6 +26,7 @@
 [ext_resource type="Texture2D" uid="uid://bqra7e5xsdg5r" path="res://Assets/Sprites/Particles/SkidParticles.png" id="11_vijl6"]
 [ext_resource type="Texture2D" uid="uid://dq58glgwf2l3" path="res://Assets/Sprites/UI/CheckpointIcon.png" id="13_uo1a1"]
 [ext_resource type="Script" uid="uid://ugfx3sb3h6rj" path="res://Scripts/Classes/States/Player/NoClip.gd" id="16_cekpg"]
+[ext_resource type="AudioStream" uid="uid://cbxnq518x3jqe" path="res://Assets/Audio/SFX/Skid.wav" id="18_hofol"]
 [ext_resource type="Texture2D" uid="uid://daaycq24wiiph" path="res://Assets/Sprites/UI/ControllerOverlay.png" id="19_bc3q3"]
 [ext_resource type="Texture2D" uid="uid://c6pd7cdhx78od" path="res://Assets/Sprites/UI/Tab.png" id="20_34tqy"]
 [ext_resource type="Script" uid="uid://dgmaoklmc0wfa" path="res://Scripts/Parts/CameraHandler.gd" id="20_d7xah"]
@@ -318,6 +319,11 @@ size = Vector2(9999999, 8)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jl70t"]
 size = Vector2(9999999, 8)
+
+[sub_resource type="Resource" id="Resource_cekpg"]
+script = ExtResource("24_hu5lw")
+Overworld = ExtResource("18_hofol")
+metadata/_custom_type_script = "uid://cmvlgsjmsk0v5"
 
 [sub_resource type="Animation" id="Animation_057py"]
 length = 0.001
@@ -757,6 +763,17 @@ metadata/_custom_type_script = "uid://5octqlf4ohel"
 process_mode = 1
 wait_time = 10.0
 one_shot = true
+
+[node name="SkidSFX" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("18_hofol")
+bus = &"SFX"
+
+[node name="ResourceSetter" type="Node" parent="SkidSFX" node_paths=PackedStringArray("node_to_affect")]
+script = ExtResource("27_6ws8x")
+node_to_affect = NodePath("..")
+property_name = "stream"
+themed_resource = SubResource("Resource_cekpg")
+metadata/_custom_type_script = "uid://cq6f682453q6o"
 
 [node name="Checkpoint" type="Sprite2D" parent="."]
 process_mode = 3

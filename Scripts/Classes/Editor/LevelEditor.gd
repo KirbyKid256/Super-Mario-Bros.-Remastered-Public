@@ -103,10 +103,12 @@ const BOUNDARY_CONNECT_TILE := Vector2i.ZERO
 
 var undo_redo = UndoRedo.new()
 
+func _enter_tree() -> void:
+	Global.level_editor = self
+
 func _ready() -> void:
 	$TileMenu.hide()
 	DiscordManager.set_discord_status("In The Level Editor...")
-	Global.level_editor = self
 	playing_level = false
 	menu_open = $TileMenu.visible
 	Global.get_node("GameHUD").hide()
@@ -145,6 +147,8 @@ func _ready() -> void:
 	%LevelAuthor.text = level_author
 	%Description.text = level_desc
 
+func _exit_tree() -> void:
+	Global.level_editor = null
 
 func _physics_process(delta: float) -> void:
 	if current_state == EditorState.IDLE:

@@ -38,6 +38,7 @@ var MAX_SWIM_FALL_SPEED := 200.0       # The player's maximum fall speed while s
 var DEATH_JUMP_HEIGHT := 300.0         # The strength of the player's "jump" during the death animation, measured in px/sec
 #endregion
 
+@onready var camera_handler: Node2D = %CameraHandler
 @onready var camera_center_joint: Node2D = $CameraCenterJoint
 
 @onready var sprite: AnimatedSprite2D = %Sprite
@@ -231,13 +232,6 @@ func check_player_label() -> void:
 	$Checkpoint/Label.modulate = PlayerManager.colours[player_id]
 	$Checkpoint/Label.visible = not Global.no_coop and Global.connected_players.size() > 1
 
-static func match_id(i, id := 0) -> bool:
-	if i is Player: return i.player_id == id
-	return i.get_meta("player_id", 0) == id
-
-func match_player_id(i) -> bool:
-	return i.get_meta("player_id", 0) == player_id
-
 func apply_character_physics() -> void:
 	var path = "res://Assets/Sprites/Players/" + character + "/CharacterInfo.json"
 	if int(Global.player_characters[player_id]) > 3:
@@ -247,11 +241,11 @@ func apply_character_physics() -> void:
 	for i in json.physics:
 		set(i, json.physics[i])
 	
-	for i in get_tree().get_nodes_in_group("SmallCollisions").filter(match_player_id):
+	for i in get_tree().get_nodes_in_group("SmallCollisions").filter(PlayerManager.filter_by_id.bind(player_id)):
 		var hitbox_scale = json.get("small_hitbox_scale", [1, 1])
 		i.scale = Vector2(hitbox_scale[0], hitbox_scale[1])
 		i.update()
-	for i in get_tree().get_nodes_in_group("BigCollisions").filter(match_player_id):
+	for i in get_tree().get_nodes_in_group("BigCollisions").filter(PlayerManager.filter_by_id.bind(player_id)):
 		var hitbox_scale = json.get("big_hitbox_scale", [1, 1])
 		i.scale = Vector2(hitbox_scale[0], hitbox_scale[1])
 		i.update()
@@ -262,19 +256,19 @@ func apply_classic_physics() -> void:
 		set(i, json[i])
 
 func recenter_camera() -> void:
-	%CameraHandler.recenter_camera()
-	%CameraHandler.update_camera_barriers()
+	camera_handler.recenter_camera()
+	camera_handler.update_camera_barriers()
 
 func reparent_camera() -> void:
-	return
+	camera_make_current()
+	recenter_camera()
 
 func editor_level_start() -> void:
 	if PipeArea.exiting_pipe_id == -1:
 		power_state = get_node("PowerStates").get_child(starting_power_state)
 	handle_power_up_states(0)
 	set_power_state_frame()
-	camera_make_current()
-	recenter_camera()
+	reparent_camera()
 	state_machine.transition_to("Normal")
 	if camera_right_limit <= global_position.x:
 		camera_right_limit = 99999999
@@ -293,7 +287,7 @@ func _physics_process(delta: float) -> void:
 	handle_block_collision_detection()
 	handle_wing_flight(delta)
 	air_frames = (air_frames + 1 if is_on_floor() == false else 0)
-	for i in get_tree().get_nodes_in_group("StepCollision").filter(match_player_id):
+	for i in get_tree().get_nodes_in_group("StepCollision").filter(PlayerManager.filter_by_id.bind(player_id)):
 		var on_wall := false
 		for x in [$StepWallChecks/LWall, $StepWallChecks/RWall]:
 			if x.is_colliding():
@@ -309,12 +303,19 @@ func _physics_process(delta: float) -> void:
 	handle_water_detection()
 	%SkidParticles.visible = Settings.file.visuals.extra_particles == 1
 	%SkidParticles.emitting = ((skidding and skid_frames > 2) or crouching) and is_on_floor() and abs(velocity.x) > 25 and Settings.file.visuals.extra_particles == 1
-	if AudioManager.active_sfxs[player_id].has("skid"):
-		if not (is_actually_on_floor() and skidding) or Settings.file.audio.skid_sfx == 0:
-			AudioManager.kill_sfx("skid", player_id)
+	if PlayerManager.use_split_screen:
+		if AudioManager.active_sfxs[player_id].has("skid"):
+			if not (is_actually_on_floor() and skidding) or Settings.file.audio.skid_sfx == 0:
+				AudioManager.kill_sfx("skid", player_id)
+		else:
+			if is_actually_on_floor() and skidding and Settings.file.audio.skid_sfx == 1:
+				AudioManager.play_global_sfx("skid", 1.0, player_id)
 	else:
-		if is_actually_on_floor() and skidding and Settings.file.audio.skid_sfx == 1:
-			AudioManager.play_sfx("skid", global_position, 1.0, player_id)
+		if $SkidSFX.playing:
+			if (is_actually_on_floor() and skidding) == false:
+				$SkidSFX.stop()
+		elif is_actually_on_floor() and skidding and Settings.file.audio.skid_sfx == 1:
+			$SkidSFX.play()
 
 const BUBBLE_PARTICLE = preload("uid://bwjae1h1airtr")
 
@@ -507,7 +508,7 @@ func handle_directions() -> void:
 var use_big_collision := false
 
 func handle_power_up_states(delta) -> void:
-	for i in get_tree().get_nodes_in_group("BigCollisions").filter(match_player_id):
+	for i in get_tree().get_nodes_in_group("BigCollisions").filter(PlayerManager.filter_by_id.bind(player_id)):
 		if i.owner == self:
 			i.set_deferred("disabled", power_state.hitbox_size == "Small" or crouching)
 	$Checkpoint.position.y = -24 if power_state.hitbox_size == "Small" or crouching else -40
@@ -549,18 +550,6 @@ func damage() -> void:
 		do_i_frames()
 	else:
 		die()
-
-var cam_direction := 1
-@onready var last_position := global_position
-
-@onready var camera_position = camera.global_position
-var camera_offset = Vector2.ZERO
-
-func point_to_camera_limit(point := 0, point_dir := -1) -> float:
-	return point + ((get_viewport_rect().size.x / 2.0) * -point_dir)
-
-func point_to_camera_limit_y(point := 0, point_dir := -1) -> float:
-	return point + ((get_viewport_rect().size.y / 2.0) * -point_dir)
 
 func passed_checkpoint() -> void:
 	if Settings.file.difficulty.checkpoint_style == 0:

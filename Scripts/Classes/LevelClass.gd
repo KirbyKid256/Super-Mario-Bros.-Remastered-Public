@@ -98,12 +98,16 @@ func _enter_tree() -> void:
 	if Settings.file.difficulty.back_scroll == 1 and Global.current_game_mode != Global.GameMode.CUSTOM_LEVEL:
 		can_backscroll = true
 	first_load = false
-	if not Global.no_coop and Global.connected_players.size() > 1:
-		await ready; spawn_in_extra_players()
 	Global.current_campaign = campaign
 	await get_tree().process_frame
 	AudioManager.stop_music_override(AudioManager.MUSIC_OVERRIDES.NONE, true)
 
+func _ready() -> void:
+	# Spawn in extra players unless No Co-Op is enabled
+	if not Global.no_coop:
+		Input.joy_connection_changed.connect(spawn_in_extra_players)
+		if Global.connected_players.size() > 1:
+			spawn_in_extra_players()
 const PLAYER = preload("res://Scenes/Prefabs/Entities/Player.tscn")
 
 func spawn_in_extra_players(device := -1, connected := true) -> void:
@@ -112,21 +116,30 @@ func spawn_in_extra_players(device := -1, connected := true) -> void:
 			if i == 0: continue
 			var player_node = PLAYER.instantiate()
 			player_node.player_id = Global.connected_players[i]
+			player_node.camera_handler = PlayerManager.get_player_with_id().camera_handler
 			if Global.current_game_mode == Global.GameMode.RACE:
-				player_node.global_position = get_tree().get_first_node_in_group("Players").global_position
+				player_node.global_position = PlayerManager.get_player_with_id().global_position
 			else:
 				player_node.global_position = get_tree().get_nodes_in_group("Players")[i - 1].global_position + Vector2(16, 0)
-			add_child(player_node)
+			if Global.current_game_mode == Global.GameMode.CUSTOM_LEVEL or Global.current_game_mode == Global.GameMode.LEVEL_EDITOR:
+				if not Global.level_editor.is_node_ready(): await Global.level_editor.ready
+				Global.level_editor.entity_layer_nodes.front().add_child(player_node)
+			else:
+				add_child(player_node)
 	else:
 		if device == 0: return
 		if connected:
 			var player_node = PLAYER.instantiate()
 			player_node.player_id = device
-			player_node.global_position = get_tree().get_first_node_in_group("Players").global_position
-			add_child(player_node)
+			player_node.global_position = PlayerManager.get_player_with_id().global_position
 			do_smoke_effect(player_node)
+			if Global.current_game_mode == Global.GameMode.CUSTOM_LEVEL or Global.current_game_mode == Global.GameMode.LEVEL_EDITOR:
+				if not Global.level_editor.is_node_ready(): await Global.level_editor.ready
+				Global.level_editor.entity_layer_nodes.front().add_child(player_node)
+			else:
+				add_child(player_node)
 		else:
-			var player_node: Player = get_tree().get_nodes_in_group("Players").filter(Player.match_id.bind(device)).front()
+			var player_node: Player = PlayerManager.get_player_with_id(device)
 			if player_node != null:
 				do_smoke_effect(player_node)
 				player_node.queue_free()

@@ -15,7 +15,6 @@ func _ready() -> void:
 	$Animation.animation_started.connect(func(anim_name: StringName):
 		if anim_name == "FlagDown": $ScoreLabels/Animation.play("ScoreRise"))
 	Input.joy_connection_changed.connect(func(a, b): update_players_reached(null, a, b))
-	player_reached.connect(update_players_reached)
 	player_reached.connect(give_points)
 	timer.timeout.connect(on_timeout)
 	# Remove 1-Up Top based on Settings
@@ -55,7 +54,7 @@ func player_touch(player: Player) -> void:
 func on_timeout() -> void:
 	for player: Player in get_tree().get_nodes_in_group("Players"):
 		if not players_reached.has(player): # Stop input from players who haven't touched the flagpole
-			sequence_begin.connect(func(): player.process_mode = Node.PROCESS_MODE_INHERIT)
+			sequence_begin.connect(func(): if player: player.process_mode = Node.PROCESS_MODE_INHERIT)
 			player.process_mode = Node.PROCESS_MODE_DISABLED
 			player.state_machine.transition_to("Normal", {"Input": false})
 	if Global.current_game_mode == Global.GameMode.MARATHON_PRACTICE:
@@ -103,13 +102,19 @@ func give_points(player: Player) -> void:
 
 # Called when all the Players reach the Flagpole
 func update_players_reached(player: Player = null, device := -1, connected := true) -> void:
-	if player != null:
+	if player != null and not players_reached.has(player):
 		players_reached.append(player)
 		players_reached.sort()
 	if device > 0 and !connected:
-		players_reached.erase(players_reached.find_custom(Player.match_id.bind(device)))
+		var removed_player = PlayerManager.get_player_with_id(device)
+		if players_reached.has(removed_player):
+			$ScoreLabels.get_child(player_points.keys().find(removed_player.global_position.y))
+			players_reached.erase(removed_player)
+		if players_reached.size() <= 1:
+			$ScoreLabels.get_child(0).modulate = Color.WHITE
 	var players = get_tree().get_nodes_in_group("Players")
-	if players_reached.size() >= players.size() or players.size() <= 1:
+	if not players_reached.is_empty() and timer and (players_reached.size() >= players.size() or players.size() <= 1 or players_reached.size() <= 1 and !connected):
+		timer.stop()
 		timer.timeout.emit()
 		timer.queue_free()
 

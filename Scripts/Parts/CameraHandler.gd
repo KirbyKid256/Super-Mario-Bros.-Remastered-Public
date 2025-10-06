@@ -141,11 +141,11 @@ func do_limits() -> void:
 	if is_instance_valid(Global.level_editor):
 		if Global.level_editor.playing_level == false:
 			wall_enabled = false
-	$"../CameraCenterJoint/LeftWall".set_collision_layer_value(1, wall_enabled)
+	camera_center_joint.get_node("LeftWall").set_collision_layer_value(1, wall_enabled)
 	var level_exit = false
 	if owner.state_machine != null:
 		level_exit = owner.state_machine.state.name == "LevelExit"
-	$"../CameraCenterJoint/RightWall".set_collision_layer_value(1, wall_enabled and level_exit == false)
+	camera_center_joint.get_node("RightWall").set_collision_layer_value(1, wall_enabled and level_exit == false)
 	
 func point_to_camera_limit(point := 0, point_dir := -1) -> float:
 	return point + ((get_viewport_rect().size.x / 2.0) * -point_dir)

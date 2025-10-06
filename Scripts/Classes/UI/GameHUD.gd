@@ -121,7 +121,7 @@ func handle_yoshi_radar() -> void:
 		%ModernRadar.get_node("AnimationPlayer").play("RESET")
 		return
 
-	var player_position = get_tree().get_first_node_in_group("Players").global_position
+	var player_position = PlayerManager.get_closest_player().global_position
 	var distance = (egg_position - player_position).length()
 	
 	%Radar.get_node("AnimationPlayer").speed_scale = (250 / distance)

@@ -79,7 +79,7 @@ func edit_level() -> void:
 func play_level() -> void:
 	Global.current_game_mode = Global.GameMode.CUSTOM_LEVEL
 	LevelEditor.load_play = true
-	$CharacterSelect.open()
+	$CharacterSelect.open(true)
 	await $CharacterSelect.selected
 	LevelTransition.level_to_transition_to = ("res://Scenes/Levels/LevelEditor.tscn")
 	Global.transition_to_scene("res://Scenes/Levels/LevelTransition.tscn")
@@ -88,7 +88,7 @@ func online_play() -> void:
 	lss_level_played()
 	Global.current_game_mode = Global.GameMode.CUSTOM_LEVEL
 	LevelEditor.load_play = true
-	$LSSCharacterSelect.open()
+	$LSSCharacterSelect.open(true)
 	await $LSSCharacterSelect.selected
 	LevelTransition.level_to_transition_to = ("res://Scenes/Levels/LevelEditor.tscn")
 	Global.transition_to_scene("res://Scenes/Levels/LevelTransition.tscn")

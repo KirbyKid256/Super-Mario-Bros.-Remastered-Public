@@ -14,7 +14,7 @@ func on_player_stomped_on(player: Player) -> void:
 func on_timeout() -> void:
 	if is_on_floor() == false:
 		return
-	direction = sign(get_tree().get_first_node_in_group("Players").global_position.x - global_position.x + 1)
+	direction = sign(PlayerManager.get_closest_player().global_position.x - global_position.x + 1)
 	$Sprite.scale.x = direction
 	if count == 0:
 		$Animations.play("PeekOut")

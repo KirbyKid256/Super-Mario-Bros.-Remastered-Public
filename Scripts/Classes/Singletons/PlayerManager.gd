@@ -50,14 +50,13 @@ func _enter_tree() -> void:
 		for action in PLAYER_ACTIONS:
 			copy_action(action, i)
 
-# Debug Printing
 func joy_connection_changed(device: int, connected: bool) -> void:
-	if device > 0:
+	if device > 0: #TODO: Add a setting to allow Player 2 to use Device 0
 		if connected:
 			print("PLAYER %d has Connected" % (device + 1))
 		else:
 			print("PLAYER %d has Disconnected" % (device + 1))
-			if active_device == device:
+			if active_device == device: # Reset Active Device if the current one is disconnected
 				active_device = 0
 
 ## This function duplicates an existing action from the [InputMap] and re-assigns it to a specific Player/Device ID.
@@ -68,3 +67,25 @@ func copy_action(action: String, device: int) -> void:
 		event = event.duplicate(true)
 		event.device = device
 		InputMap.action_add_event(new_action, event)
+
+#region Player Grabbing Functions
+## This function returns the node of the Player with the specified ID. By default, this grabs P1.
+func get_player_with_id(id := 0) -> Player:
+	return get_tree().get_nodes_in_group("Players").filter(filter_by_id.bind(id)).front()
+
+## This function returns the Player closest to a given global position.
+func get_closest_player(origin := Vector2(0, 0)) -> Player:
+	var players = get_tree().get_nodes_in_group("Players")
+	players.sort_custom(sort_by_closest.bind(origin))
+	return players.front()
+
+func filter_by_id(i, id := 0) -> bool:
+	if i is Player: return i.player_id == id
+	return i.get_meta("player_id", 0) == id
+
+func sort_by_player_id(a: Player, b: Player) -> bool:
+	return a.player_id < b.player_id
+
+func sort_by_closest(a: Node2D, b: Node2D, origin := Vector2(0, 0)) -> bool:
+	return abs(a.global_position) - abs(origin) < abs(b.global_position) - abs(origin)
+#endregion

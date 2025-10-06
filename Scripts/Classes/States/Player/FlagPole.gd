@@ -11,7 +11,6 @@ func enter(msg := {}) -> void:
 	player.play_animation("FlagSlide")
 	player.sprite.pause()
 	flagpole = msg["FlagPole"]
-	print(flagpole.timer)
 	flagpole.timer.timeout.connect(on_timeout)
 	await Global.level_complete_begin
 	state_machine.transition_to("LevelExit")

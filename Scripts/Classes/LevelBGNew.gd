@@ -116,9 +116,9 @@ func handle_disco_visuals(delta: float) -> void:
 		visual_progress = 0
 	combo_progress = inverse_lerp(0.0, DiscoLevel.max_combo_amount, DiscoLevel.combo_amount)
 	combo_progress = clamp(combo_progress, 0, 1)
-	if get_tree().get_first_node_in_group("Players") != null:
-		if get_tree().get_first_node_in_group("Players").is_invincible:
-			combo_progress = 1
+	var player: Player = PlayerManager.get_player_with_id()
+	if player != null and player.is_invincible:
+		combo_progress = 1
 	visual_progress = (lerp(visual_progress, combo_progress, delta))
 	$DiscoBits.modulate.a = lerpf(0, 0.9, visual_progress)
 	$DiscoBits/Rainbow/Joint.position.y = lerpf(256, 0, visual_progress)
