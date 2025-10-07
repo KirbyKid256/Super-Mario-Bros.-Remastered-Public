@@ -43,7 +43,7 @@ func handle_main_hud() -> void:
 	%Time.text = " " + str(Global.time).pad_zeros(3)
 	if Settings.file.difficulty.time_limit == 0:
 		%Time.text = " ---"
-	%Time.visible = get_tree().get_first_node_in_group("Players") != null
+	%Time.visible = PlayerManager.get_first_player() != null
 	handle_modern_hud()
 	if Global.current_game_mode == Global.GameMode.CHALLENGE:
 		handle_challenge_mode_hud()
@@ -65,7 +65,7 @@ func handle_modern_hud() -> void:
 	%ModernTime.text = "⏲" + str(Global.time).pad_zeros(3)
 	%ModernKeyCount.visible = KeyItem.total_collected > 0
 	%ModernKeyAmount.text = "*" + str(KeyItem.total_collected).pad_zeros(2)
-	if get_tree().get_first_node_in_group("Players") == null or Settings.file.difficulty.time_limit == 0:
+	if PlayerManager.get_first_player() == null or Settings.file.difficulty.time_limit == 0:
 		%ModernTime.text = "⏲---"
 
 func handle_disco_combo() -> void:
@@ -121,7 +121,7 @@ func handle_yoshi_radar() -> void:
 		%ModernRadar.get_node("AnimationPlayer").play("RESET")
 		return
 
-	var player_position = PlayerManager.get_closest_player().global_position
+	var player_position = PlayerManager.get_closest_player(egg_position).global_position
 	var distance = (egg_position - player_position).length()
 	
 	%Radar.get_node("AnimationPlayer").speed_scale = (250 / distance)
@@ -154,7 +154,7 @@ func handle_speedrun_timer() -> void:
 	%ModernPB.modulate = %PB.modulate
 
 func _input(event: InputEvent) -> void:
-	if get_tree().get_first_node_in_group("Players") != null and Global.can_pause and (Global.current_game_mode != Global.GameMode.LEVEL_EDITOR):
+	if PlayerManager.get_first_player() != null and Global.can_pause and (Global.current_game_mode != Global.GameMode.LEVEL_EDITOR):
 		if get_tree().paused == false and Global.game_paused == false:
 			if Global.player_action_just_pressed("pause", event.device):
 				activate_pause_menu(event.device)

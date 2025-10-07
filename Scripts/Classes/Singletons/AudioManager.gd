@@ -110,6 +110,10 @@ func _ready() -> void:
 
 ## Plays a sound in the current scene using an [AudioStreamPlayer2D].
 func play_sfx(stream_name := "", position := Vector2.ZERO, pitch := 1.0, player_id := 0) -> void:
+	# Changes the sound to a Global SFX since it's hard to determine positioning with multiple screens.
+	if SplitscreenHandler.use_split_screen:
+		play_global_sfx(stream_name, pitch, player_id)
+		return
 	if queued_sfxs[player_id].has(stream_name): return
 	queued_sfxs[player_id].append(stream_name)
 	kill_sfx(stream_name, player_id)
@@ -213,12 +217,13 @@ func stop_music_override(stream: MUSIC_OVERRIDES, force := false) -> void:
 	else:
 		set_music_override(audio_override_queue[audio_override_queue.size() - 1])
 
-func load_sfx_map(json := {}) -> void:
+func load_sfx_map() -> void:
 	for i in PlayerManager.MAX_LOCAL_PLAYERS:
 		sfx_library[i] = DEFAULT_SFX_LIBRARY.duplicate()
-		for j in json:
-			sfx_library[i][j] = json[j]
-	print(json)
+		var custom_sfx = character_sfx_map.get(Player.CHARACTERS[Global.player_characters[i]], {})
+		if custom_sfx.is_empty(): continue
+		for j in sfx_library[i]:
+			sfx_library[i][j] = custom_sfx.get(j, sfx_library[i][j])
 
 func handle_music() -> void:
 	if Global.in_title_screen:

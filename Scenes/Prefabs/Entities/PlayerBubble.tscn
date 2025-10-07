@@ -1,0 +1,60 @@
+[gd_scene load_steps=9 format=3 uid="uid://cj5u0p3odosye"]
+
+[ext_resource type="Script" uid="uid://b2u6fvgosh4sy" path="res://Scenes/Prefabs/Entities/PlayerBubble.gd" id="1_5f8kp"]
+[ext_resource type="Texture2D" uid="uid://dgxsanv216shn" path="res://Assets/Sprites/Players/Bubble.png" id="2_u1cb6"]
+[ext_resource type="Script" uid="uid://364rywt44hy6" path="res://Scripts/Classes/UI/PackSprite.gd" id="3_uyi2x"]
+[ext_resource type="SpriteFrames" uid="uid://df4enjjl84mji" path="res://Resources/SpriteFrames/Player/Mario/Small.tres" id="4_5f8kp"]
+[ext_resource type="Script" uid="uid://cbal8ms2oe1ik" path="res://Scripts/Classes/Components/ResourceSetterNew.gd" id="6_q2b45"]
+[ext_resource type="Script" uid="uid://cnheej0sxmoxg" path="res://Scripts/Parts/PlayerDetection.gd" id="7_674u5"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_674u5"]
+lifetime_randomness = 1.0
+particle_flag_disable_z = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 1.0
+emission_ring_radius = 16.0
+emission_ring_inner_radius = 15.0
+emission_ring_cone_angle = 90.0
+gravity = Vector3(0, 100, 0)
+radial_accel_min = 249.99998
+radial_accel_max = 249.99998
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2b1vy"]
+radius = 16.0
+
+[node name="PlayerBubble" type="AnimatedSprite2D" node_paths=PackedStringArray("resource_setter")]
+sprite_frames = ExtResource("4_5f8kp")
+animation = &"Die"
+script = ExtResource("1_5f8kp")
+bubble_speed_boost = 10.0
+resource_setter = NodePath("ResourceSetterNew")
+metadata/_custom_type_script = "uid://b08qfwj5jk6g1"
+
+[node name="ResourceSetterNew" type="Node" parent="."]
+script = ExtResource("6_q2b45")
+use_cache = false
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="BubbleSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_u1cb6")
+script = ExtResource("3_uyi2x")
+metadata/_custom_type_script = "uid://364rywt44hy6"
+
+[node name="PopParticles" type="GPUParticles2D" parent="BubbleSprite"]
+emitting = false
+amount = 16
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_674u5")
+
+[node name="PlayerDetection" type="Area2D" parent="BubbleSprite"]
+script = ExtResource("7_674u5")
+metadata/_custom_type_script = "uid://cnheej0sxmoxg"
+
+[node name="Shape" type="CollisionShape2D" parent="BubbleSprite/PlayerDetection"]
+shape = SubResource("CircleShape2D_2b1vy")
+
+[connection signal="player_entered" from="BubbleSprite/PlayerDetection" to="." method="on_player_entered"]

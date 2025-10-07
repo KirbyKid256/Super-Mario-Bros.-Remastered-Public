@@ -309,7 +309,7 @@ func _physics_process(delta: float) -> void:
 				AudioManager.kill_sfx("skid", player_id)
 		else:
 			if is_actually_on_floor() and skidding and Settings.file.audio.skid_sfx == 1:
-				AudioManager.play_global_sfx("skid", 1.0, player_id)
+				AudioManager.play_global_sfx("skid", 1, player_id)
 	else:
 		if $SkidSFX.playing:
 			if (is_actually_on_floor() and skidding) == false:
@@ -555,28 +555,34 @@ func die(pit := false) -> void:
 	Global.p_switch_timer = 0
 	stop_all_timers()
 	Global.total_deaths += 1
-	sprite.process_mode = Node.PROCESS_MODE_ALWAYS
+	PlayerManager.dead_players[player_id] = self
 	state_machine.transition_to("Dead", {"Pit": pit})
-	process_mode = Node.PROCESS_MODE_ALWAYS
-	get_tree().paused = true
-	Level.can_set_time = true
-	Level.first_load = true
-	if Global.current_game_mode != Global.GameMode.BOO_RACE:
-		AudioManager.set_music_override(AudioManager.MUSIC_OVERRIDES.DEATH, 999, false)
-		await get_tree().create_timer(3).timeout
+	if get_tree().get_nodes_in_group("Players").size() > 1:
+		remove_from_group("Players")
+		AudioManager.play_sfx("die", global_position, 1, player_id)
 	else:
-		AudioManager.set_music_override(AudioManager.MUSIC_OVERRIDES.RACE_LOSE, 999, false)
-		await get_tree().create_timer(5).timeout
-
-	death_load()
+		remove_from_group("Players")
+		for player in PlayerManager.dead_players.values():
+			player.process_mode = Node.PROCESS_MODE_ALWAYS
+			player.sprite.process_mode = Node.PROCESS_MODE_ALWAYS
+		get_tree().paused = true
+		Level.can_set_time = true
+		Level.first_load = true
+		if Global.current_game_mode != Global.GameMode.RACE and Global.current_game_mode != Global.GameMode.BOO_RACE:
+			AudioManager.set_music_override(AudioManager.MUSIC_OVERRIDES.DEATH, 999, false)
+			await get_tree().create_timer(3).timeout
+		else:
+			AudioManager.set_music_override(AudioManager.MUSIC_OVERRIDES.RACE_LOSE, 999, false)
+			await get_tree().create_timer(5).timeout
+		death_load()
 
 func death_load() -> void:
 	power_state = get_node("PowerStates/Small")
 	Global.reset_power_states()
 
-	if Global.death_load:
-		return
-	Global.death_load = true
+	if Global.death_load: return
+	if get_tree().get_nodes_in_group("Players").is_empty():
+		Global.death_load = true
 
 	# Handle lives decrement for CAMPAIGN and MARATHON
 	if [Global.GameMode.CAMPAIGN, Global.GameMode.MARATHON].has(Global.current_game_mode):
@@ -676,7 +682,10 @@ func power_up_animation(new_power_state := "") -> void:
 	var new_frames = $ResourceSetterNew.get_resource(load(get_character_sprite_path(new_power_state)))
 	sprite.process_mode = Node.PROCESS_MODE_ALWAYS
 	sprite.show()
-	get_tree().paused = true
+	if Global.connected_players.size() > 1:
+		process_mode = Node.PROCESS_MODE_DISABLED
+	else:
+		get_tree().paused = true
 	if get_node("PowerStates/" + new_power_state).hitbox_size != power_state.hitbox_size:
 		if Settings.file.visuals.transform_style == 0:
 			sprite.speed_scale = 3
@@ -718,7 +727,10 @@ func power_up_animation(new_power_state := "") -> void:
 			transforming = true
 			await get_tree().create_timer(0.6).timeout
 			transforming = false
-	get_tree().paused = false
+	if Global.connected_players.size() > 1:
+		process_mode = Node.PROCESS_MODE_INHERIT
+	else:
+		get_tree().paused = false
 	sprite.process_mode = Node.PROCESS_MODE_INHERIT
 	if can_input and Global.player_action_just_pressed("jump", player_id):
 		jump()
@@ -794,8 +806,6 @@ func jump() -> void:
 	gravity = JUMP_GRAVITY
 	AudioManager.play_sfx("small_jump" if power_state.hitbox_size == "Small" else "big_jump", global_position, 1, player_id)
 	has_jumped = true
-	await get_tree().physics_frame
-	has_jumped = true
 
 func calculate_jump_height() -> float: # Thanks wye love you xxx
 	return -(JUMP_HEIGHT + JUMP_INCR * int(abs(velocity.x) / 25))
@@ -820,6 +830,7 @@ func do_smoke_effect() -> void:
 	for i in 2:
 		var node = SMOKE_PARTICLE.instantiate()
 		node.global_position = global_position - Vector2(0, 16 * i)
+		node.z_index = z_index
 		add_sibling(node)
 		if power_state.hitbox_size == "Small":
 			break

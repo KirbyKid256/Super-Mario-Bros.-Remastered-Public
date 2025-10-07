@@ -134,6 +134,9 @@ var connected_players:
 	get():
 		if no_coop: return [0]
 		var joypads = Input.get_connected_joypads(); if not joypads.has(0): joypads.insert(0, 0)
+		for i in PlayerManager.test_players:
+			if i == 0 or joypads.has(i): continue
+			joypads.append(i)
 		return joypads
 
 const CAMPAIGNS := ["SMB1", "SMBLL", "SMBS", "SMBANN"]
@@ -283,12 +286,15 @@ func get_version_number() -> int:
 	return int(number)
 
 func player_action_pressed(action := "", player_id = PlayerManager.active_device) -> bool:
+	if not Input.get_connected_joypads().has(player_id) and PlayerManager.test_players >= player_id: player_id = 0
 	return Input.is_action_pressed(action + "_" + str(player_id))
 
 func player_action_just_pressed(action := "", player_id = PlayerManager.active_device) -> bool:
+	if not Input.get_connected_joypads().has(player_id) and PlayerManager.test_players >= player_id: player_id = 0
 	return Input.is_action_just_pressed(action + "_" + str(player_id))
 
 func player_action_just_released(action := "", player_id = PlayerManager.active_device) -> bool:
+	if not Input.get_connected_joypads().has(player_id) and PlayerManager.fake_players >= player_id: player_id = 0
 	return Input.is_action_just_released(action + "_" + str(player_id))
 
 func tally_time() -> void:
@@ -323,6 +329,7 @@ func activate_p_switch() -> void:
 	p_switch_active = true
 
 func reset_values() -> void:
+	PlayerManager.dead_players.clear()
 	PlayerGhost.idx = 0
 	Checkpoint.passed_checkpoints.clear()
 	Checkpoint.sublevel_id = 0

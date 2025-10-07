@@ -70,6 +70,9 @@ const BONUS_ROOMS := {
 @export var vertical_height := -208
 @export var can_backscroll := false
 
+@export var splitscreen_overlay_nodes: Array[Node] = []
+@export var splitscreen_duplicate_nodes: Array[Node] = []
+
 static var next_world := 1
 static var next_level := 2
 static var next_level_file_path := ""
@@ -81,6 +84,8 @@ static var vine_return_level := ""
 static var in_vine_level := false
 
 static var can_set_time := true
+
+@onready var splitscreen_handler = load("res://Scenes/Prefabs/LevelObjects/SplitscreenHandler.tscn").instantiate()
 
 func _enter_tree() -> void:
 	Global.current_level = self
@@ -115,6 +120,12 @@ func _ready() -> void:
 		Input.joy_connection_changed.connect(spawn_in_extra_players)
 		if Global.connected_players.size() > 1:
 			spawn_in_extra_players()
+	# Setup the Cameras
+	if SplitscreenHandler.use_split_screen:
+		if get_node_or_null("LevelBG") and not splitscreen_duplicate_nodes.has($LevelBG):
+			splitscreen_duplicate_nodes.append($LevelBG)
+		add_child(splitscreen_handler)
+
 const PLAYER = preload("res://Scenes/Prefabs/Entities/Player.tscn")
 
 func spawn_in_extra_players(device := -1, connected := true) -> void:
@@ -123,9 +134,9 @@ func spawn_in_extra_players(device := -1, connected := true) -> void:
 			if i == 0: continue
 			var player_node = PLAYER.instantiate()
 			player_node.player_id = Global.connected_players[i]
-			player_node.camera_handler = PlayerManager.get_player_with_id().camera_handler
+			player_node.camera_handler = PlayerManager.get_first_player().camera_handler
 			if Global.current_game_mode == Global.GameMode.RACE:
-				player_node.global_position = PlayerManager.get_player_with_id().global_position
+				player_node.global_position = PlayerManager.get_first_player().global_position
 			else:
 				player_node.global_position = get_tree().get_nodes_in_group("Players")[i - 1].global_position + Vector2(16, 0)
 			if Global.current_game_mode == Global.GameMode.CUSTOM_LEVEL or Global.current_game_mode == Global.GameMode.LEVEL_EDITOR:
@@ -134,11 +145,11 @@ func spawn_in_extra_players(device := -1, connected := true) -> void:
 			else:
 				add_child(player_node)
 	else:
-		if device == 0: return
+		if device == 0 or PlayerManager.test_players >= device: return
 		if connected:
 			var player_node = PLAYER.instantiate()
 			player_node.player_id = device
-			player_node.global_position = PlayerManager.get_player_with_id().global_position
+			player_node.global_position = PlayerManager.get_first_player().global_position
 			do_smoke_effect(player_node)
 			if Global.current_game_mode == Global.GameMode.CUSTOM_LEVEL or Global.current_game_mode == Global.GameMode.LEVEL_EDITOR:
 				if not Global.level_editor.is_node_ready(): await Global.level_editor.ready
@@ -159,7 +170,7 @@ func do_smoke_effect(player: Player) -> void:
 		node.z_index = player.z_index
 		add_child(node)
 		if player.power_state.hitbox_size == "Small": break
-	AudioManager.play_sfx("magic", player.global_position, 1.0, player.player_id)
+	AudioManager.play_sfx("magic", player.global_position, 1, player.player_id)
 
 func update_theme() -> void:
 	if auto_set_theme:

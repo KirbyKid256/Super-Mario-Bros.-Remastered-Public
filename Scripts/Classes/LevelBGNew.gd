@@ -77,7 +77,7 @@ func _ready() -> void:
 	if particles == 4:
 		if ["", "Snow", "Jungle", "Castle"].has(Global.level_theme):
 			particles = ["", "Snow", "Jungle", "Castle"].find(Global.level_theme)
-	await get_parent().ready
+	if get_parent() == Global.current_level: await get_parent().ready
 	if Engine.is_editor_hint() == false:
 		if time_of_day == 2:
 			is_auto = true

@@ -59,7 +59,8 @@ func update_title() -> void:
 func update_players(device: int = -1, connected: bool = true) -> void:
 	if device < 0:
 		for i in range(1, 8): $PlayerSprites.get_child(i).visible = Global.connected_players.has(i)
-	elif device > 0:
+	else:
+		if device == 0 or PlayerManager.test_players >= device: return
 		if $PlayerSprites.get_child(device).visible != connected:
 			$PlayerSprites.get_child(device).visible = connected
 			for i in 2:
@@ -67,7 +68,7 @@ func update_players(device: int = -1, connected: bool = true) -> void:
 				smoke.animation_finished.connect(smoke.queue_free)
 				smoke.position = $PlayerSprites.get_child(device).position - Vector2(0, 16 * i)
 				$PlayerSprites.add_child(smoke)
-				if i == 0: AudioManager.play_sfx("magic", smoke.global_position)
+				if i == 0: AudioManager.play_sfx("magic", smoke.global_position, 1, device)
 				if int(Global.player_power_states[device]) == 0: break
 
 func play_bgm() -> void:

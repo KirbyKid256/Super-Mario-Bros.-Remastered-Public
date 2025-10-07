@@ -1,0 +1,56 @@
+[gd_scene load_steps=6 format=3 uid="uid://baafnevs8jxk8"]
+
+[ext_resource type="Texture2D" uid="uid://diic24dpiofmt" path="res://Assets/Sprites/Players/StartBlock.png" id="1_hh6v3"]
+[ext_resource type="Script" uid="uid://ca3bew33g45eq" path="res://Scripts/Classes/UI/PackTextureRect.gd" id="2_03b14"]
+[ext_resource type="Script" uid="uid://cbal8ms2oe1ik" path="res://Scripts/Classes/Components/ResourceSetterNew.gd" id="3_o0iyj"]
+
+[sub_resource type="GDScript" id="GDScript_l5v6c"]
+script/source = "extends StaticBody2D
+
+@export var player_id := -1
+
+var character := \"Mario\":
+	set(value):
+		character = value
+		$Sprite/ResourceSetterNew.force_properties[\"Character\"] = value
+
+func _physics_process(_delta: float) -> void:
+	if not is_inside_tree() or player_id < 0: return
+	var player: Player = get_tree().get_nodes_in_group(\"Players\").filter(func(p): return p.player_id == player_id).front()
+	if player != null and player.global_position == global_position: return
+	if player == null or player and player.velocity.y != 0:
+		queue_free()
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eg0rv"]
+size = Vector2(48, 16)
+
+[node name="StartBlock" type="StaticBody2D"]
+script = SubResource("GDScript_l5v6c")
+
+[node name="Sprite" type="TextureRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_right = 24.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_hh6v3")
+stretch_mode = 1
+script = ExtResource("2_03b14")
+metadata/_custom_type_script = "uid://ca3bew33g45eq"
+
+[node name="ResourceSetterNew" type="Node" parent="Sprite" node_paths=PackedStringArray("node_to_affect")]
+script = ExtResource("3_o0iyj")
+node_to_affect = NodePath("..")
+property_name = "texture"
+mode = 1
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_eg0rv")
