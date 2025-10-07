@@ -15,9 +15,9 @@ func on_area_entered(area: Area2D) -> void:
 		else:
 			collect_item(area.owner)
 
-func give_life(_player: Player) -> void:
+func give_life(player: Player) -> void:
 	DiscoLevel.combo_amount += 1
-	AudioManager.play_sfx("1_up", global_position)
+	AudioManager.play_sfx("1_up", global_position, 1, player.player_id)
 	if Global.current_game_mode == Global.GameMode.CHALLENGE or Settings.file.difficulty.inf_lives:
 		Global.score += 2000
 		$ScoreNoteSpawner.spawn_note(2000)

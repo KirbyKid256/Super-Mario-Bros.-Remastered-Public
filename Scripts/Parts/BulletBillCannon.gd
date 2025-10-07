@@ -20,7 +20,7 @@ func _physics_process(_delta: float) -> void:
 func fire() -> void:
 	if BulletBill.amount >= 3 or $PlayerDetect.get_overlapping_areas().any(func(area: Area2D): return area.owner is Player) or is_inside_tree() == false:
 		return
-	var player: Player = get_tree().get_first_node_in_group("Players")
+	var player: Player = PlayerManager.get_closest_player(global_position)
 	var direction = sign(player.global_position.x - global_position.x)
 	$BlockCheck.scale.x = direction
 	$BlockCheck/RayCast2D.force_raycast_update()
@@ -33,7 +33,7 @@ func fire() -> void:
 		node.position.x += 8 * direction
 	node.set("velocity", Vector2(100 * direction, 0))
 	if node is not BulletBill:
-		AudioManager.play_sfx("cannon", global_position)
+		AudioManager.play_sfx("cannon", global_position, 1, player.player_id)
 	else:
 		node.cannon = true
 	add_sibling(node)

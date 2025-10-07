@@ -4,7 +4,7 @@ extends Enemy
 
 func stomped_on(player: Player) -> void:
 	player.enemy_bounce_off()
-	AudioManager.play_sfx("enemy_stomp", global_position)
+	AudioManager.play_sfx("enemy_stomp", global_position, 1, player.player_id)
 	summon_held()
 
 func summon_held() -> Node:

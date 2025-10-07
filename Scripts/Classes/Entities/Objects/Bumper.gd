@@ -13,9 +13,9 @@ func bounce_player(player: Player) -> void:
 			player.jump_cancelled = false
 			player.velocity.y = HIGH_STRENGTH
 			player.has_jumped = true
-			AudioManager.play_sfx("bumper_high", global_position)
+			AudioManager.play_sfx("bumper_high", global_position, 1, player.player_id)
 		else:
-			AudioManager.play_sfx("bumper", global_position)
+			AudioManager.play_sfx("bumper", global_position, 1, player.player_id)
 			player.velocity.y = LOW_STRENGTH
 	else:
 		player.velocity = global_position.direction_to(player.global_position) * 200
@@ -23,9 +23,9 @@ func bounce_player(player: Player) -> void:
 			player.gravity = player.JUMP_GRAVITY
 			player.velocity.y = LOW_STRENGTH
 			player.has_jumped = true
-			AudioManager.play_sfx("bumper_high", global_position)
+			AudioManager.play_sfx("bumper_high", global_position, 1, player.player_id)
 		else:
-			AudioManager.play_sfx("bumper", global_position)
+			AudioManager.play_sfx("bumper", global_position, 1, player.player_id)
 	refresh_hitbox()
 	$AnimationPlayer.play("Bounce")
 	await $AnimationPlayer.animation_finished

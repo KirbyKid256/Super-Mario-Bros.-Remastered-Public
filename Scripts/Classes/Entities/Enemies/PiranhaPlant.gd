@@ -13,7 +13,7 @@ func _ready() -> void:
 	$Timer.start()
 
 func on_timeout() -> void:
-	var player = get_tree().get_first_node_in_group("Players")
+	var player = PlayerManager.get_closest_player(global_position)
 	if plant_direction < 2:
 		if abs(player.global_position.x - global_position.x) >= player_range:
 			$Animation.play("Rise")

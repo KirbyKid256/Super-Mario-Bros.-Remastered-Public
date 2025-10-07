@@ -15,7 +15,7 @@ func throw_fireball() -> void:
 	player.call_deferred("add_sibling", node)
 	fireball_amount += 1
 	node.tree_exited.connect(func(): fireball_amount -= 1)
-	AudioManager.play_sfx("fireball", player.global_position)
+	AudioManager.play_sfx("fireball", player.global_position, 1, player.player_id)
 	player.attacking = true
 	await get_tree().create_timer(0.1, false).timeout
 	player.attacking = false

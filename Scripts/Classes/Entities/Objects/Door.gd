@@ -38,7 +38,7 @@ func _physics_process(_delta: float) -> void:
 					if KeyItem.total_collected > 0:
 						unlock_door(i.owner)
 					else:
-						AudioManager.play_sfx("door_locked", global_position)
+						AudioManager.play_sfx("door_locked", global_position, 1, i.owner.player_id)
 						$Sprite.play("Locked")
 						$AnimationPlayer.play("Locked")
 				else:
@@ -72,7 +72,7 @@ func run_door_check() -> void:
 			player_exit(i)
 
 func unlock_door(player: Player) -> void:
-	AudioManager.play_sfx("door_unlock", global_position)
+	AudioManager.play_sfx("door_unlock", global_position, 1, player.player_id)
 	Global.p_switch_timer_paused = true
 	KeyItem.total_collected -= 1
 	freeze_player(player)
@@ -95,7 +95,7 @@ func player_exit(player: Player) -> void:
 	await get_tree().create_timer(0.2, false).timeout
 	$Sprite.play("Close")
 	player.state_machine.transition_to("Normal")
-	AudioManager.play_sfx("door_close", global_position)
+	AudioManager.play_sfx("door_close", global_position, 1, player.player_id)
 	can_enter = true
 	Global.p_switch_timer_paused = false
 
@@ -107,7 +107,7 @@ func player_enter(player: Player) -> void:
 	freeze_player(player)
 	$Sprite.play("Open")
 	LevelEditor.play_door_transition = true
-	AudioManager.play_sfx("door_open", global_position)
+	AudioManager.play_sfx("door_open", global_position, 1, player.player_id)
 	await get_tree().create_timer(0.5, false).timeout
 	if Global.level_editor.sub_level_id == sublevel_id:
 		Global.do_fake_transition()

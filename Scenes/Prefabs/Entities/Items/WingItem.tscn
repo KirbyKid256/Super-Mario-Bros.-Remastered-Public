@@ -11,7 +11,7 @@
 script/source = "extends PowerUpItem
 
 func player_entered(player: Player) -> void:
-	AudioManager.play_sfx(\"power_up\", global_position)
+	AudioManager.play_sfx(\"power_up\", global_position, 1, player.player_id)
 	player.wing_get()
 	queue_free()
 "

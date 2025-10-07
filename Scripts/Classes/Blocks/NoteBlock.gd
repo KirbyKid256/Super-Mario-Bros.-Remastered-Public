@@ -30,7 +30,10 @@ func bounce_down(body: PhysicsBody2D) -> void:
 	animating = true
 	bounced.emit()
 	if play_sfx:
-		AudioManager.play_sfx("note_block", global_position)
+		if body is Player:
+			AudioManager.play_sfx("note_block", global_position, 1, body.player_id)
+		else:
+			AudioManager.play_sfx("note_block", global_position)
 	bodies.append(body)
 	if body is Player:
 		body.normal_state.jump_queued = false

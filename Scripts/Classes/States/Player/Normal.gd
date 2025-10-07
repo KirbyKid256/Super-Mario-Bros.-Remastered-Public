@@ -169,7 +169,7 @@ func swim_up() -> void:
 	if player.swim_stroke:
 		player.play_animation("SwimIdle")
 	player.velocity.y = -player.SWIM_HEIGHT * player.gravity_vector.y
-	AudioManager.play_sfx("swim", player.global_position)
+	AudioManager.play_sfx("swim", player.global_position, 1, player.player_id)
 	swim_up_meter = 0.5
 	player.crouching = false
 

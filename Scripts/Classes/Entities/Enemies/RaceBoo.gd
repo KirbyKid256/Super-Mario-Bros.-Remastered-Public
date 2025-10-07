@@ -27,7 +27,7 @@ func _ready() -> void:
 	$Sprite.play("Lose")
 	$OffScreenIcon.frame =  BooRaceHandler.boo_colour
 	$GoldParticles.visible = BooRaceHandler.boo_colour == 4
-	PlayerManager.get_player_with_id().dead.connect(func(): $Sprite.play("Win"))
+	PlayerManager.get_first_player().dead.connect(func(): $Sprite.play("Win"))
 
 func _process(_delta: float) -> void:
 	if Global.current_game_mode == Global.GameMode.BOO_RACE:
@@ -41,7 +41,7 @@ func handle_off_screen_icon() -> void:
 	sprite_position.x = clamp(sprite_position.x, (screen_center.x - (screen_size.x / 2)) + 8, (screen_center.x + (screen_size.x / 2)) - 8)
 	sprite_position.y = clamp(sprite_position.y, (screen_center.y - (screen_size.y / 2)) + 8, (screen_center.y + (screen_size.y / 2)) - 8)
 	$OffScreenIcon.global_position = sprite_position
-	if global_position.x > PlayerManager.get_player_with_id().global_position.x and path.progress_ratio >= 0.8:
+	if global_position.x > PlayerManager.get_first_player().global_position.x and path.progress_ratio >= 0.8:
 		$OffScreenIcon/Animation.play("CloseFlash")
 		$Sprite.play("Win")
 

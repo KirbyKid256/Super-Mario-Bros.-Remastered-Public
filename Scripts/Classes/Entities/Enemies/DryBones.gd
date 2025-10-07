@@ -10,7 +10,7 @@ func _physics_process(_delta: float) -> void:
 func stomped_on(player: Player) -> void:
 	player.enemy_bounce_off(false)
 	$Sprite.play("Crumble")
-	AudioManager.play_sfx("dry_bones_crumble", global_position)
+	AudioManager.play_sfx("dry_bones_crumble", global_position, 1, player.player_id)
 	$BasicEnemyMovement.can_move = false
 	set_collision_layer_value(5, false)
 	set_collision_mask_value(5, false)

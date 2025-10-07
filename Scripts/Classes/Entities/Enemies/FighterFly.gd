@@ -18,7 +18,7 @@ func _physics_process(delta: float) -> void:
 		$BasicEnemyMovement.move_speed = 0
 
 func stomped_on(player: Player) -> void:
-	AudioManager.play_sfx("enemy_stomp", global_position)
+	AudioManager.play_sfx("enemy_stomp", global_position, 1, player.player_id)
 	$BasicEnemyMovement.can_move = false
 	Global.combo_amount += 1
 	player.enemy_bounce_off()

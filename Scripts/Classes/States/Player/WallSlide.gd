@@ -24,7 +24,7 @@ func physics_update(delta: float) -> void:
 	player.move_and_slide()
 
 func jump_off() -> void:
-	AudioManager.play_sfx("bump", player.global_position)
+	AudioManager.play_sfx("bump", player.global_position, 1, player.player_id)
 	player.state_machine.transition_to("Normal")
 	player.jump()
 	player.velocity.x = 120 * player.direction

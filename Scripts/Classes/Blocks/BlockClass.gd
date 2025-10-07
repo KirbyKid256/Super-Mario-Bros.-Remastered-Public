@@ -39,7 +39,7 @@ func dispense_item() -> void:
 	can_hit = false
 	await get_tree().create_timer(0.1, false).timeout
 	DiscoLevel.combo_meter += combo_meter_amount
-	var item_to_dispense = player_mushroom_check(get_tree().get_first_node_in_group("Players"))
+	var item_to_dispense = player_mushroom_check(PlayerManager.get_first_player())
 	var node = item_to_dispense.instantiate()
 	if node is PowerUpItem or node.has_meta("is_item"):
 		for i in get_tree().get_nodes_in_group("Players"):
@@ -50,7 +50,7 @@ func dispense_item() -> void:
 			add_sibling(node)
 			if node is PowerUpItem:
 				if not Global.current_game_mode == Global.GameMode.RACE and Global.connected_players.size() > 1:
-					AudioManager.play_sfx("item_appear", global_position)
+					AudioManager.play_sfx("item_appear", global_position, 1, i.player_id)
 					node.player_multiplayer_launch_spawn(i)
 				else:
 					node.block_dispense_tween()

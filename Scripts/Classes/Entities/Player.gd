@@ -211,8 +211,8 @@ func _ready() -> void:
 	Global.can_time_tick = true
 	if [Global.GameMode.RACE, Global.GameMode.BOO_RACE, Global.GameMode.MARATHON, Global.GameMode.MARATHON_PRACTICE].has(Global.current_game_mode) == false:
 		apply_character_physics()
-	apply_character_sfx_map()
-	Global.level_theme_changed.connect(apply_character_sfx_map)
+	AudioManager.load_sfx_map()
+	Global.level_theme_changed.connect(AudioManager.load_sfx_map)
 	Global.level_theme_changed.connect(apply_character_physics)
 	Global.level_theme_changed.connect(set_power_state_frame)
 	Global.level_theme_changed.connect(check_player_label)
@@ -303,7 +303,7 @@ func _physics_process(delta: float) -> void:
 	handle_water_detection()
 	%SkidParticles.visible = Settings.file.visuals.extra_particles == 1
 	%SkidParticles.emitting = ((skidding and skid_frames > 2) or crouching) and is_on_floor() and abs(velocity.x) > 25 and Settings.file.visuals.extra_particles == 1
-	if PlayerManager.use_split_screen:
+	if SplitscreenHandler.use_split_screen:
 		if AudioManager.active_sfxs[player_id].has("skid"):
 			if not (is_actually_on_floor() and skidding) or Settings.file.audio.skid_sfx == 0:
 				AudioManager.kill_sfx("skid", player_id)
@@ -369,32 +369,6 @@ func get_fallback_animation(animation_name := "") -> String:
 	else:
 		return animation_name
 
-func apply_character_sfx_map() -> void:
-	var path = "res://Assets/Sprites/Players/" + character + "/SFX.json"
-	var custom_character := false
-	if int(Global.player_characters[player_id]) > 3:
-		custom_character = true
-		path = path.replace("res://Assets/Sprites/Players", Global.config_path.path_join("custom_characters/"))
-	path = ResourceSetter.get_pure_resource_path(path)
-	var json = JSON.parse_string(FileAccess.open(path, FileAccess.READ).get_as_text())
-	
-	for i in json:
-		var res_path = "res://Assets/Audio/SFX/" + json[i]
-		res_path = ResourceSetter.get_pure_resource_path(res_path)
-		if FileAccess.file_exists(res_path) == false or custom_character:
-			var directory = "res://Assets/Sprites/Players/" + character + "/" + json[i]
-			if int(Global.player_characters[player_id]) > 3:
-				directory = directory.replace("res://Assets/Sprites/Players", Global.config_path.path_join("custom_characters/"))
-			directory = ResourceSetter.get_pure_resource_path(directory)
-			if FileAccess.file_exists(directory):
-				json[i] = directory
-			else:
-				json[i] = res_path
-		else:
-			json[i] = res_path
-	
-	AudioManager.load_sfx_map(json)
-
 func refresh_hitbox() -> void:
 	$Hitbox.set_deferred("monitoring", false)
 	$Hitbox.set_deferred("monitorable", false)
@@ -450,7 +424,7 @@ func add_stomp_combo(award_score := true) -> void:
 				score_note_spawner.spawn_note(10000)
 			else:
 				Global.lives += 1
-				AudioManager.play_sfx("1_up", global_position, 1.0, player_id)
+				AudioManager.play_sfx("1_up", global_position, 1, player_id)
 				score_note_spawner.spawn_one_up_note()
 	else:
 		if award_score:
@@ -459,7 +433,7 @@ func add_stomp_combo(award_score := true) -> void:
 		stomp_combo += 1
 
 func bump_ceiling() -> void:
-	AudioManager.play_sfx("bump", global_position, 1.0, player_id)
+	AudioManager.play_sfx("bump", global_position, 1, player_id)
 	velocity.y = CEILING_BUMP_SPEED
 	can_bump_sfx = false
 	bumping = true
@@ -543,7 +517,7 @@ func damage() -> void:
 		if Settings.file.difficulty.damage_style == 0:
 			damage_state = get_node("PowerStates/Small")
 		DiscoLevel.combo_meter -= 50
-		AudioManager.play_sfx("damage", global_position, 1.0, player_id)
+		AudioManager.play_sfx("damage", global_position, 1, player_id)
 		await power_up_animation(damage_state.state_name)
 		power_state = get_node("PowerStates/" + damage_state.state_name)
 		Global.player_power_states[player_id] = str(power_state.get_index())
@@ -554,7 +528,7 @@ func damage() -> void:
 func passed_checkpoint() -> void:
 	if Settings.file.difficulty.checkpoint_style == 0:
 		$Checkpoint/Animation.play("Show")
-	AudioManager.play_sfx("checkpoint", global_position, 1.0, player_id)
+	AudioManager.play_sfx("checkpoint", global_position, 1, player_id)
 
 func do_i_frames() -> void:
 	can_hurt = false
@@ -670,7 +644,7 @@ func get_power_up(power_name := "") -> void:
 	Global.score += 1000
 	DiscoLevel.combo_amount += 1
 	score_note_spawner.spawn_note(1000)
-	AudioManager.play_sfx("power_up", global_position, 1.0, player_id)
+	AudioManager.play_sfx("power_up", global_position, 1, player_id)
 	if Settings.file.difficulty.damage_style == 0 and power_state.state_name != power_name:
 		if power_name != "Big" and power_state.state_name != "Big":
 			power_name = "Big"
@@ -764,7 +738,7 @@ func enter_pipe(pipe: PipeArea, warp_to_level := true) -> void:
 	pipe_enter_direction = pipe.get_vector(pipe.enter_direction)
 	if pipe_enter_direction.x != 0:
 		global_position.y = pipe.global_position.y + 14
-	AudioManager.play_sfx("pipe", global_position, 1.0, player_id)
+	AudioManager.play_sfx("pipe", global_position, 1, player_id)
 	state_machine.transition_to("Pipe")
 	PipeArea.exiting_pipe_id = pipe.pipe_id
 	hide_pipe_animation()
@@ -801,7 +775,7 @@ func go_to_exit_pipe(pipe: PipeArea) -> void:
 func exit_pipe(pipe: PipeArea) -> void:
 	show()
 	pipe_enter_direction = -pipe.get_vector(pipe.enter_direction)
-	AudioManager.play_sfx("pipe", global_position, 1.0, player_id)
+	AudioManager.play_sfx("pipe", global_position, 1, player_id)
 	state_machine.transition_to("Pipe")
 	await get_tree().create_timer(0.65, false).timeout
 	Global.can_pause = true
@@ -813,7 +787,7 @@ func jump() -> void:
 		return
 	velocity.y = calculate_jump_height() * gravity_vector.y
 	gravity = JUMP_GRAVITY
-	AudioManager.play_sfx("small_jump" if power_state.hitbox_size == "Small" else "big_jump", global_position, 1.0, player_id)
+	AudioManager.play_sfx("small_jump" if power_state.hitbox_size == "Small" else "big_jump", global_position, 1, player_id)
 	has_jumped = true
 
 func calculate_jump_height() -> float: # Thanks wye love you xxx
@@ -842,7 +816,7 @@ func do_smoke_effect() -> void:
 		add_sibling(node)
 		if power_state.hitbox_size == "Small":
 			break
-	AudioManager.play_sfx("magic", global_position, 1.0, player_id)
+	AudioManager.play_sfx("magic", global_position, 1, player_id)
 
 func on_timeout() -> void:
 	AudioManager.stop_music_override(AudioManager.MUSIC_OVERRIDES.STAR)
@@ -855,7 +829,7 @@ func on_area_entered(area: Area2D) -> void:
 		if area.owner.velocity.y > 0 and area.owner.is_actually_on_floor() == false:
 			area.owner.enemy_bounce_off(false)
 			velocity.y = 50
-			AudioManager.play_sfx("bump", global_position, 1.0, player_id)
+			AudioManager.play_sfx("bump", global_position, 1, player_id)
 
 func hammer_get() -> void:
 	has_hammer = true

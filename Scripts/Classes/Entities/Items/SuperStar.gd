@@ -8,6 +8,6 @@ func _physics_process(delta: float) -> void:
 func collect_item(player: Player) -> void:
 	collected.emit()
 	player.super_star()
-	AudioManager.play_sfx("power_up", global_position)
+	AudioManager.play_sfx("power_up", global_position, 1, player.player_id)
 	AudioManager.set_music_override(AudioManager.MUSIC_OVERRIDES.STAR, 1, false)
 	queue_free()

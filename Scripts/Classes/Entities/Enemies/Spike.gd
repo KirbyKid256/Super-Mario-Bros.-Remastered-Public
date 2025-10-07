@@ -13,7 +13,7 @@ func _physics_process(delta: float) -> void:
 		$Movement.handle_movement(delta)
 	else:
 		$StaticMovement.handle_movement(delta)
-		var target_player = get_tree().get_first_node_in_group("Players")
+		var target_player = PlayerManager.get_closest_player(global_position)
 		var target_direction = sign(target_player.global_position.x - global_position.x)
 		if target_direction != 0:
 			direction = target_direction
@@ -35,5 +35,5 @@ func summon_ball() -> void:
 
 func on_timeout() -> void:
 	if not $Movement.can_move: return
-	var target_player = get_tree().get_first_node_in_group("Players")
+	var target_player = PlayerManager.get_closest_player(global_position)
 	direction = sign(target_player.global_position.x - global_position.x)

@@ -71,7 +71,7 @@ func add_entities(chunk := "", chunk_id := 0, layer := 0) -> void:
 		if entity_map[entity_id][0] != "res://Scenes/Prefabs/Entities/Player.tscn":
 			entity_node = load(entity_map[entity_id][0]).instantiate()
 		else:
-			entity_node = get_tree().get_first_node_in_group("Players")
+			entity_node = PlayerManager.get_first_player()
 		var offset = entity_map[entity_id][1].split(",")
 		entity_node.global_position = entity_tile_position * 16 + (Vector2i(8, 8) + Vector2i(int(offset[0]), int(offset[1])))
 		editor.entity_layer_nodes[layer].add_child(entity_node)

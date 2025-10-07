@@ -18,7 +18,7 @@ func _ready() -> void:
 	$HammerTimer.start()
 
 func _process(delta: float) -> void:
-	target_player = get_tree().get_first_node_in_group("Players")
+	target_player = PlayerManager.get_closest_player(global_position)
 	direction = sign(target_player.global_position.x - global_position.x)
 	$Sprite.scale.x = direction
 	if $TrackJoint.is_attached: $MovementAnimations.play("RESET")

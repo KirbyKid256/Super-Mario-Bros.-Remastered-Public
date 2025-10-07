@@ -5,7 +5,7 @@ var target_player: Player = null
 var can_rise := true
 
 func _physics_process(delta: float) -> void:
-	target_player = get_tree().get_first_node_in_group("Players")
+	target_player = PlayerManager.get_closest_player(global_position)
 	if falling:
 		global_position.y += 32 * delta
 		if global_position.y >= target_player.global_position.y - 24 and can_rise:

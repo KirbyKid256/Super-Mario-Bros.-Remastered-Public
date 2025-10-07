@@ -156,8 +156,8 @@ func _physics_process(delta: float) -> void:
 		else:
 			timer = (abs(start_time - Time.get_ticks_msec()) / 1000) - paused_time
 		if enable_recording:
-			if get_tree().get_first_node_in_group("Players") != null:
-				record_frame(get_tree().get_first_node_in_group("Players"))
+			if PlayerManager.get_first_player() != null:
+				record_frame(PlayerManager.get_first_player())
 	else:
 		paused_time = 0
 	Global.player_ghost.visible = ghost_visible
@@ -200,7 +200,7 @@ func gen_time_string(timer_dict := {}) -> String:
 	return str(int(timer_dict["mins"])).pad_zeros(2) + ":" + str(int(timer_dict["secs"])).pad_zeros(2) + ":" + str(int(timer_dict["mils"])).pad_zeros(2)
 
 func save_recording() -> void:
-	var recording := [timer, current_recording, levels, str(["Mario", "Luigi", "Toad", "Toadette"].find(PlayerManager.get_player_with_id().character)), anim_list]
+	var recording := [timer, current_recording, levels, str(["Mario", "Luigi", "Toad", "Toadette"].find(PlayerManager.get_first_player().character)), anim_list]
 	var recording_dir = Global.config_path.path_join("marathon_recordings/" + Global.current_campaign)
 	DirAccess.make_dir_recursive_absolute(recording_dir)
 	var file = FileAccess.open(recording_dir + "/" + str(Global.world_num) + "-" + str(Global.level_num) + ("warp" if is_warp_run else "") + ".json", FileAccess.WRITE)

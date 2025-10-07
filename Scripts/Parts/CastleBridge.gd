@@ -52,7 +52,7 @@ func destroy_bridge(player: Player) -> void:
 		await get_tree().create_timer(0.5).timeout
 		for i in $Bridge.get_children():
 			if i.visible:
-				AudioManager.play_sfx("block_break", i.global_position)
+				AudioManager.play_sfx("block_break", i.global_position, 1, player.player_id)
 			if Settings.file.visuals.bridge_animation == 0:
 				bridge_piece_break(i)
 			else:

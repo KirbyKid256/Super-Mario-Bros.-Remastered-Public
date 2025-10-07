@@ -5,7 +5,7 @@ extends StaticBody2D
 func on_player_entered(player: Player) -> void:
 	player.enemy_bounce_off(false)
 	play_animation()
-	AudioManager.play_sfx("spring", global_position)
+	AudioManager.play_sfx("spring", global_position, 1, player.player_id)
 	if is_super:
 		await get_tree().physics_frame
 		player.velocity.y *= 1.5

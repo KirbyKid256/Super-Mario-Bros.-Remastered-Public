@@ -41,7 +41,7 @@ func stomped_on(player: Player) -> void:
 	if dead:
 		return
 	player.enemy_bounce_off()
-	AudioManager.play_sfx("enemy_stomp", global_position)
+	AudioManager.play_sfx("enemy_stomp", global_position, 1, player.player_id)
 	if winged:
 		DiscoLevel.combo_meter = 100
 		DiscoLevel.combo_amount += 1

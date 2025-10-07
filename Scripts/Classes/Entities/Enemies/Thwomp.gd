@@ -23,7 +23,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func handle_idle(delta: float) -> void:
-	var target_player = get_tree().get_first_node_in_group("Players")
+	var target_player = PlayerManager.get_closest_player(global_position)
 	var x_distance = abs(target_player.global_position.x - global_position.x)
 	velocity = Vector2.ZERO
 	if x_distance < 24 and can_fall:

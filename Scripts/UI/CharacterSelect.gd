@@ -50,14 +50,23 @@ func get_custom_characters() -> void:
 			var json = JSON.parse_string(FileAccess.open(char_path.path_join("CharacterInfo.json"), FileAccess.READ).get_as_text())
 			Player.CHARACTERS.append(i)
 			Player.CHARACTER_NAMES.append(json.name)
+			var default_idx := wrapi(Player.CHARACTERS.find(i), 0, 4)
 			if FileAccess.file_exists(char_path.path_join("CharacterColour.json")):
 				Player.CHARACTER_COLOURS.append(load(char_path.path_join("CharacterColour.json")))
+			else:
+				Player.CHARACTER_COLOURS.append(Player.CHARACTER_COLOURS[default_idx])
 			if FileAccess.file_exists(char_path.path_join("LifeIcon.json")):
 				GameHUD.character_icons.append(load(char_path.path_join("LifeIcon.json")))
+			else:
+				GameHUD.character_icons.append(GameHUD.character_icons[default_idx])
 			if FileAccess.file_exists(char_path.path_join("ColourPalette.json")):
 				Player.CHARACTER_PALETTES.append(load(char_path.path_join("ColourPalette.json")))
+			else:
+				Player.CHARACTER_PALETTES.append(Player.CHARACTER_PALETTES[default_idx])
 			if FileAccess.file_exists(char_path.path_join("SFX.json")):
 				AudioManager.character_sfx_map[i] = JSON.parse_string(FileAccess.open(char_path.path_join("SFX.json"), FileAccess.READ).get_as_text())
+				for j in AudioManager.character_sfx_map[i]:
+					AudioManager.character_sfx_map[i][j] = char_path.path_join(AudioManager.character_sfx_map[i][j])
 
 func open(can_coop := false) -> void:
 	PlayerManager.active_device = 0
@@ -118,7 +127,7 @@ func update_sprites() -> void:
 	%CharacterName.text = tr(Player.CHARACTER_NAMES[selected_index])
 	$Panel/MarginContainer/VBoxContainer/CharacterName/TextShadowColourChanger/ColourPaletteSampler.texture = %ColourPaletteSampler.texture
 	$Panel/MarginContainer/VBoxContainer/CharacterName/TextShadowColourChanger.handle_shadow_colours()
-	if player_queue.is_empty() and PlayerManager.active_device < 1:
+	if player_queue.is_empty() and PlayerManager.active_device < 1 and PlayerManager.test_players == 0:
 		$Panel.self_modulate = Color.WHITE
 		%PlayerNumber.hide()
 	else:

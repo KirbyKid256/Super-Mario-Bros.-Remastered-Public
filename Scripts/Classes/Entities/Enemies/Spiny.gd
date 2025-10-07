@@ -10,7 +10,7 @@ func _physics_process(delta: float) -> void:
 func handle_movement(_delta: float) -> void:
 	if in_egg:
 		if is_on_floor():
-			var player = get_tree().get_first_node_in_group("Players")
+			var player = PlayerManager.get_closest_player(global_position)
 			direction = sign(player.global_position.x - global_position.x)
 			in_egg = false
 		$Sprite.play("Egg")

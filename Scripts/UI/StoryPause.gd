@@ -60,7 +60,7 @@ func update_colours(_device := -1, _connected := true) -> void:
 func open(device := 0) -> void:
 	if is_pause:
 		Global.game_paused = true
-		AudioManager.play_global_sfx("pause")
+		AudioManager.play_global_sfx("pause", 1, device)
 		get_tree().paused = true
 	if Global.connected_players.size() > 1:
 		PlayerManager.active_device = device

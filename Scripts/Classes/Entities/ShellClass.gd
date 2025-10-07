@@ -48,7 +48,7 @@ func on_player_stomped_on(stomped_player: Player) -> void:
 	else:
 		DiscoLevel.combo_meter += 10
 		moving = false
-		AudioManager.play_sfx("enemy_stomp", global_position)
+		AudioManager.play_sfx("enemy_stomp", global_position, 1, stomped_player.player_id)
 		stomped_player.enemy_bounce_off(true, moving_time > 0.1)
 
 func block_bounced(_block: Block) -> void:
@@ -98,7 +98,7 @@ func kick(hit_player: Player) -> void:
 		$ScoreNoteSpawner.spawn_note(8000)
 	else:
 		award_score(get_kick_award(hit_player))
-	AudioManager.play_sfx("kick", global_position)
+	AudioManager.play_sfx("kick", global_position, 1, hit_player.player_id)
 	
 	# Limit the number of times you can kick the same shell.
 	if Global.current_game_mode == Global.GameMode.CHALLENGE:

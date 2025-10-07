@@ -122,4 +122,4 @@ func update_players_reached(player: Player = null, device := -1, connected := tr
 func on_player_entered(player: Player) -> void:
 	player_touch(player)
 	Global.lives += 1
-	AudioManager.play_sfx("1_up", global_position)
+	AudioManager.play_sfx("1_up", global_position, 1, player.player_id)

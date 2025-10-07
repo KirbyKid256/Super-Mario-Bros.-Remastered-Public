@@ -11,7 +11,7 @@ var direction := -1
 signal killed
 
 func _physics_process(delta: float) -> void:
-	target_player = get_tree().get_first_node_in_group("Players")
+	target_player = PlayerManager.get_closest_player(global_position)
 	if $TrackJoint.is_attached == false:
 		handle_movement(delta)
 	$Sprite.scale.x = direction

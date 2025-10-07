@@ -35,7 +35,7 @@ func _process(_delta: float) -> void:
 	screen_center = get_viewport().get_camera_2d().get_screen_center_position()
 
 func _physics_process(delta: float) -> void:
-	player = get_tree().get_first_node_in_group("Players")
+	player = PlayerManager.get_closest_player(global_position)
 	handle_movement(delta)
 
 func handle_movement(_delta: float) -> void:
