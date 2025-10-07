@@ -708,7 +708,7 @@ offset_bottom = 35.0
 [node name="CharacterSelect" parent="CanvasLayer/StoryMode/ContinueUnbeatenGame" instance=ExtResource("13_8wrri")]
 visible = false
 
-[node name="ChallengeOptions" type="VBoxContainer" parent="CanvasLayer" node_paths=PackedStringArray("options")]
+[node name="ChallengeOptions" type="VBoxContainer" parent="CanvasLayer" node_paths=PackedStringArray("options", "multiplayer_options")]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(9, 0)
@@ -726,7 +726,8 @@ size_flags_horizontal = 4
 size_flags_vertical = 10
 theme_override_constants/separation = 0
 script = ExtResource("9_dsf7o")
-options = [NodePath("BooRace"), NodePath("ChallengeHunt")]
+options = [NodePath("BooRace"), NodePath("ChallengeHunt"), NodePath("VsRace")]
+multiplayer_options = [NodePath("VsRace")]
 
 [node name="BooRace" type="Label" parent="CanvasLayer/ChallengeOptions"]
 layout_mode = 2
@@ -740,6 +741,13 @@ layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 text = "CHALLENGE_HUNT"
+uppercase = true
+
+[node name="VsRace" type="Label" parent="CanvasLayer/ChallengeOptions"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "CHALLENGE_RACE"
 uppercase = true
 
 [node name="Buffer" type="Control" parent="CanvasLayer/ChallengeOptions"]
@@ -1653,8 +1661,8 @@ metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
 [connection signal="cancelled" from="CanvasLayer/StoryMode/NewBeatenGame/LevelSelect" to="CanvasLayer/StoryMode/NewBeatenGame/WorldSelect" method="open"]
 [connection signal="level_selected" from="CanvasLayer/StoryMode/NewBeatenGame/LevelSelect" to="CanvasLayer/StoryMode/NewBeatenGame/BeatenCharSelect" method="open" binds= [true]]
 [connection signal="cancelled" from="CanvasLayer/StoryMode/NewBeatenGame/BeatenCharSelect" to="CanvasLayer/StoryMode/NewBeatenGame/LevelSelect" method="open"]
-[connection signal="selected" from="CanvasLayer/StoryMode/NewBeatenGame/BeatenCharSelect" to="." method="clear_stats"]
 [connection signal="selected" from="CanvasLayer/StoryMode/NewBeatenGame/BeatenCharSelect" to="." method="start_game"]
+[connection signal="selected" from="CanvasLayer/StoryMode/NewBeatenGame/BeatenCharSelect" to="." method="clear_stats"]
 [connection signal="cancelled" from="CanvasLayer/StoryMode/ContinueBeatenGame/WorldSelect" to="CanvasLayer/StoryMode/StoryOptions" method="open"]
 [connection signal="world_selected" from="CanvasLayer/StoryMode/ContinueBeatenGame/WorldSelect" to="CanvasLayer/StoryMode/ContinueBeatenGame/LevelSelect" method="open"]
 [connection signal="cancelled" from="CanvasLayer/StoryMode/ContinueBeatenGame/LevelSelect" to="CanvasLayer/StoryMode/ContinueBeatenGame/WorldSelect" method="open"]
@@ -1662,15 +1670,15 @@ metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
 [connection signal="cancelled" from="CanvasLayer/StoryMode/ContinueBeatenGame/CharSelect" to="CanvasLayer/StoryMode/ContinueBeatenGame/LevelSelect" method="open"]
 [connection signal="selected" from="CanvasLayer/StoryMode/ContinueBeatenGame/CharSelect" to="." method="start_game"]
 [connection signal="cancelled" from="CanvasLayer/StoryMode/NewUnbeatenGame/NoBeatenCharSelect" to="CanvasLayer/StoryMode/StoryOptions" method="open"]
+[connection signal="selected" from="CanvasLayer/StoryMode/NewUnbeatenGame/NoBeatenCharSelect" to="." method="start_game"]
 [connection signal="selected" from="CanvasLayer/StoryMode/NewUnbeatenGame/NoBeatenCharSelect" to="." method="clear_stats"]
 [connection signal="selected" from="CanvasLayer/StoryMode/NewUnbeatenGame/NoBeatenCharSelect" to="." method="go_back_to_first_level"]
-[connection signal="selected" from="CanvasLayer/StoryMode/NewUnbeatenGame/NoBeatenCharSelect" to="." method="start_game"]
 [connection signal="cancelled" from="CanvasLayer/StoryMode/ContinueUnbeatenGame/CharacterSelect" to="CanvasLayer/StoryMode/StoryOptions" method="open"]
 [connection signal="selected" from="CanvasLayer/StoryMode/ContinueUnbeatenGame/CharacterSelect" to="." method="start_game"]
 [connection signal="closed" from="CanvasLayer/ChallengeOptions" to="CanvasLayer/Options2" method="open"]
 [connection signal="option_1_selected" from="CanvasLayer/ChallengeOptions" to="." method="go_to_boo_menu"]
 [connection signal="option_2_selected" from="CanvasLayer/ChallengeOptions" to="." method="challenge_hunt_selected"]
-[connection signal="option_3_selected" from="CanvasLayer/ChallengeOptions" to="." method="world_9_selected"]
+[connection signal="option_3_selected" from="CanvasLayer/ChallengeOptions" to="." method="go_to_race_menu"]
 [connection signal="cancelled" from="CanvasLayer/ChallengeHunt/WorldSelect" to="CanvasLayer/ChallengeOptions" method="open"]
 [connection signal="world_selected" from="CanvasLayer/ChallengeHunt/WorldSelect" to="CanvasLayer/ChallengeHunt/LevelSelect" method="open"]
 [connection signal="cancelled" from="CanvasLayer/ChallengeHunt/LevelSelect" to="CanvasLayer/ChallengeHunt/WorldSelect" method="open"]

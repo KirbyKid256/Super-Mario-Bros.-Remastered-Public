@@ -229,8 +229,13 @@ func _ready() -> void:
 
 func check_player_label() -> void:
 	$Checkpoint/Label.text = str(player_id + 1)
-	$Checkpoint/Label.modulate = PlayerManager.colours[player_id]
 	$Checkpoint/Label.visible = not Global.no_coop and Global.connected_players.size() > 1
+	if is_in_group("RaceTeamRed"):
+		$Checkpoint/Label.modulate = Color("F73910")
+	elif is_in_group("RaceTeamBlue"):
+		$Checkpoint/Label.modulate = Color("5050FF")
+	else:
+		$Checkpoint/Label.modulate = PlayerManager.colours[player_id]
 
 func apply_character_physics() -> void:
 	var path = "res://Assets/Sprites/Players/" + character + "/CharacterInfo.json"
@@ -579,6 +584,7 @@ func die(pit := false) -> void:
 func death_load() -> void:
 	power_state = get_node("PowerStates/Small")
 	Global.reset_power_states()
+	PlayerManager.dead_players.clear()
 
 	if Global.death_load: return
 	if get_tree().get_nodes_in_group("Players").is_empty():
@@ -601,6 +607,15 @@ func death_load() -> void:
 
 		Global.GameMode.CHALLENGE: func():
 			Global.transition_to_scene("res://Scenes/Levels/ChallengeMiss.tscn"),
+
+		Global.GameMode.RACE: func():
+			get_tree().paused = false
+			Global.reset_values()
+			Global.clear_saved_values()
+			Global.death_load = false
+			PlayerManager.force_local_players.clear()
+			PlayerManager.use_split_screen = false
+			Global.transition_to_scene("res://Scenes/Levels/RaceMenu.tscn"),
 
 		Global.GameMode.BOO_RACE: func():
 			Global.reset_values()

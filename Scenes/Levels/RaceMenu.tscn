@@ -1,0 +1,756 @@
+[gd_scene load_steps=27 format=3 uid="uid://cw84h3011jeay"]
+
+[ext_resource type="Script" uid="uid://c00370j445g6h" path="res://Scripts/UI/RaceMenu.gd" id="2_unt7u"]
+[ext_resource type="Theme" uid="uid://dtn507x2b5de7" path="res://Resources/Theme.tres" id="2_w1not"]
+[ext_resource type="Texture2D" uid="uid://bhuybr2gtuco5" path="res://Assets/Sprites/UI/MenuBG.png" id="3_18ao8"]
+[ext_resource type="Texture2D" uid="uid://fq4iw7dsp3n6" path="res://Assets/Sprites/UI/VsRace.png" id="3_miv6t"]
+[ext_resource type="Texture2D" uid="uid://3ai0ggxah360" path="res://Assets/Sprites/UI/MenuBorder.png" id="4_hex44"]
+[ext_resource type="Texture2D" uid="uid://o01vuu4snhd6" path="res://Assets/Sprites/UI/RaceMenuBG.png" id="5_twiem"]
+[ext_resource type="Script" uid="uid://ca3bew33g45eq" path="res://Scripts/Classes/UI/PackTextureRect.gd" id="6_mvlvm"]
+[ext_resource type="Script" uid="uid://cbal8ms2oe1ik" path="res://Scripts/Classes/Components/ResourceSetterNew.gd" id="7_8pwi4"]
+[ext_resource type="JSON" path="res://Assets/Sprites/UI/MenuBorder.json" id="8_qhftf"]
+[ext_resource type="JSON" path="res://Assets/Sprites/UI/MenuBG.json" id="9_25yqo"]
+[ext_resource type="AudioStream" uid="uid://ehcskhcpqrgh" path="res://Assets/Audio/BGM/BooMenu.mp3" id="10_08tv6"]
+[ext_resource type="JSON" path="res://Assets/Audio/BGM/BooMenu.json" id="11_21i26"]
+[ext_resource type="StyleBox" uid="uid://comkghpj0djcl" path="res://Resources/UI/Panel.tres" id="12_stan1"]
+[ext_resource type="Texture2D" uid="uid://3p2l7rec0gh5" path="res://Assets/Sprites/UI/Cursor.png" id="13_uaftc"]
+[ext_resource type="JSON" path="res://Assets/Sprites/UI/Cursor.json" id="14_500ut"]
+[ext_resource type="Script" uid="uid://364rywt44hy6" path="res://Scripts/Classes/UI/PackSprite.gd" id="16_anhbx"]
+[ext_resource type="SpriteFrames" uid="uid://cjblhx4flkqva" path="res://Resources/SpriteFrames/Player/Mario/Big.tres" id="18_djpsf"]
+[ext_resource type="PackedScene" uid="uid://b20bb6gjtf7xi" path="res://Scenes/Prefabs/UI/TeamSelect.tscn" id="19_1jubd"]
+[ext_resource type="Script" uid="uid://b08qfwj5jk6g1" path="res://Scripts/Parts/PlayerSprite.gd" id="19_hmagy"]
+[ext_resource type="PackedScene" uid="uid://ci678koo0peoa" path="res://Scenes/Prefabs/UI/CharacterSelect.tscn" id="24_cd4rg"]
+[ext_resource type="Script" uid="uid://cqif1li7otvpl" path="res://Scripts/Parts/SpriteFramesToJsonConverter.gd" id="25_5w2k4"]
+[ext_resource type="Script" uid="uid://co6tjg3w6qpd8" path="res://Scripts/Parts/LabelFontChanger.gd" id="26_18wys"]
+[ext_resource type="PackedScene" uid="uid://cinr6kcbmo6gr" path="res://Scenes/Parts/DropShadowRenderer.tscn" id="27_0dq8t"]
+
+[sub_resource type="Shader" id="Shader_mm3k3"]
+code = "shader_type canvas_item;
+
+uniform vec2 motion = vec2(0.0);
+uniform float scale = 1.0;
+uniform vec2 offset = vec2(0.0);
+
+void vertex(){
+	UV = (VERTEX + offset + TIME * motion) * TEXTURE_PIXEL_SIZE * (1.0/scale);
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nk4wu"]
+shader = SubResource("Shader_mm3k3")
+shader_parameter/motion = Vector2(-8, -8)
+shader_parameter/scale = 1.0
+shader_parameter/offset = Vector2(0, 0)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hpo87"]
+atlas = ExtResource("13_uaftc")
+region = Rect2(0, 0, 8, 8)
+
+[node name="RaceMenu" type="Node"]
+script = ExtResource("2_unt7u")
+metadata/_edit_horizontal_guides_ = [69.0]
+metadata/_edit_vertical_guides_ = [85.0, 173.0]
+
+[node name="BG" type="NinePatchRect" parent="."]
+texture_repeat = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_w1not")
+texture = ExtResource("3_18ao8")
+region_rect = Rect2(0, 0, 16, 16)
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="Border" type="NinePatchRect" parent="BG"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_right = 0.95
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_hex44")
+region_rect = Rect2(0, 0, 32, 32)
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+metadata/_custom_type_script = "uid://xem6lai3ufyj"
+
+[node name="BG" type="TextureRect" parent="BG/Border"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_nk4wu")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -0.3999939
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_twiem")
+expand_mode = 1
+stretch_mode = 1
+script = ExtResource("6_mvlvm")
+metadata/_custom_type_script = "uid://ca3bew33g45eq"
+
+[node name="ResourceSetterNew" type="Node" parent="BG/Border" node_paths=PackedStringArray("node_to_affect")]
+script = ExtResource("7_8pwi4")
+node_to_affect = NodePath("..")
+property_name = "texture"
+mode = 1
+resource_json = ExtResource("8_qhftf")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="ResourceSetterNew" type="Node" parent="BG" node_paths=PackedStringArray("node_to_affect")]
+script = ExtResource("7_8pwi4")
+node_to_affect = NodePath("..")
+property_name = "texture"
+mode = 1
+resource_json = ExtResource("9_25yqo")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_08tv6")
+bus = &"Music"
+
+[node name="ResourceSetterNew" type="Node" parent="Music" node_paths=PackedStringArray("node_to_affect")]
+script = ExtResource("7_8pwi4")
+node_to_affect = NodePath("..")
+property_name = "stream"
+mode = 2
+resource_json = ExtResource("11_21i26")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(120, 81)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = -18.0
+offset_right = 60.0
+offset_bottom = 63.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("12_stan1")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -2
+theme_override_constants/margin_bottom = -2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="LevelLabels" type="VFlowContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/v_separation = 0
+
+[node name="1-1" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -2
+
+[node name="Cursor" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-1"]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+
+[node name="Texture" type="TextureRect" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-1/Cursor"]
+visible = false
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 16.0
+texture = SubResource("AtlasTexture_hpo87")
+stretch_mode = 3
+
+[node name="ResourceSetterNew" type="Node" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-1/Cursor/Texture" node_paths=PackedStringArray("node_to_affect")]
+script = ExtResource("7_8pwi4")
+node_to_affect = NodePath("..")
+property_name = "texture"
+mode = 1
+resource_json = ExtResource("14_500ut")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-1"]
+layout_mode = 2
+text = "1-1"
+
+[node name="Control" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-1"]
+layout_mode = 2
+
+[node name="1-2" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -2
+
+[node name="Cursor" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-2"]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+
+[node name="Texture" type="TextureRect" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-2/Cursor"]
+visible = false
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 16.0
+texture = SubResource("AtlasTexture_hpo87")
+stretch_mode = 3
+
+[node name="ResourceSetterNew" type="Node" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-2/Cursor/Texture" node_paths=PackedStringArray("node_to_affect")]
+script = ExtResource("7_8pwi4")
+node_to_affect = NodePath("..")
+property_name = "texture"
+mode = 1
+resource_json = ExtResource("14_500ut")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-2"]
+layout_mode = 2
+text = "1-2"
+
+[node name="Control" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-2"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="1-3" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -2
+
+[node name="Cursor" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-3"]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+
+[node name="Texture" type="TextureRect" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-3/Cursor"]
+visible = false
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 16.0
+texture = SubResource("AtlasTexture_hpo87")
+stretch_mode = 3
+
+[node name="ResourceSetterNew" type="Node" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-3/Cursor/Texture" node_paths=PackedStringArray("node_to_affect")]
+script = ExtResource("7_8pwi4")
+node_to_affect = NodePath("..")
+property_name = "texture"
+mode = 1
+resource_json = ExtResource("14_500ut")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-3"]
+layout_mode = 2
+text = "1-3"
+
+[node name="Control" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-3"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="1-4" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -2
+
+[node name="Cursor" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-4"]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+
+[node name="Texture" type="TextureRect" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-4/Cursor"]
+visible = false
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 16.0
+texture = SubResource("AtlasTexture_hpo87")
+stretch_mode = 3
+
+[node name="ResourceSetterNew" type="Node" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-4/Cursor/Texture" node_paths=PackedStringArray("node_to_affect")]
+script = ExtResource("7_8pwi4")
+node_to_affect = NodePath("..")
+property_name = "texture"
+mode = 1
+resource_json = ExtResource("14_500ut")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-4"]
+layout_mode = 2
+text = "1-4"
+
+[node name="Control" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-4"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="2-1" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -2
+
+[node name="Cursor" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-1"]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+
+[node name="Texture" type="TextureRect" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-1/Cursor"]
+visible = false
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 16.0
+texture = SubResource("AtlasTexture_hpo87")
+stretch_mode = 3
+
+[node name="ResourceSetterNew" type="Node" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-1/Cursor/Texture" node_paths=PackedStringArray("node_to_affect")]
+script = ExtResource("7_8pwi4")
+node_to_affect = NodePath("..")
+property_name = "texture"
+mode = 1
+resource_json = ExtResource("14_500ut")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-1"]
+layout_mode = 2
+text = "2-1"
+
+[node name="Control" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-1"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="2-2" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -2
+
+[node name="Cursor" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-2"]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+
+[node name="Texture" type="TextureRect" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-2/Cursor"]
+visible = false
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 16.0
+texture = SubResource("AtlasTexture_hpo87")
+stretch_mode = 3
+
+[node name="ResourceSetterNew" type="Node" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-2/Cursor/Texture" node_paths=PackedStringArray("node_to_affect")]
+script = ExtResource("7_8pwi4")
+node_to_affect = NodePath("..")
+property_name = "texture"
+mode = 1
+resource_json = ExtResource("14_500ut")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-2"]
+layout_mode = 2
+text = "2-2"
+
+[node name="Control" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-2"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="2-3" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -2
+
+[node name="Cursor" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-3"]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+
+[node name="Texture" type="TextureRect" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-3/Cursor"]
+visible = false
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 16.0
+texture = SubResource("AtlasTexture_hpo87")
+stretch_mode = 3
+
+[node name="ResourceSetterNew" type="Node" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-3/Cursor/Texture" node_paths=PackedStringArray("node_to_affect")]
+script = ExtResource("7_8pwi4")
+node_to_affect = NodePath("..")
+property_name = "texture"
+mode = 1
+resource_json = ExtResource("14_500ut")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-3"]
+layout_mode = 2
+text = "2-3"
+
+[node name="Control" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-3"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="2-4" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -2
+
+[node name="Cursor" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-4"]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+
+[node name="Texture" type="TextureRect" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-4/Cursor"]
+visible = false
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 16.0
+texture = SubResource("AtlasTexture_hpo87")
+stretch_mode = 3
+
+[node name="ResourceSetterNew" type="Node" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-4/Cursor/Texture" node_paths=PackedStringArray("node_to_affect")]
+script = ExtResource("7_8pwi4")
+node_to_affect = NodePath("..")
+property_name = "texture"
+mode = 1
+resource_json = ExtResource("14_500ut")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-4"]
+layout_mode = 2
+text = "2-4"
+
+[node name="Control" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-4"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="Logo" type="Sprite2D" parent="PanelContainer"]
+position = Vector2(60, -27)
+texture = ExtResource("3_miv6t")
+script = ExtResource("16_anhbx")
+metadata/_custom_type_script = "uid://364rywt44hy6"
+
+[node name="PlayerSprites" type="Node2D" parent="PanelContainer"]
+unique_name_in_owner = true
+position = Vector2(17, -33)
+
+[node name="RedTeam" type="Node2D" parent="PanelContainer/PlayerSprites"]
+unique_name_in_owner = true
+
+[node name="PlayerSprite0" type="AnimatedSprite2D" parent="PanelContainer/PlayerSprites/RedTeam" node_paths=PackedStringArray("resource_setter")]
+position = Vector2(0, -1)
+sprite_frames = ExtResource("18_djpsf")
+animation = &"Idle"
+offset = Vector2(0, -15)
+script = ExtResource("19_hmagy")
+force_power_state = "Small"
+resource_setter = NodePath("ResourceSetterNew")
+metadata/_custom_type_script = "uid://b08qfwj5jk6g1"
+
+[node name="ResourceSetterNew" type="Node" parent="PanelContainer/PlayerSprites/RedTeam/PlayerSprite0"]
+script = ExtResource("7_8pwi4")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="PlayerSprite2" type="AnimatedSprite2D" parent="PanelContainer/PlayerSprites/RedTeam" node_paths=PackedStringArray("resource_setter")]
+visible = false
+position = Vector2(-16, -1)
+sprite_frames = ExtResource("18_djpsf")
+animation = &"Idle"
+offset = Vector2(0, -15)
+script = ExtResource("19_hmagy")
+player_id = 2
+force_power_state = "Small"
+resource_setter = NodePath("ResourceSetterNew")
+metadata/_custom_type_script = "uid://b08qfwj5jk6g1"
+
+[node name="ResourceSetterNew" type="Node" parent="PanelContainer/PlayerSprites/RedTeam/PlayerSprite2"]
+script = ExtResource("7_8pwi4")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="PlayerSprite4" type="AnimatedSprite2D" parent="PanelContainer/PlayerSprites/RedTeam" node_paths=PackedStringArray("resource_setter")]
+visible = false
+position = Vector2(-32, -1)
+sprite_frames = ExtResource("18_djpsf")
+animation = &"Idle"
+offset = Vector2(0, -15)
+script = ExtResource("19_hmagy")
+player_id = 4
+force_power_state = "Small"
+resource_setter = NodePath("ResourceSetterNew")
+metadata/_custom_type_script = "uid://b08qfwj5jk6g1"
+
+[node name="ResourceSetterNew" type="Node" parent="PanelContainer/PlayerSprites/RedTeam/PlayerSprite4"]
+script = ExtResource("7_8pwi4")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="PlayerSprite6" type="AnimatedSprite2D" parent="PanelContainer/PlayerSprites/RedTeam" node_paths=PackedStringArray("resource_setter")]
+visible = false
+position = Vector2(-48, -1)
+sprite_frames = ExtResource("18_djpsf")
+animation = &"Idle"
+offset = Vector2(0, -15)
+script = ExtResource("19_hmagy")
+player_id = 6
+force_power_state = "Small"
+resource_setter = NodePath("ResourceSetterNew")
+metadata/_custom_type_script = "uid://b08qfwj5jk6g1"
+
+[node name="ResourceSetterNew" type="Node" parent="PanelContainer/PlayerSprites/RedTeam/PlayerSprite6"]
+script = ExtResource("7_8pwi4")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="BlueTeam" type="Node2D" parent="PanelContainer/PlayerSprites"]
+unique_name_in_owner = true
+position = Vector2(88, 0)
+
+[node name="PlayerSprite1" type="AnimatedSprite2D" parent="PanelContainer/PlayerSprites/BlueTeam" node_paths=PackedStringArray("resource_setter")]
+position = Vector2(0, -1)
+sprite_frames = ExtResource("18_djpsf")
+animation = &"Idle"
+offset = Vector2(0, -15)
+flip_h = true
+script = ExtResource("19_hmagy")
+player_id = 1
+force_power_state = "Small"
+resource_setter = NodePath("ResourceSetterNew")
+metadata/_custom_type_script = "uid://b08qfwj5jk6g1"
+
+[node name="ResourceSetterNew" type="Node" parent="PanelContainer/PlayerSprites/BlueTeam/PlayerSprite1"]
+script = ExtResource("7_8pwi4")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="PlayerSprite3" type="AnimatedSprite2D" parent="PanelContainer/PlayerSprites/BlueTeam" node_paths=PackedStringArray("resource_setter")]
+visible = false
+position = Vector2(16, -1)
+sprite_frames = ExtResource("18_djpsf")
+animation = &"Idle"
+offset = Vector2(0, -15)
+flip_h = true
+script = ExtResource("19_hmagy")
+player_id = 3
+force_power_state = "Small"
+resource_setter = NodePath("ResourceSetterNew")
+metadata/_custom_type_script = "uid://b08qfwj5jk6g1"
+
+[node name="ResourceSetterNew" type="Node" parent="PanelContainer/PlayerSprites/BlueTeam/PlayerSprite3"]
+script = ExtResource("7_8pwi4")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="PlayerSprite5" type="AnimatedSprite2D" parent="PanelContainer/PlayerSprites/BlueTeam" node_paths=PackedStringArray("resource_setter")]
+visible = false
+position = Vector2(32, -1)
+sprite_frames = ExtResource("18_djpsf")
+animation = &"Idle"
+offset = Vector2(0, -15)
+flip_h = true
+script = ExtResource("19_hmagy")
+player_id = 5
+force_power_state = "Small"
+resource_setter = NodePath("ResourceSetterNew")
+metadata/_custom_type_script = "uid://b08qfwj5jk6g1"
+
+[node name="ResourceSetterNew" type="Node" parent="PanelContainer/PlayerSprites/BlueTeam/PlayerSprite5"]
+script = ExtResource("7_8pwi4")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="PlayerSprite7" type="AnimatedSprite2D" parent="PanelContainer/PlayerSprites/BlueTeam" node_paths=PackedStringArray("resource_setter")]
+visible = false
+position = Vector2(48, -1)
+sprite_frames = ExtResource("18_djpsf")
+animation = &"Idle"
+offset = Vector2(0, -15)
+flip_h = true
+script = ExtResource("19_hmagy")
+player_id = 7
+force_power_state = "Small"
+resource_setter = NodePath("ResourceSetterNew")
+metadata/_custom_type_script = "uid://b08qfwj5jk6g1"
+
+[node name="ResourceSetterNew" type="Node" parent="PanelContainer/PlayerSprites/BlueTeam/PlayerSprite7"]
+script = ExtResource("7_8pwi4")
+metadata/_custom_type_script = "uid://cbal8ms2oe1ik"
+
+[node name="TallyContainer" type="PanelContainer" parent="."]
+anchors_preset = -1
+anchor_left = 0.051000003
+anchor_top = 0.79600006
+anchor_right = 0.94900006
+anchor_bottom = 1.0
+offset_left = 7.9439993
+offset_top = 0.95999146
+offset_right = -7.5440216
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("12_stan1")
+
+[node name="MarginContainer" type="MarginContainer" parent="TallyContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -2
+theme_override_constants/margin_bottom = -2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TallyContainer/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="RedLabel" type="Label" parent="TallyContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 2
+text = "RED*000"
+
+[node name="TruRed" type="Label" parent="TallyContainer/MarginContainer/HBoxContainer/RedLabel"]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 16.0
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.96862745, 0.22352941, 0.0627451, 1)
+text = "RED"
+
+[node name="BluLabel" type="Label" parent="TallyContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 6
+text = "BLU*000"
+
+[node name="TruBlu" type="Label" parent="TallyContainer/MarginContainer/HBoxContainer/BluLabel"]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 16.0
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.25882354, 0.25882354, 1, 1)
+text = "BLU"
+
+[node name="TieLabel" type="Label" parent="TallyContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+text = "TIE*000"
+
+[node name="TruTie" type="Label" parent="TallyContainer/MarginContainer/HBoxContainer/TieLabel"]
+layout_mode = 0
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.12941177, 0.6784314, 0.0627451, 1)
+text = "TIE"
+
+[node name="NotEnoughPlayers" type="PanelContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(120, 81)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = -18.0
+offset_right = 60.0
+offset_bottom = 63.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("12_stan1")
+
+[node name="MarginContainer" type="MarginContainer" parent="NotEnoughPlayers"]
+layout_mode = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -2
+theme_override_constants/margin_bottom = -2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NotEnoughPlayers/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="NotEnoughPlayers/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "MULTI_EMPTY_0"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+uppercase = true
+
+[node name="Label2" type="Label" parent="NotEnoughPlayers/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "MULTI_EMPTY_1"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+uppercase = true
+
+[node name="TeamSelect" parent="." instance=ExtResource("19_1jubd")]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -52.0
+offset_top = -28.0
+offset_right = 52.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CharacterSelect" parent="." instance=ExtResource("24_cd4rg")]
+visible = false
+z_as_relative = false
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+
+[node name="ThemedToJSONConverter" type="Node" parent="."]
+script = ExtResource("25_5w2k4")
+metadata/_custom_type_script = "uid://cqif1li7otvpl"
+
+[node name="LabelFontChanger" type="Node" parent="." node_paths=PackedStringArray("labels")]
+script = ExtResource("26_18wys")
+labels = [null, null, null, null, null, null, null, null]
+metadata/_custom_type_script = "uid://co6tjg3w6qpd8"
+
+[node name="DropShadow" parent="." instance=ExtResource("27_0dq8t")]
+position = Vector2(0, -40)
+
+[connection signal="focus_entered" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-1" to="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-1/Cursor/Texture" method="show"]
+[connection signal="focus_entered" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-1" to="." method="set_current_level_idx" binds= [0]]
+[connection signal="focus_exited" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-1" to="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-1/Cursor/Texture" method="hide"]
+[connection signal="focus_entered" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-2" to="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-2/Cursor/Texture" method="show"]
+[connection signal="focus_entered" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-2" to="." method="set_current_level_idx" binds= [1]]
+[connection signal="focus_exited" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-2" to="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-2/Cursor/Texture" method="hide"]
+[connection signal="focus_entered" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-3" to="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-3/Cursor/Texture" method="show"]
+[connection signal="focus_entered" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-3" to="." method="set_current_level_idx" binds= [2]]
+[connection signal="focus_exited" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-3" to="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-3/Cursor/Texture" method="hide"]
+[connection signal="focus_entered" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-4" to="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-4/Cursor/Texture" method="show"]
+[connection signal="focus_entered" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-4" to="." method="set_current_level_idx" binds= [3]]
+[connection signal="focus_exited" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-4" to="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/1-4/Cursor/Texture" method="hide"]
+[connection signal="focus_entered" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-1" to="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-1/Cursor/Texture" method="show"]
+[connection signal="focus_entered" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-1" to="." method="set_current_level_idx" binds= [4]]
+[connection signal="focus_exited" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-1" to="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-1/Cursor/Texture" method="hide"]
+[connection signal="focus_entered" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-2" to="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-2/Cursor/Texture" method="show"]
+[connection signal="focus_entered" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-2" to="." method="set_current_level_idx" binds= [5]]
+[connection signal="focus_exited" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-2" to="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-2/Cursor/Texture" method="hide"]
+[connection signal="focus_entered" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-3" to="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-3/Cursor/Texture" method="show"]
+[connection signal="focus_entered" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-3" to="." method="set_current_level_idx" binds= [6]]
+[connection signal="focus_exited" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-3" to="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-3/Cursor/Texture" method="hide"]
+[connection signal="focus_entered" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-4" to="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-4/Cursor/Texture" method="show"]
+[connection signal="focus_entered" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-4" to="." method="set_current_level_idx" binds= [7]]
+[connection signal="focus_exited" from="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-4" to="PanelContainer/MarginContainer/VBoxContainer/LevelLabels/2-4/Cursor/Texture" method="hide"]
+[connection signal="cancelled" from="TeamSelect" to="." method="regrab_focus"]
+[connection signal="cancelled" from="TeamSelect" to="." method="open"]
+[connection signal="selected" from="TeamSelect" to="CharacterSelect" method="open" binds= [true]]
+[connection signal="switched_teams" from="TeamSelect" to="." method="on_switched_teams"]
+[connection signal="cancelled" from="CharacterSelect" to="TeamSelect" method="open"]
+[connection signal="selected" from="CharacterSelect" to="." method="character_selected"]

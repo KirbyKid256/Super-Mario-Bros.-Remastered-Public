@@ -237,6 +237,9 @@ func go_to_achievement_menu() -> void:
 func go_to_boo_menu() -> void:
 	Global.transition_to_scene("res://Scenes/Levels/BooRaceMenu.tscn")
 
+func go_to_race_menu() -> void:
+	Global.transition_to_scene("res://Scenes/Levels/RaceMenu.tscn")
+
 func open_options() -> void:
 	$CanvasLayer/SettingsMenu.open()
 	active_options.active = false

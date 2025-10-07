@@ -207,6 +207,9 @@ func transition_to_next_level() -> void:
 	if Global.current_game_mode == Global.GameMode.CHALLENGE:
 		Global.transition_to_scene("res://Scenes/Levels/ChallengeModeResults.tscn")
 		return
+	if Global.current_game_mode == Global.GameMode.RACE:
+		Global.transition_to_scene("res://Scenes/Levels/RaceMenu.tscn")
+		return
 	if Global.current_game_mode == Global.GameMode.BOO_RACE:
 		Global.transition_to_scene("res://Scenes/Levels/BooRaceMenu.tscn")
 		return

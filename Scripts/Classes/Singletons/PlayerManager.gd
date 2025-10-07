@@ -45,14 +45,26 @@ const PLAYER_ACTIONS := [
 
 var active_device: int = 0
 
+## Checks if any Players are forced to play the level until the end without disconnecting.
+var force_local_players: Array[int] = []
+
 var test_players := 1:
 	get(): return clampi(test_players + 1, 0, MAX_LOCAL_PLAYERS)
 var dead_players: Dictionary[int, Player] = {}
+
+## Tracks each Players' individual coin count. This is primarily used for VS. Race.
+var player_coins: Dictionary[int, int]
+
+signal coin_collected(player: Player)
+
 func _enter_tree() -> void:
+	# Input
 	Input.joy_connection_changed.connect(joy_connection_changed)
 	for i in MAX_LOCAL_PLAYERS:
 		for action in PLAYER_ACTIONS:
 			copy_action(action, i)
+	# Gameplay
+	coin_collected.connect(on_coin_collected)
 
 func joy_connection_changed(device: int, connected: bool) -> void:
 	if device > 0: #TODO: Add a setting to allow Player 2 to use Device 0
@@ -101,4 +113,15 @@ func sort_by_player_id(a: Player, b: Player) -> bool:
 
 func sort_by_closest(a: Node2D, b: Node2D, origin: Vector2) -> bool:
 	return abs(a.global_position) - abs(origin) < abs(b.global_position) - abs(origin)
+#endregion
+
+#region Gameplay Functions
+func on_coin_collected(player: Player):
+	if player_coins.is_empty(): reset_player_coins()
+	player_coins[player.player_id] += 1
+	Global.coins -= 1
+
+func reset_player_coins():
+	for i in PlayerManager.MAX_LOCAL_PLAYERS:
+		player_coins[i] = 0
 #endregion

@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://bod0jkf7jc5pm"]
+[gd_scene load_steps=42 format=3 uid="uid://bod0jkf7jc5pm"]
 
 [ext_resource type="Script" uid="uid://bjbd3a6su47si" path="res://Scripts/Classes/UI/GameHUD.gd" id="1_f34v2"]
 [ext_resource type="Script" uid="uid://caq1qiwmy0mox" path="res://Scripts/Parts/BetterAnimatedSprite.gd" id="2_cbrve"]
@@ -26,6 +26,7 @@
 [ext_resource type="FontVariation" uid="uid://djxdgxy1iv8yv" path="res://Resources/ThemedResources/FontLLMain.tres" id="17_2w8b3"]
 [ext_resource type="PackedScene" uid="uid://b85i7uni0twpe" path="res://Scenes/Prefabs/UI/DiscoResults.tscn" id="17_ocsy5"]
 [ext_resource type="Script" uid="uid://dt2p68xl462v2" path="res://Scripts/Parts/TextShadowColourChanger.gd" id="18_jwl8o"]
+[ext_resource type="PackedScene" uid="uid://bgw28ceirwok0" path="res://Scenes/Prefabs/UI/RacePauseMenu.tscn" id="21_oeqb4"]
 [ext_resource type="Texture2D" uid="uid://w74s6oi3l8k8" path="res://Assets/Sprites/UI/TextShadowColours.png" id="24_h6dkv"]
 [ext_resource type="JSON" path="res://Assets/Sprites/UI/TextShadow.json" id="25_oeqb4"]
 
@@ -1006,6 +1007,9 @@ visible = false
 visible = false
 
 [node name="BooRacePause" parent="." instance=ExtResource("7_35c0k")]
+visible = false
+
+[node name="RacePause" parent="." instance=ExtResource("21_oeqb4")]
 visible = false
 
 [node name="MarathonResults" parent="." instance=ExtResource("16_cfljn")]

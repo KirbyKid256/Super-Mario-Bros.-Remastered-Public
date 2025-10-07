@@ -8,6 +8,7 @@ extends VBoxContainer
 var selected_index := 0
 
 @export var options: Array[Label] = []
+@export var multiplayer_options: Array[Label] = []
 @onready var title_screen_parent := owner
 
 signal option_1_selected
@@ -19,6 +20,11 @@ signal closed
 func _process(_delta: float) -> void:
 	if active:
 		handle_inputs()
+		for i in multiplayer_options:
+			if Global.connected_players.size() > 1:
+				i.modulate = Color.WHITE
+			else:
+				i.modulate = Color.GRAY
 
 func open() -> void:
 	Global.world_num = clamp(Global.world_num, 1, Level.get_world_count())
@@ -52,5 +58,8 @@ func handle_inputs() -> void:
 		closed.emit()
 
 func option_selected() -> void:
-	active = false
-	emit_signal("option_" + str(selected_index + 1) + "_selected")
+	if not multiplayer_options.has(options[selected_index]) or multiplayer_options.has(options[selected_index]) and Global.connected_players.size() > 1:
+		active = false
+		emit_signal("option_" + str(selected_index + 1) + "_selected")
+	else:
+		AudioManager.play_global_sfx("bump")

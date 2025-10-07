@@ -18,11 +18,21 @@ static var best_times := [
 	-1.0, -1.0, -1.0, -1.0,
 	-1.0, -1.0, -1.0, -1.0
 ]
+static var session_tallies := {
+	"red": 0,
+	"blue": 0,
+	"draw": 0
+}
+static var session_teams: Dictionary[String, Array] = {
+	"red": [0, 2, 4, 6],
+	"blue": [1, 3, 5, 7]
+}
 
 static var cleared_boo_levels := "00000000"
 const SILENCE = preload("res://Assets/Audio/BGM/Silence.json")
+
 func _ready() -> void:
-	SpeedrunHandler.show_timer = true
+	SpeedrunHandler.show_timer = not vs_race
 	SpeedrunHandler.timer = 0
 	SpeedrunHandler.timer_active = false
 	SpeedrunHandler.best_time = best_times[level_id]
@@ -31,7 +41,22 @@ func _ready() -> void:
 	if is_custom == false:
 		Global.current_game_mode = Global.GameMode.RACE if vs_race else Global.GameMode.BOO_RACE
 		do_countdown()
-		
+	if vs_race:
+		boo.path.queue_free()
+		boo.queue_free()
+		# Reset Vs. Race stuff
+		PlayerManager.reset_player_coins()
+		await get_parent().ready
+		for i in session_teams["red"]:
+			var player = PlayerManager.get_player_with_id(i)
+			if player == null: return
+			player.add_to_group("RaceTeamRed")
+			player.check_player_label()
+		for i in session_teams["blue"]:
+			var player = PlayerManager.get_player_with_id(i)
+			if player == null: return
+			player.add_to_group("RaceTeamBlue")
+			player.check_player_label()
 
 func do_countdown() -> void:
 	var old_music = Global.current_level.music
@@ -48,22 +73,32 @@ func do_countdown() -> void:
 	Global.can_time_tick = true
 	for i in get_tree().get_nodes_in_group("Players"):
 		i.state_machine.transition_to("Normal")
-	$Timer.wait_time = boo_block_times[boo_colour]
-	$Timer.start()
+	if not vs_race:
+		boo.move_tween()
+		$Timer.wait_time = boo_block_times[boo_colour]
+		$Timer.start()
+		SpeedrunHandler.start_timer()
 	countdown_active = false
-	SpeedrunHandler.start_timer()
-	boo.move_tween()
 	TimedBooBlock.can_tick = true
 	await get_tree().create_timer(0.5, false).timeout
 	Global.current_level.music = old_music
 
-func tally_time() -> void:
-	pass
+static func reset_session() -> void:
+	session_tallies = {"red": 0, "blue": 0, "draw": 0}
+	session_teams = {"red": [0, 2, 4, 6], "blue": [1, 3, 5, 7]}
 
-func player_win_race() -> void:
+func player_win_race(player: Player) -> void:
 	SpeedrunHandler.run_finished()
 	run_best_time_check()
 	TimedBooBlock.can_tick = false
+	if vs_race:
+		if player.is_in_group("RaceTeamRed"):
+			session_tallies["red"] += 1
+		elif player.is_in_group("RaceTeamBlue"):
+			session_tallies["blue"] += 1
+		PlayerManager.force_local_players.clear()
+		PlayerManager.use_split_screen = false
+		return
 	
 	var cleared_boo: int = 0
 	
@@ -98,11 +133,14 @@ func player_win_race() -> void:
 		boo_colour += 1
 
 func run_best_time_check() -> void:
+	if vs_race: return
 	if SpeedrunHandler.timer <= best_times[level_id] or best_times[level_id] < 0:
 		best_times[level_id] = SpeedrunHandler.timer
 
 func _exit_tree() -> void:
 	countdown_active = false
+	if vs_race:
+		PlayerManager.player_coins.clear()
 
 func on_timeout() -> void:
 	if not vs_race and boo.moving:

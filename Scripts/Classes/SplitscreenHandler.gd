@@ -48,10 +48,6 @@ func update_viewports(_device := -1, _connected := true):
 					subviewport.world_2d = default_viewport.world_2d
 					if get_parent().splitscreen_duplicate_nodes.has(child):
 						if viewport.get_index() == 0:
-							if Global.current_game_mode == Global.GameMode.RACE and child.is_in_group("RaceBlocks"):
-								var player: Player = PlayerManager.get_player_with_id(viewport.get_index())
-								if player and player.is_in_group("RaceTeamBlue") and child.get("replace") != null:
-									child.replace = true
 							if child is CanvasItem: child.visibility_layer = subviewport.canvas_cull_mask
 							child.reparent(subviewport)
 						else:

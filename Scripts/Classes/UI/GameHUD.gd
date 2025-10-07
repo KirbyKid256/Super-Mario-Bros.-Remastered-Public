@@ -55,9 +55,10 @@ func handle_main_hud() -> void:
 		handle_speedrun_timer()
 
 func handle_modern_hud() -> void:
+	var racing: bool = Settings.file.visuals.modern_hud and Global.current_game_mode == Global.GameMode.RACE
 	%ModernLifeCount.update_character_info()
 	$ModernHUD/TopLeft/RedCoins.hide()
-	$ModernHUD/TopLeft/CoinCount.show()
+	$ModernHUD/TopLeft/CoinCount.visible = !racing
 	%ModernPB.hide()
 	%ModernIGT.hide()
 	%ModernCoinCount.text = "*" + str(Global.coins).pad_zeros(2)
@@ -161,6 +162,8 @@ func _input(event: InputEvent) -> void:
 
 func activate_pause_menu(device: int = 0) -> void:
 	match Global.current_game_mode:
+		Global.GameMode.RACE:
+			$RacePause.open(device)
 		Global.GameMode.BOO_RACE:
 			$BooRacePause.open()
 		Global.GameMode.MARATHON:
