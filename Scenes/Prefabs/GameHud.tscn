@@ -205,6 +205,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Icon" type="AnimatedSprite2D" parent="Main/CoinCount/KeyCount"]
+process_mode = 1
 position = Vector2(0, -8)
 centered = false
 script = ExtResource("2_cbrve")
@@ -246,6 +247,7 @@ theme_override_fonts/font = ExtResource("17_2w8b3")
 text = "*03"
 
 [node name="CoinIcon" type="AnimatedSprite2D" parent="Main/CoinCount"]
+process_mode = 1
 sprite_frames = SubResource("SpriteFrames_40ba1")
 autoplay = "default"
 frame_progress = 0.132926
@@ -610,6 +612,7 @@ offset_bottom = 44.0
 size_flags_vertical = 8
 
 [node name="Coin" type="AnimatedSprite2D" parent="ModernHUD/TopLeft/CoinCount"]
+process_mode = 1
 position = Vector2(4, 0)
 sprite_frames = SubResource("SpriteFrames_40ba1")
 autoplay = "default"
@@ -838,6 +841,7 @@ offset_right = 60.0
 offset_bottom = 108.0
 
 [node name="Icon" type="AnimatedSprite2D" parent="ModernHUD/TopLeft/ModernKeyCount"]
+process_mode = 1
 position = Vector2(0, -8)
 centered = false
 script = ExtResource("2_cbrve")

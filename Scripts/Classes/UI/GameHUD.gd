@@ -38,6 +38,8 @@ func handle_main_hud() -> void:
 		world_num = ["A", "B", "C", "D"][int(world_num) % 10]
 	elif int(world_num) < 1:
 		world_num = " "
+	else:
+		print(Global.world_num)
 	%LevelNum.text = world_num + "-" + str(Global.level_num)
 	%Crown.visible = Global.second_quest
 	%Time.text = " " + str(Global.time).pad_zeros(3)
@@ -81,6 +83,8 @@ func handle_challenge_mode_hud() -> void:
 	$ModernHUD/TopLeft/RedCoins.show()
 	$ModernHUD/TopLeft/CoinCount.hide()
 	$Main/CoinCount.hide()
+	%ModernLifeCount.hide()
+	%CharacterIcon.hide()
 	var red_coins_collected = ChallengeModeHandler.current_run_red_coins_collected
 	var idx := 0
 	if Global.world_num > 8:
