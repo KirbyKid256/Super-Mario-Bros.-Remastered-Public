@@ -46,17 +46,6 @@ func _ready() -> void:
 		boo.queue_free()
 		# Reset Vs. Race stuff
 		PlayerManager.reset_player_coins()
-		await get_parent().ready
-		for i in session_teams["red"]:
-			var player = PlayerManager.get_player_with_id(i)
-			if player == null: return
-			player.add_to_group("RaceTeamRed")
-			player.check_player_label()
-		for i in session_teams["blue"]:
-			var player = PlayerManager.get_player_with_id(i)
-			if player == null: return
-			player.add_to_group("RaceTeamBlue")
-			player.check_player_label()
 
 func do_countdown() -> void:
 	var old_music = Global.current_level.music
@@ -97,7 +86,7 @@ func player_win_race(player: Player) -> void:
 		elif player.is_in_group("RaceTeamBlue"):
 			session_tallies["blue"] += 1
 		PlayerManager.force_local_players.clear()
-		PlayerManager.use_split_screen = false
+		SplitscreenHandler.use_split_screen = false
 		return
 	
 	var cleared_boo: int = 0

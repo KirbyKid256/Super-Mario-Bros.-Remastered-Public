@@ -1,6 +1,8 @@
 class_name TimedBooBlock
 extends Block
 
+@export var invert := false
+
 var time := 3
 var active := false
 
@@ -23,9 +25,15 @@ func on_timeout() -> void:
 		elif time < 3:
 			AudioManager.play_global_sfx("timer_beep")
 	if active:
-		$Sprite.play("On" + str(time))
+		if invert:
+			$Sprite.play("Off" + str(time))
+		else:
+			$Sprite.play("On" + str(time))
 	else:
-		$Sprite.play("Off" + str(time))
+		if invert:
+			$Sprite.play("On" + str(time))
+		else:
+			$Sprite.play("Off" + str(time))
 
 func block_hit() -> void:
 	if not can_hit:
@@ -44,9 +52,15 @@ func on_switch_hit() -> void:
 	time = 4
 	active = not active
 	if active:
-		$Sprite.play("BlueToRed")
+		if invert:
+			$Sprite.play("RedToBlue")
+		else:
+			$Sprite.play("BlueToRed")
 	else:
-		$Sprite.play("RedToBlue")
+		if invert:
+			$Sprite.play("BlueToRed")
+		else:
+			$Sprite.play("RedToBlue")
 	await $Sprite.animation_finished
 	$Timer.start()
 	time = 4

@@ -10,7 +10,7 @@ static var use_split_screen := false
 
 func _ready() -> void:
 	Input.joy_connection_changed.connect(update_viewports)
-	for i in Global.connected_players:
+	for i in MAX_VIEWPORTS:
 		# Add Viewports
 		var viewport = $GridContainer/Viewport0
 		if i != 0:
@@ -26,11 +26,8 @@ func _enter_tree() -> void:
 	update_viewports()
 
 func update_viewports(_device := -1, _connected := true):
-	#for i in PlayerManager.MAX_LOCAL_PLAYERS:
-		#if Global.connected_players.has(i % MAX_VIEWPORTS):
-			#$GridContainer.get_child(i % MAX_VIEWPORTS).show()
-		#elif i <= MAX_VIEWPORTS:
-			#$GridContainer.get_child(i % MAX_VIEWPORTS).hide()
+	for i in Global.connected_players:
+		$GridContainer.get_child(i % MAX_VIEWPORTS).show()
 	# Re-parent Players
 	for player: Player in get_tree().get_nodes_in_group("Players"):
 		player.reparent($GridContainer.get_child(player.player_id).get_child(0))
@@ -51,6 +48,8 @@ func update_viewports(_device := -1, _connected := true):
 							if child is CanvasItem: child.visibility_layer = subviewport.canvas_cull_mask
 							child.reparent(subviewport)
 						else:
+							if PlayerManager.get_player_with_id(viewport.get_index()) == null: continue
 							var new_child = child.duplicate()
 							if new_child is CanvasItem: new_child.visibility_layer = subviewport.canvas_cull_mask
+							if new_child.get("player_id") != null: new_child.player_id = viewport.get_index()
 							subviewport.add_child(new_child)

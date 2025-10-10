@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dciqpg4a7jtjm"]
+
+[ext_resource type="PackedScene" uid="uid://5ua3p0lfl1bf" path="res://Scenes/Prefabs/Blocks/BooRaceBlocks/BooOnOffSwitch.tscn" id="1_gdxsh"]
+
+[node name="BooOnOffSwitchAlt" instance=ExtResource("1_gdxsh")]
+invert = true

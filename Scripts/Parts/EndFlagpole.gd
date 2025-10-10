@@ -46,6 +46,7 @@ func player_touch(player: Player) -> void:
 		else:
 			player.state_machine.transition_to("FlagPole", {"FlagPole": self})
 			update_players_reached(player)
+			timer.timeout.emit()
 	else:
 		player.state_machine.transition_to("FlagPole", {"FlagPole": self})
 		update_players_reached(player)

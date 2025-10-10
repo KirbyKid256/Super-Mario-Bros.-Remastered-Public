@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://eoo4cjsp5xu4"]
+
+[ext_resource type="PackedScene" uid="uid://dgq7enviy1qhw" path="res://Scenes/Prefabs/Blocks/BooRaceBlocks/TimedBooBlock.tscn" id="1_fpngc"]
+
+[node name="TimedBooBlockAlt" instance=ExtResource("1_fpngc")]
+invert = true
+
+[node name="Sprite" parent="." index="0"]
+animation = &"On3"
+autoplay = "On3"

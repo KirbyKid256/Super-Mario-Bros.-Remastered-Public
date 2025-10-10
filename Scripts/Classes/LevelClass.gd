@@ -131,12 +131,25 @@ const PLAYER = preload("res://Scenes/Prefabs/Entities/Player.tscn")
 func spawn_in_extra_players(device := -1, connected := true) -> void:
 	if device < 0:
 		for i in Global.connected_players.size():
-			if i == 0: continue
+			if i == 0:
+				# Add Player to VS. Race Teams as Early as Possible
+				if Global.current_game_mode == Global.GameMode.RACE:
+					if BooRaceHandler.session_teams["red"].has(i):
+						PlayerManager.get_first_player().add_to_group("RaceTeamRed")
+					elif BooRaceHandler.session_teams["blue"].has(i):
+						PlayerManager.get_first_player().add_to_group("RaceTeamBlue")
+				continue
 			var player_node = PLAYER.instantiate()
 			player_node.player_id = Global.connected_players[i]
 			player_node.camera_handler = PlayerManager.get_first_player().camera_handler
 			if Global.current_game_mode == Global.GameMode.RACE:
+				# Make sure each Player starts at the same spot for fairness
 				player_node.global_position = PlayerManager.get_first_player().global_position
+				# Add Players to VS. Race Teams as Early as Possible
+				if BooRaceHandler.session_teams["red"].has(i):
+					player_node.add_to_group("RaceTeamRed")
+				elif BooRaceHandler.session_teams["blue"].has(i):
+					player_node.add_to_group("RaceTeamBlue")
 			else:
 				player_node.global_position = get_tree().get_nodes_in_group("Players")[i - 1].global_position + Vector2(16, 0)
 			if Global.current_game_mode == Global.GameMode.CUSTOM_LEVEL or Global.current_game_mode == Global.GameMode.LEVEL_EDITOR:
@@ -145,7 +158,7 @@ func spawn_in_extra_players(device := -1, connected := true) -> void:
 			else:
 				add_child(player_node)
 	else:
-		if device == 0 or PlayerManager.test_players >= device: return
+		if device == 0 or PlayerManager.test_players >= device or PlayerManager.force_local_players.has(device): return
 		if connected:
 			var player_node = PLAYER.instantiate()
 			player_node.player_id = device

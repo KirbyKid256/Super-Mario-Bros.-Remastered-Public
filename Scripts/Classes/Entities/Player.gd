@@ -631,7 +631,7 @@ func death_load() -> void:
 			Global.clear_saved_values()
 			Global.death_load = false
 			PlayerManager.force_local_players.clear()
-			PlayerManager.use_split_screen = false
+			SplitscreenHandler.use_split_screen = false
 			Global.transition_to_scene("res://Scenes/Levels/RaceMenu.tscn"),
 
 		Global.GameMode.BOO_RACE: func():

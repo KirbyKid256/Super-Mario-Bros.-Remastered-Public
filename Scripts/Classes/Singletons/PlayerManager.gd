@@ -90,12 +90,16 @@ func copy_action(action: StringName, device: int) -> void:
 func get_first_player() -> Player:
 	var players = get_tree().get_nodes_in_group("Players")
 	if players.is_empty(): return null
-	players.sort_custom(sort_by_player_id.bind)
+	players.sort_custom(sort_by_player_id)
 	return players.front()
 
 ## Returns the Player with the specified [code]device[/code]. By default, this grabs P1, the Player with an ID of [code]0[/code]. Unlike `get_first_player`, this throws an error if the Player with the given ID doesn't exist in the Tree Group.
 func get_player_with_id(device := 0) -> Player:
-	return get_tree().get_nodes_in_group("Players").filter(filter_by_id.bind(device)).front()
+	var players = get_tree().get_nodes_in_group("Players")
+	if players.is_empty(): return null
+	players = players.filter(filter_by_id.bind(device))
+	if players.is_empty(): return null
+	return players.front()
 
 ## Returns the Player closest to a given [code]origin[/code] point. The origin is based on a [Node2D]s [code]global_position[/code]. By default, the origin is (0, 0).
 func get_closest_player(origin: Vector2) -> Player:

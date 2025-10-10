@@ -55,10 +55,13 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_yh77s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ldgc7")
 }],
-"loop": true,
+"loop": false,
 "name": &"Default",
-"speed": 5.0
+"speed": 0.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -113,7 +116,7 @@ metadata/_custom_type_script = "uid://b5ejlbl0vp1gm"
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_yh77s")
-animation = &"On"
+animation = &"Default"
 autoplay = "Default"
 
 [node name="ResourceSetter" type="Node" parent="Sprite" node_paths=PackedStringArray("node_to_affect")]
@@ -131,3 +134,4 @@ shape = SubResource("RectangleShape2D_uwq65")
 
 [connection signal="player_block_hit" from="." to="." method="on_block_hit" unbinds=1]
 [connection signal="player_block_hit" from="." to="BlockAnimations" method="bounce_block" unbinds=1]
+[connection signal="updated" from="Sprite/ResourceSetter" to="." method="on_updated"]

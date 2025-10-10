@@ -1,6 +1,9 @@
-[gd_scene load_steps=23 format=3 uid="uid://cq5mo03ew7wjc"]
+[gd_scene load_steps=26 format=3 uid="uid://cq5mo03ew7wjc"]
 
+[ext_resource type="PackedScene" uid="uid://dciqpg4a7jtjm" path="res://Scenes/Prefabs/Blocks/BooRaceBlocks/BooOnOffSwitchAlt.tscn" id="2_8jj2v"]
+[ext_resource type="PackedScene" uid="uid://eoo4cjsp5xu4" path="res://Scenes/Prefabs/Blocks/BooRaceBlocks/TimedBooBlockAlt.tscn" id="4_2ixhy"]
 [ext_resource type="PackedScene" uid="uid://by6ndsjhlkmbt" path="res://Scenes/Prefabs/Blocks/BooRaceBlocks/BooOnOffBlock.tscn" id="7_cqi2u"]
+[ext_resource type="Script" uid="uid://bi5u8yi6y2ex1" path="res://Scripts/Parts/RaceTiles.gd" id="8_cm7a7"]
 [ext_resource type="PackedScene" uid="uid://5ua3p0lfl1bf" path="res://Scenes/Prefabs/Blocks/BooRaceBlocks/BooOnOffSwitch.tscn" id="8_ue7ie"]
 [ext_resource type="PackedScene" uid="uid://c1xle3fplnxtr" path="res://Scenes/Prefabs/Blocks/BooRaceBlocks/BooOnOffBlueBlock.tscn" id="9_bv0hg"]
 [ext_resource type="PackedScene" uid="uid://dgq7enviy1qhw" path="res://Scenes/Prefabs/Blocks/BooRaceBlocks/TimedBooBlock.tscn" id="10_l3bm6"]
@@ -36,12 +39,14 @@ tile_data = PackedInt32Array(0, 524288, 6, 1, 589824, 6)
 tile_data = PackedInt32Array(0, 524288, 7, 1, 589824, 7)
 
 [sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_cm7a7"]
-scenes/0/scene = ExtResource("7_cqi2u")
-scenes/1/scene = ExtResource("8_ue7ie")
-scenes/2/scene = ExtResource("9_bv0hg")
-scenes/3/scene = ExtResource("10_l3bm6")
-scenes/4/scene = ExtResource("14_xw0jq")
-scenes/5/scene = ExtResource("19_lt7u0")
+scenes/0/scene = ExtResource("8_ue7ie")
+scenes/1/scene = ExtResource("2_8jj2v")
+scenes/2/scene = ExtResource("10_l3bm6")
+scenes/3/scene = ExtResource("4_2ixhy")
+scenes/4/scene = ExtResource("7_cqi2u")
+scenes/5/scene = ExtResource("9_bv0hg")
+scenes/6/scene = ExtResource("14_xw0jq")
+scenes/7/scene = ExtResource("19_lt7u0")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rrb2x"]
 texture = ExtResource("30_ohmg6")
@@ -218,6 +223,8 @@ metadata/_better_terrain = {
 [sub_resource type="GDScript" id="GDScript_vt0hv"]
 script/source = "extends Node
 
+@export var invert := false
+
 var active := false
 
 @onready var tile_map: TileMapLayer = owner
@@ -232,12 +239,12 @@ func on_switch_hit() -> void:
 	update_tiles()
 
 func update_tiles() -> void:
-	for i in tile_map.get_used_cells_by_id(5):
+	for i in tile_map.get_used_cells_by_id(1):
 		var y_coord = tile_map.get_cell_atlas_coords(i)
 		if y_coord.y > 2:
-			tile_map.set_cell(i, 5, y_coord - Vector2i(0, 3))
+			tile_map.set_cell(i, 1, y_coord - Vector2i(0, 3))
 		elif y_coord.y <= 2:
-			tile_map.set_cell(i, 5, y_coord + Vector2i(0, 3))
+			tile_map.set_cell(i, 1, y_coord + Vector2i(0, 3))
 
 
 func on_toggled() -> void:
@@ -250,12 +257,13 @@ func on_toggled() -> void:
 z_index = -1
 tile_set = SubResource("TileSet_2ixhy")
 physics_quadrant_size = 2
+script = ExtResource("8_cm7a7")
 
 [node name="OnOffConveyorTextureSetter" type="Node" parent="." node_paths=PackedStringArray("tile_map")]
 script = ExtResource("32_4vbic")
 tile_map = NodePath("..")
 texture = ExtResource("30_ohmg6")
-atlas_id = 5
+atlas_id = 1
 
 [node name="ResourceSetterNew" type="Node" parent="OnOffConveyorTextureSetter" node_paths=PackedStringArray("node_to_affect")]
 script = ExtResource("34_av6qi")
